@@ -1,0 +1,9 @@
+.light .pageHeader{
+    background-color: #fff;
+    color: #252525;
+}
+
+.dark .pageHeader{
+    background-color: #000;
+    color: #fff;
+}
