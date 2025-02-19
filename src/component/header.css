@@ -1,9 +1,17 @@
 .light .pageHeader{
     background-color: #fff;
     color: #252525;
+    box-shadow: 1px 2px 2px #eee;
 }
 
 .dark .pageHeader{
-    background-color: #000;
+    background-color: var(--dark);
     color: #fff;
+}
+
+.username{
+    background: #f3f3f3;
+    color: black;
+    padding: 5px 16px;
+    border-radius: 20px;
 }
