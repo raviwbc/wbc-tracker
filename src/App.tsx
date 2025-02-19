@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import './App.css';
 import { HeaderComp } from './component/file.tsx';
 import { MyContext } from './myContext.tsx';
+import { MyContextType } from './model/contextApi.ts';
 
 function App() {
   const [theme, setTheme] = useState('light');

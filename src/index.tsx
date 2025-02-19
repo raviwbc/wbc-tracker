@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import "./index.css";
 import App from './App.tsx';
+import TimeTrack from './component/timeTrack.tsx';
 
 
 const root = ReactDOM.createRoot(
@@ -13,6 +14,7 @@ root.render(
       Tailwind is Working! ✅
     </div>
     <App />
+    <TimeTrack />
   </React.StrictMode>
 );
 
