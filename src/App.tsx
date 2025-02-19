@@ -1,33 +1,32 @@
-import React from 'react';
+import React, { useState } from 'react';
 // import logo from './logo.svg';
 import './App.css';
-import { Rh } from './component/file.tsx';
+import { HeaderComp } from './component/file.tsx';
+import { MyContext } from './myContext.tsx';
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img  className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Sanjai Santhosh !!
-        </a>
-        
-  
-    <div className="font-bold text-green-500">
-      Tailwind is Working! ✅
-    </div>
-  
+  const [theme, setTheme] = useState('light');
+  const [user, setUser] = useState('Guest');
 
-        <Rh></Rh>
-      </header>
+  const toggleTheme = () => {
+    setTheme((prevTheme) => (prevTheme === 'light' ? 'dark' : 'light'));
+  };
+
+  const contextValue: MyContextType = {
+    theme,
+    user,
+    toggleTheme,
+  };
+
+  return (
+    <div>
+      
+      <MyContext.Provider value={contextValue}>
+        <div className={theme}>
+        <HeaderComp></HeaderComp>
+        </div>
+        </MyContext.Provider>
+      
     </div>
   );
 }
