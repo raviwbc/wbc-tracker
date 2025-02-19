@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import moment from "moment"; 
-
+import './timeTracker.css'
 
 type Dates = string[]; 
 
-const timeTrack = () => {
+const TimeTrack = () => {
   const [dates, setDates] = useState<Dates>([]); 
 
   
@@ -50,7 +50,7 @@ const timeTrack = () => {
       <div className="flex justify-between">
         <div className="flex gap-3 items-center">
           <i className="fa-solid fa-clock text-blue-500 text-2xl"></i>
-          <div>Time Tracker</div>
+          <div className="nameText">Time Tracker</div>
         </div>
         <div className="flex gap-2 items-center">
           <i className="fa-solid fa-user text-red-500 text-2xl"></i>
@@ -59,17 +59,17 @@ const timeTrack = () => {
       </div>
 
       {/* Calendar */}
-      <div className="mt-4 flex gap-5">
+      <div className="mt-4 flex gap-4 shadow-lg dateDayContainer">
         {dates.map((item, index) => (
           <div
             key={index}
-            className="flex flex-col items-center border p-3 rounded-lg bg-gray-100"
+            className="flex flex-col items-center bg-gray-100 dateDayBox "
           >
             <div className="text-lg font-bold">{item.split(" ")[0]}</div>
-            <div className="text-sm text-gray-500">{item.split(" ")[1]}</div>
+            <div className="text-sm text-gray-600">{item.split(" ")[1]}</div>
           </div>
         ))}
-        <button className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600">
+        <button className="bg-blue-500  px-4  rounded-md hover:bg-blue-600 currentDateBtnTxt">
           {moment().format("MMMM DD ddd")}
         </button>
       </div>
@@ -141,4 +141,4 @@ const timeTrack = () => {
   );
 };
 
-export default timeTrack;
+export default TimeTrack;
