@@ -12,6 +12,7 @@ function App() {
   const toggleTheme = () => {
     setTheme((prevTheme) => (prevTheme === 'light' ? 'dark' : 'light'));
   };
+  
 
   const contextValue: MyContextType = {
     theme,
