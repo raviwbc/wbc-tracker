@@ -9,9 +9,6 @@ const root = ReactDOM.createRoot(
 );
 root.render(
   <React.StrictMode>
-        <div className="font-bold text-green-500">
-      Tailwind is Working! ✅
-    </div>
     <App />
   </React.StrictMode>
 );
