@@ -47,7 +47,7 @@ const TimeTrack = () => {
   return (
     <div className="m-5">
       {/* Header */}
-      <div className="flex justify-between">
+      {/* <div className="flex justify-between px-3">
         <div className="flex gap-3 items-center">
           <i className="fa-solid fa-clock text-blue-500 text-2xl"></i>
           <div className="nameText">Time Tracker</div>
@@ -56,7 +56,7 @@ const TimeTrack = () => {
           <i className="fa-solid fa-user text-red-500 text-2xl"></i>
           <div>Sanjai G</div>
         </div>
-      </div>
+      </div> */}
 
       {/* Calendar */}
       <div className="mt-4 flex gap-4 shadow-lg dateDayContainer">
