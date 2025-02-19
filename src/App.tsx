@@ -19,6 +19,13 @@ function App() {
         >
           Sanjai Santhosh !!
         </a>
+        
+  
+    <div className="font-bold text-green-500">
+      Tailwind is Working! ✅
+    </div>
+  
+
         <Rh></Rh>
       </header>
     </div>
