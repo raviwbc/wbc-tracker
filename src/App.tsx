@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 // import logo from './logo.svg';
+import './custom_styles/font-style.css';
+
 import './App.css';
 import { HeaderComp } from './component/header.tsx';
 import { MyContext } from './myContext.tsx';

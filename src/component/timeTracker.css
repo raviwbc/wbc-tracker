@@ -8,11 +8,56 @@
     color: white;
     border-radius: 10px;
     font-weight: 500;
+    background-color: #4d6bfe;
 }
 .dateDayContainer{
     padding: 12px;
     border: 1px solid #dfe4eb;
     border-radius: 8px;
+    gap: 15px;
 
 }
-   
+
+/* stop clock css
+ */
+ .startBtn {
+    background-color: #007900;
+    color: white;
+    font-size: 18px;
+    font-weight: 600;
+    width: 95px;
+ }
+.startBtn:hover{
+    background-color: #0ca20c;
+}
+ .stopBtn {
+    background-color: #e3090b;
+    color: white;
+    font-size: 18px;
+    font-weight: 600;
+    width: 95px;
+ }
+.stopBtn:hover{
+    background-color: #fc0d11;
+}
+.toggleContain{
+    label{
+        background-color: #4d6bfe4d;
+        padding-right: 10px;
+        border-radius: 22px;
+        border: 1px solid #0d2dc94d;
+    }
+    .MuiFormControlLabel{
+        color: #0b0051;
+        font-size: 16px;
+    }
+}
+
+
+/* form */
+.formControls{
+    width: 200px;
+}
+/* .css-sc8y68-MuiInputBase-root-MuiOutlinedInput-root-MuiSelect-root { */
+    /* height: 40px; */
+/* } */

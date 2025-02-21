@@ -1,25 +1,31 @@
 import React, { useEffect, useState } from "react";
-import moment from "moment"; 
-import './timeTracker.css'
+import moment from "moment";
 
-type Dates = string[]; 
+// form 
+import { Formik, Field, Form, ErrorMessage, useFormik } from 'formik';
+import * as Yup from 'yup';
+
+import './timeTracker.css'
+import { Button, FormControl, FormControlLabel, FormHelperText, InputLabel, MenuItem, Select, Switch, TextField } from "@mui/material";
+
+type Dates = string[];
 
 const TimeTrack = () => {
-  const [dates, setDates] = useState<Dates>([]); 
+  const [dates, setDates] = useState<Dates>([]);
 
-  
-  const [isRunning, setIsRunning] = useState<boolean>(false); 
-  const [runTime, setRunTime] = useState<number>(0); 
 
- 
+  const [isRunning, setIsRunning] = useState<boolean>(false);
+  const [runTime, setRunTime] = useState<number>(0);
+
+
   const [isAccOpen, setIsAccOpen] = useState<boolean>(false);
 
-  
+
   const stopClock = (): void => {
     setIsRunning(!isRunning);
   };
 
-  
+
   useEffect(() => {
     let timer: NodeJS.Timeout | undefined;
     if (isRunning) {
@@ -32,32 +38,31 @@ const TimeTrack = () => {
     return () => clearInterval(timer);
   }, [isRunning]);
 
-    const timeFormat = moment.utc(runTime * 1000).format("HH:mm:ss");
+  const timeFormat = moment.utc(runTime * 1000).format("HH:mm:ss");
 
   // Effect to populate the date list
   useEffect(() => {
     const listOfDate: Dates = [];
-    for (let i = 20; i >= 0; i--) {
+    for (let i = 23; i >= 0; i--) {
       const date = moment().subtract(i, "days").format("DD ddd");
       listOfDate.push(date);
     }
     setDates(listOfDate);
   }, []);
 
+
+  // Form
+
+  const validationSchema = Yup.object({
+    project: Yup.string().required('Please select this project!'),
+    task: Yup.string().required("This field is required!"),
+    status: Yup.number().required("Please select the status!"),
+    notes: Yup.number().required("Please add notes!"),
+  })
+
+
   return (
     <div className="m-5">
-      {/* Header */}
-      {/* <div className="flex justify-between px-3">
-        <div className="flex gap-3 items-center">
-          <i className="fa-solid fa-clock text-blue-500 text-2xl"></i>
-          <div className="nameText">Time Tracker</div>
-        </div>
-        <div className="flex gap-2 items-center">
-          <i className="fa-solid fa-user text-red-500 text-2xl"></i>
-          <div>Sanjai G</div>
-        </div>
-      </div> */}
-
       {/* Calendar */}
       <div className="mt-4 flex gap-4  dateDayContainer">
         {dates.map((item, index) => (
@@ -74,30 +79,136 @@ const TimeTrack = () => {
         </button>
       </div>
 
-      {/* Stopwatch Section */}
-      <div className="mt-4 flex justify-between items-center rounded-lg  p-4">
-        {/* Logo */}
-        <img
-          src="https://www.clio.com/wp-content/uploads/2017/11/time_tracker_logo__cmyk-e1629830767918.png"
-          alt="Time Tracker Logo"
-          className="w-28 h-12"
-        />
+      {/* taskbar Section */}
+      <div className="mt-4 flex justify-between rounded-lg  p-4">
+        {/* Form */}
+        <div>
+          <Formik
+            initialValues={{ project: '', task: '', status: '', notes: '' ,isManual:false}}
+            validationSchema={validationSchema}
+            onSubmit={(values) => {
+              console.log('Form data', values);
+            }}
+          >
+            {(formik) => (
+              <form onSubmit={formik.handleSubmit} >
+                <div className="flex gap-3 ">
+                  {/* Project Dropdown */}
+                  <div>
+                    <FormControl  error={formik.touched.project && Boolean(formik.errors.project)} className="formControls">
+                      <InputLabel>Project</InputLabel>
+                      <Field
+                        name="project"
+                        as={Select}
+                        label="Project"
+                        value={formik.values.project}
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                      >
+                        <MenuItem value="EmedLogix">EmedLogix</MenuItem>
+                        <MenuItem value="Office">EXO Office</MenuItem>
+                        <MenuItem value="Ejlye">Ejlye</MenuItem>
+                      </Field>
+                      <FormHelperText>{formik.touched.project && formik.errors.project}</FormHelperText>
+                    </FormControl>
+                  </div>
 
+                  {/* Task Dropdown */}
+                  <div >
+                    <FormControl className="formControls" error={formik.touched.task && Boolean(formik.errors.task)}>
+                      <InputLabel>Task</InputLabel>
+                      <Field
+                        name="task"
+                        as={Select}
+                        label="Task"
+                        value={formik.values.task}
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                      >
+                        <MenuItem value="Task1">Task 1</MenuItem>
+                        <MenuItem value="Task2">Task 2</MenuItem>
+                        <MenuItem value="Task3">Task 3</MenuItem>
+                      </Field>
+                      <FormHelperText>{formik.touched.task && formik.errors.task}</FormHelperText>
+                    </FormControl>
+                  </div>
+
+                  {/* Status Dropdown */}
+                  <div >
+                    <FormControl className="formControls" error={formik.touched.status && Boolean(formik.errors.status)}>
+                      <InputLabel>Status</InputLabel>
+                      <Field
+                        name="status"
+                        as={Select}
+                        label="Status"
+                        value={formik.values.status}
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}>
+                        <MenuItem value={1}>WIP</MenuItem>
+                        <MenuItem value={2}>Done</MenuItem>
+                      </Field>
+                      <FormHelperText>{formik.touched.status && formik.errors.status}</FormHelperText>
+                    </FormControl>
+                  </div>
+
+                  {/* Notes Textarea */}
+                  <div >
+                    <Field
+                      name="notes"
+                      as={TextField}
+                      label="Notes"
+                      placeholder="Enter your notes here"
+                      value={formik.values.notes}
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      multiline
+                      rows={1}
+                      className="formControls"
+                      error={formik.touched.notes && Boolean(formik.errors.notes)}
+                      helperText={formik.touched.notes && formik.errors.notes}
+                    />
+                  </div>
+
+                  {/* Submit Button */}
+                  {/* <div className="mt-2">
+                    <Button type="submit" variant="contained" color="primary" fullWidth >
+                      Submit
+                    </Button>
+                  </div> */}
+
+<div className="m-2 toggleContain">
+          <Field name="isManual">
+            {({ field, form }) => (
+              <FormControlLabel
+                control={
+                  <Switch
+                    {...field} // use Formik's field props
+                    checked={field.value} 
+                    onChange={form.handleChange} 
+                    onBlur={form.handleBlur}
+                  />
+                }
+                label="Manual Entry"
+              />
+            )}
+          </Field>
+        </div>
+                </div>
+              </form>
+            )}
+          </Formik>
+        </div>
         {/* Stopwatch */}
-        <div className="flex gap-5 items-center">
-          <div className="text-2xl font-bold">{timeFormat}</div>
+        <div className="flex gap-5">
+          <div className="text-2xl font-bold mt-3" >{timeFormat}</div>
           <div>
             <button
-              className={`mt-2 px-4 py-2 text-white rounded-md ${
-                isRunning
-                  ? "bg-red-500 hover:bg-red-600"
-                  : "bg-green-500 hover:bg-green-600"
-              }`}
+              className={`mt-2 px-4 py-2 text-white rounded-md ${isRunning ? "stopBtn": "startBtn"}`}
               onClick={stopClock}
             >
-              {isRunning ? "Stop" : "Start"}
+              {isRunning ? "Stop" : "Start"} {isRunning ? <i className="fa-solid fa-pause ml-1"></i> : <i className="fa-solid fa-play ml-1"></i>}
             </button>
-          </div>
+          </div>  
         </div>
       </div>
 

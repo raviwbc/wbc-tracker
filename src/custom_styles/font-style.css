@@ -1,0 +1,95 @@
+@font-face {
+    font-family: 'Roboto';
+    font-weight: 300;
+    src: url(./roboto/Roboto-Light.woff2) format('woff2');
+}
+
+@font-face {
+    font-family: 'Roboto';
+    font-weight: 400;
+    src: url(./roboto/Roboto-Regular.woff2) format('woff2');
+}
+
+@font-face {
+    font-family: 'Roboto';
+    font-weight: 500;
+    src: url(./roboto/Roboto-Regular.woff2) format('woff2');
+}
+
+@font-face {
+    font-family: 'Roboto';
+    font-weight: 600;
+    src: url(./roboto/Roboto-Medium.woff2) format('woff2');
+}
+
+@font-face {
+    font-family: 'Roboto';
+    font-weight: 700;
+    src: url(./roboto/Roboto-Bold.woff2) format('woff2');
+}
+
+@font-face {
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 800;
+    src: url(./roboto/Roboto-Black.woff2) format('woff2');
+}
+
+@font-face {
+    font-family: 'Source Sans Pro';
+    font-weight: 300;
+    src: url(./sourcesanspro/SourceSansPro-Light.woff2) format('woff2');
+}
+
+@font-face {
+    font-family: 'Source Sans Pro';
+    font-weight: 400;
+    src: url(./sourcesanspro/SourceSansPro-Regular.woff2) format('woff2');
+}
+
+@font-face {
+    font-family: 'Source Sans Pro';
+    font-weight: 500;
+    src: url(./sourcesanspro/SourceSansPro-Regular.woff2) format('woff2');
+}
+
+@font-face {
+    font-family: 'Source Sans Pro';
+    font-weight: 600;
+    src: url(./sourcesanspro/SourceSansPro-Semibold.woff2) format('woff2');
+}
+
+@font-face {
+    font-family: 'Source Sans Pro';
+    font-weight: 700;
+    src: url(./sourcesanspro/SourceSansPro-Bold.woff2) format('woff2');
+}
+
+@font-face {
+    font-family: 'Source Sans Pro';
+    font-weight: 800;
+    src: url(./sourcesanspro/SourceSansPro-Black.woff2) format('woff2');
+}
+
+@font-face {
+    font-family: 'Material Icons';
+    font-style: normal;
+    font-weight: 400;
+    src: url(./maticons/maticon.woff2) format('woff2');
+}
+
+.material-icons {
+    font-family: 'Material Icons';
+    font-weight: normal;
+    font-style: normal;
+    font-size: 24px;
+    line-height: 1;
+    letter-spacing: normal;
+    text-transform: none;
+    display: inline-block;
+    white-space: nowrap;
+    word-wrap: normal;
+    direction: ltr;
+    -webkit-font-feature-settings: 'liga';
+    -webkit-font-smoothing: antialiased;
+}
