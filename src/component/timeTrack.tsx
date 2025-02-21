@@ -37,7 +37,7 @@ const TimeTrack = () => {
   // Effect to populate the date list
   useEffect(() => {
     const listOfDate: Dates = [];
-    for (let i = 9; i >= 0; i--) {
+    for (let i = 20; i >= 0; i--) {
       const date = moment().subtract(i, "days").format("DD ddd");
       listOfDate.push(date);
     }
@@ -59,7 +59,7 @@ const TimeTrack = () => {
       </div> */}
 
       {/* Calendar */}
-      <div className="mt-4 flex gap-4 shadow-lg dateDayContainer">
+      <div className="mt-4 flex gap-4  dateDayContainer">
         {dates.map((item, index) => (
           <div
             key={index}
@@ -75,7 +75,7 @@ const TimeTrack = () => {
       </div>
 
       {/* Stopwatch Section */}
-      <div className="mt-4 flex justify-between items-center rounded-lg shadow-lg p-4">
+      <div className="mt-4 flex justify-between items-center rounded-lg  p-4">
         {/* Logo */}
         <img
           src="https://www.clio.com/wp-content/uploads/2017/11/time_tracker_logo__cmyk-e1629830767918.png"
