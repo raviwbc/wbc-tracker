@@ -7,6 +7,8 @@ import { HeaderComp } from './component/header.tsx';
 import { MyContext } from './myContext.tsx';
 import { MyContextType } from './model/contextApi.ts';
 import TimeTrack from './component/timeTrack.tsx';
+import { Provider } from 'react-redux';
+import { store } from './store/store.ts';
 
 function App() {
   const [theme, setTheme] = useState('dark');
@@ -25,13 +27,14 @@ function App() {
 
   return (
     <div>
-      
+      <Provider store={store}>
       <MyContext.Provider value={contextValue}>
         <div className={theme}>
         <HeaderComp></HeaderComp>
         <TimeTrack />
         </div>
         </MyContext.Provider>
+        </Provider>
       
     </div>
   );
