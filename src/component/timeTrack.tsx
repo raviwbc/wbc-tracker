@@ -15,28 +15,23 @@ type Dates = string[];
 const TimeTrack = () => {
   const [dates, setDates] = useState<Dates>([]);
 
-
   const [isRunning, setIsRunning] = useState<boolean>(false);
   const [runTime, setRunTime] = useState<number>(0);
-
 
   const [isAccOpen, setIsAccOpen] = useState<boolean>(false);
 
   // Show Select Values
-
   const [showSelectVal1, setShowSelectVal1] = useState<boolean>(false)
   const [showSelectVal2, setShowSelectVal2] = useState<boolean>(false)
+
   const [prjTaskList,setPrjTaskList] = useState([])
+  const [prjList,setPrjList] = useState([])
+  const [TaskList,setTaskList] = useState([])
 
   //Get Project List
   const dispatch = useDispatch()
   const projectList = useSelector((state: any) => {    
-    if(state.trackerReducer.data?.model){
-      console.log(state.trackerReducer.data.model)
-      setPrjTaskList(state.trackerReducer.data?.model)
-      return state.trackerReducer.data?.model
-    }
-    return state
+    return state.trackerReducer
   })
 
   const [formData, setFormData] = useState({
@@ -97,8 +92,9 @@ const TimeTrack = () => {
   }, []);
 
 useEffect(()=>{
-  setPrjTaskList(projectList.model?.tasks)
-  console.log('sanjai1',prjTaskList);
+  setPrjList(projectList.data.projectList)
+  setTaskList(projectList.data.taskList)
+  console.log('prjList',projectList.data.projectList);
 },[projectList])
   // Form
   const validationSchema = () => {
@@ -116,16 +112,6 @@ useEffect(()=>{
     }
   };
 
-
-  // Start Validaion and data reset
-
-  const startValidation = () => {
-
-  }
-  useEffect(() => {
-    console.log('eeeeeeeeee', formData);
-
-  }, [formData])
 
   return (
     <div className="m-5">
@@ -197,11 +183,11 @@ useEffect(()=>{
                           onChange={formik.handleChange}
                           onBlur={formik.handleBlur}
                         >
-                          {/* {projectList.map((data) => (
-                            <MenuItem key={data.ProjectID} value={data.ProjectID}>
-                              {data.Title}
+                          {prjList.map((data:any) => (
+                            <MenuItem key={data.projectID} value={data.ProjectID}>
+                              {data.title}
                             </MenuItem>
-                          ))} */}
+                          ))}
                         </Field>
                         <FormHelperText>{formik.touched.project && formik.errors.project}</FormHelperText>
                       </FormControl>
@@ -297,7 +283,6 @@ useEffect(()=>{
                   <button
                     type="submit"
                     className={`mt-2 px-4 py-2 text-white rounded-md ${isRunning ? "stopBtn clicked" : "startBtn"}`}
-                    onClick={startValidation}
                   >
                     {isRunning ? "Stop" : "Start"}
                     {isRunning ? <i className="fa-solid fa-pause ml-1"></i> : <i className="fa-solid fa-play ml-1"></i>}
