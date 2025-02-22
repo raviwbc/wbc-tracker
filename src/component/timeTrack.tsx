@@ -21,11 +21,6 @@ const TimeTrack = () => {
   const [isAccOpen, setIsAccOpen] = useState<boolean>(false);
 
 
-  const stopClock = (): void => {
-    setIsRunning(!isRunning);
-  };
-
-
   useEffect(() => {
     let timer: NodeJS.Timeout | undefined;
     if (isRunning) {
@@ -52,13 +47,20 @@ const TimeTrack = () => {
 
 
   // Form
-
-  const validationSchema = Yup.object({
-    project: Yup.string().required('Please select this project!'),
-    task: Yup.string().required("This field is required!"),
-    status: Yup.number().required("Please select the status!"),
-    notes: Yup.number().required("Please add notes!"),
-  })
+  const validationSchema = () => {
+    if (!isRunning) {
+      return Yup.object({
+        project: Yup.string().required('Please select this project!'),
+        task: Yup.string().required("This field is required!"),
+      });
+    } else {
+      return Yup.object({
+        status: Yup.number().required("Please select the status!"),
+        notes: Yup.string().required("Please add notes!"),
+      });
+      
+    }
+  };
 
 
   return (
@@ -80,136 +82,139 @@ const TimeTrack = () => {
       </div>
 
       {/* taskbar Section */}
-      <div className="mt-4 flex justify-between rounded-lg  p-4">
+      <div >
         {/* Form */}
-        <div>
-          <Formik
-            initialValues={{ project: '', task: '', status: '', notes: '' ,isManual:false}}
-            validationSchema={validationSchema}
-            onSubmit={(values) => {
-              console.log('Form data', values);
-            }}
-          >
-            {(formik) => (
-              <form onSubmit={formik.handleSubmit} >
-                <div className="flex gap-3 ">
-                  {/* Project Dropdown */}
-                  <div>
-                    <FormControl  error={formik.touched.project && Boolean(formik.errors.project)} className="formControls">
-                      <InputLabel>Project</InputLabel>
+        <Formik
+          initialValues={{ project: '', task: '', status: '', notes: '', isManual: false }}
+          validationSchema={validationSchema}
+          onSubmit={(values) => {
+            debugger
+            setIsRunning(!isRunning);
+            console.log('Form data', values);
+          }}
+        >
+          {(formik) => (
+            <form onSubmit={formik.handleSubmit} className="mt-4 flex justify-between rounded-lg  p-4">
+              <div className="flex gap-3">
+                {!isRunning ?
+                  <div className="flex gap-3 ">
+                    {/* Project Dropdown */}
+                    <div>
+                      <FormControl error={formik.touched.project && Boolean(formik.errors.project)} className="formControls">
+                        <InputLabel>Project</InputLabel>
+                        <Field
+                          name="project"
+                          as={Select}
+                          label="Project"
+                          value={formik.values.project}
+                          onChange={formik.handleChange}
+                          onBlur={formik.handleBlur}
+                        >
+                          <MenuItem value="EmedLogix">EmedLogix</MenuItem>
+                          <MenuItem value="Office">EXO Office</MenuItem>
+                          <MenuItem value="Ejlye">Ejlye</MenuItem>
+                        </Field>
+                        <FormHelperText>{formik.touched.project && formik.errors.project}</FormHelperText>
+                      </FormControl>
+                    </div>
+
+                    {/* Task Dropdown */}
+                    <div >
+                      <FormControl className="formControls" error={formik.touched.task && Boolean(formik.errors.task)}>
+                        <InputLabel>Task</InputLabel>
+                        <Field
+                          name="task"
+                          as={Select}
+                          label="Task"
+                          value={formik.values.task}
+                          onChange={formik.handleChange}
+                          onBlur={formik.handleBlur}
+                        >
+                          <MenuItem value="Task1">Task 1</MenuItem>
+                          <MenuItem value="Task2">Task 2</MenuItem>
+                          <MenuItem value="Task3">Task 3</MenuItem>
+                        </Field>
+                        <FormHelperText>{formik.touched.task && formik.errors.task}</FormHelperText>
+                      </FormControl>
+                    </div>
+                  </div>
+                  :
+                  <div className="flex gap-3 ">
+
+                    {/* Status Dropdown */}
+                    <div >
+                      <FormControl className="formControls" error={formik.touched.status && Boolean(formik.errors.status)}>
+                        <InputLabel>Status</InputLabel>
+                        <Field
+                          name="status"
+                          as={Select}
+                          label="Status"
+                          value={formik.values.status}
+                          onChange={formik.handleChange}
+                          onBlur={formik.handleBlur}>
+                          <MenuItem value={1}>WIP</MenuItem>
+                          <MenuItem value={2}>Done</MenuItem>
+                        </Field>
+                        <FormHelperText>{formik.touched.status && formik.errors.status}</FormHelperText>
+                      </FormControl>
+                    </div>
+
+                    {/* Notes Textarea */}
+                    <div >
                       <Field
-                        name="project"
-                        as={Select}
-                        label="Project"
-                        value={formik.values.project}
+                        name="notes"
+                        as={TextField}
+                        label="Notes"
+                        placeholder="Enter your notes here"
+                        value={formik.values.notes}
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
-                      >
-                        <MenuItem value="EmedLogix">EmedLogix</MenuItem>
-                        <MenuItem value="Office">EXO Office</MenuItem>
-                        <MenuItem value="Ejlye">Ejlye</MenuItem>
-                      </Field>
-                      <FormHelperText>{formik.touched.project && formik.errors.project}</FormHelperText>
-                    </FormControl>
-                  </div>
+                        multiline
+                        rows={1}
+                        className="formControls"
+                        error={formik.touched.notes && Boolean(formik.errors.notes)}
+                        helperText={formik.touched.notes && formik.errors.notes}
+                      />
+                    </div>
+                  </div>}
 
-                  {/* Task Dropdown */}
-                  <div >
-                    <FormControl className="formControls" error={formik.touched.task && Boolean(formik.errors.task)}>
-                      <InputLabel>Task</InputLabel>
-                      <Field
-                        name="task"
-                        as={Select}
-                        label="Task"
-                        value={formik.values.task}
-                        onChange={formik.handleChange}
-                        onBlur={formik.handleBlur}
-                      >
-                        <MenuItem value="Task1">Task 1</MenuItem>
-                        <MenuItem value="Task2">Task 2</MenuItem>
-                        <MenuItem value="Task3">Task 3</MenuItem>
-                      </Field>
-                      <FormHelperText>{formik.touched.task && formik.errors.task}</FormHelperText>
-                    </FormControl>
-                  </div>
-
-                  {/* Status Dropdown */}
-                  <div >
-                    <FormControl className="formControls" error={formik.touched.status && Boolean(formik.errors.status)}>
-                      <InputLabel>Status</InputLabel>
-                      <Field
-                        name="status"
-                        as={Select}
-                        label="Status"
-                        value={formik.values.status}
-                        onChange={formik.handleChange}
-                        onBlur={formik.handleBlur}>
-                        <MenuItem value={1}>WIP</MenuItem>
-                        <MenuItem value={2}>Done</MenuItem>
-                      </Field>
-                      <FormHelperText>{formik.touched.status && formik.errors.status}</FormHelperText>
-                    </FormControl>
-                  </div>
-
-                  {/* Notes Textarea */}
-                  <div >
-                    <Field
-                      name="notes"
-                      as={TextField}
-                      label="Notes"
-                      placeholder="Enter your notes here"
-                      value={formik.values.notes}
-                      onChange={formik.handleChange}
-                      onBlur={formik.handleBlur}
-                      multiline
-                      rows={1}
-                      className="formControls"
-                      error={formik.touched.notes && Boolean(formik.errors.notes)}
-                      helperText={formik.touched.notes && formik.errors.notes}
-                    />
-                  </div>
-
-                  {/* Submit Button */}
-                  {/* <div className="mt-2">
-                    <Button type="submit" variant="contained" color="primary" fullWidth >
-                      Submit
-                    </Button>
-                  </div> */}
-
-<div className="m-2 toggleContain">
-          <Field name="isManual">
-            {({ field, form }) => (
-              <FormControlLabel
-                control={
-                  <Switch
-                    {...field} // use Formik's field props
-                    checked={field.value} 
-                    onChange={form.handleChange} 
-                    onBlur={form.handleBlur}
-                  />
-                }
-                label="Manual"
-              />
-            )}
-          </Field>
-        </div>
+                <div className="m-2 toggleContain">
+                  <Field name="isManual">
+                    {({ field, form }) => (
+                      <FormControlLabel
+                        control={
+                          <Switch
+                            {...field} // use Formik's field props
+                            checked={field.value}
+                            onChange={form.handleChange}
+                            onBlur={form.handleBlur}
+                          />
+                        }
+                        label="Manual"
+                      />
+                    )}
+                  </Field>
                 </div>
-              </form>
-            )}
-          </Formik>
-        </div>
-        {/* Stopwatch */}
-        <div className="flex gap-5">
-          <div className="text-2xl font-bold mt-3" >{timeFormat}</div>
-          <div>
-            <button
-              className={`mt-2 px-4 py-2 text-white rounded-md ${isRunning ? "stopBtn clicked": "startBtn"}`}
-              onClick={stopClock}
-            >
-              {isRunning ? "Stop" : "Start"} {isRunning ? <i className="fa-solid fa-pause ml-1"></i> : <i className="fa-solid fa-play ml-1"></i>}
-            </button>
-          </div>  
-        </div>
+              </div>
+
+
+              {/* Stopwatch */}
+              <div className="flex gap-5">
+                <div className="text-2xl font-bold mt-3" >{timeFormat}</div>
+                <div>
+                  <button type="submit"
+                    className={`mt-2 px-4 py-2 text-white rounded-md ${isRunning ? "stopBtn clicked" : "startBtn"}`}
+                  // onClick={formValidation} 
+                  >
+                    {isRunning ? "Stop" : "Start"} {isRunning ? <i className="fa-solid fa-pause ml-1"></i> : <i className="fa-solid fa-play ml-1"></i>}
+                  </button>
+                </div>
+              </div>
+            </form>
+          )}
+        </Formik>
+
+
       </div>
 
       {/* Accordion */}
