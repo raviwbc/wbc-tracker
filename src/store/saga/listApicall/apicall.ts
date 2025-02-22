@@ -1,6 +1,7 @@
 import { call, put, takeLatest } from "redux-saga/effects"
-import { fetchPostsAPI } from "../../api-call/jsonapi.ts"
+import { fetchPostsAPI, getProjectList } from "../../api-call/jsonapi.ts"
 import { apiSuccess, apifailed, fetchPostsRequest } from "../../reducers/titleList.ts"
+import { projectListFailed, ProjectListRequest, projectListSuccess } from "../../reducers/timeTracker.ts"
 
 
 
@@ -14,6 +15,17 @@ function* fetchList(){
     }
 }
 
+function* fetchProjectList(){
+    try{
+        const resp = yield call(getProjectList)
+        console.log(resp, 'project')
+        yield put(projectListSuccess(resp.data))
+    }catch(e){
+        yield put(projectListFailed(e.message))
+    }
+}
+
 export function* watchFetchlist(){
-    yield takeLatest(fetchPostsRequest.type, fetchList)
+    // yield takeLatest(fetchPostsRequest.type, fetchList),
+    yield takeLatest(ProjectListRequest.type, fetchProjectList)
 }
