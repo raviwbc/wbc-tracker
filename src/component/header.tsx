@@ -40,13 +40,13 @@ function mychnages(e:any){
           <div><b>LOGO {count}</b></div>
         </div>
         <div className="flex gap-2 items-center">
-          <div>
+          {/* <div>
             <button onClick={()=> dispatch(increment())}>+ &nbsp;</button>
             <button onClick={()=> dispatch(decrement())}>- &nbsp;</button>
             <button onClick={()=> dispatch(incrementAsync())}> + &nbsp; Async</button>
             <button onClick={()=> dispatch(fetchPostsRequest())} > api call</button>
             <button onClick={()=> dispatch(ProjectListRequest()) }> call project List </button>
-          </div>
+          </div> */}
         <div>
         <FormControlLabel control={<Switch defaultChecked onChange={toggleTheme} />} label={"Theme"} />
         </div>
