@@ -247,10 +247,11 @@ const TimeTrack = () => {
 
         {/* Accordion Content */}
         {isAccOpen && (
-          <div className="p-5 border border-gray-200 rounded-b-xl">
+          <div className="p-5 bg-white border border-gray-200 rounded-b-xl">
             <p className="">
             <CompletedList/>
             </p>
+            
           </div>
         )}
       </div>
