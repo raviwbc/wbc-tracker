@@ -1,6 +1,6 @@
 export const APP_CONSTANTS = {
-    SERVICE_BASE_URL : 'http://localhost:5000',
+    SERVICE_BASE_URL : 'http://192.168.1.137/blueprint/api',
     API: {
-    GETPROJECTLIST : '/posts',
+    GETPROJECTLIST : '/Task/Get?userid=4',
     }
 }

@@ -1,0 +1,42 @@
+.taskListTable{
+    padding: 20px;
+}
+.taskListTable>div.parent_div{
+    display: grid;
+    grid-template-columns: calc(100% - 510px) 100px 200px 100px 100px;
+    
+}
+.taskListTable .parent_div>div{
+padding: 10px 5px;
+}
+
+.taskListTable .parent_div span{
+    background: #e6ffec;
+    border: 1px solid #84bf7c;
+    border-radius: 31px;
+    padding: 2px 10px;
+    color: #005726;
+    font-size: 13px;
+}
+
+.taskListTable .parent_div span[data-status = 'Interval']{
+    background: #ffefef;
+    border: 1px solid #bf7c7c;
+    color: #570000;
+}
+span.status[data-status]{
+    border-radius: 31px;
+    padding: 2px 10px;
+    font-size: 13px;
+}
+span.status[data-status = 'WIP']{
+    background: #fff6e6;
+    border: 1px solid #bfa37c;
+    color: #571d00;
+}
+
+span.status[data-status = 'Done']{
+    background: #eae6ff;
+    border: 1px solid #827cbf;
+    color: #000a57;
+}

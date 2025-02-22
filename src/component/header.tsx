@@ -37,7 +37,7 @@ function mychnages(e:any){
         <div  className={theme + ' p-3'}>
         <div className="flex justify-between">
         <div className="flex gap-3 items-center">
-          <div><b>LOGO {count}</b></div>
+          <div><b>TIME TRACKER</b></div>
         </div>
         <div className="flex gap-2 items-center">
           {/* <div>
