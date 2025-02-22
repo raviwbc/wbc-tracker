@@ -6,7 +6,9 @@ import { Formik, Field, Form, ErrorMessage, useFormik } from 'formik';
 import * as Yup from 'yup';
 
 import './timeTracker.css'
-import { Button, FormControl, FormControlLabel, FormHelperText, InputLabel, MenuItem, Select, Switch, TextField } from "@mui/material";
+import { Button, FormControl, FormControlLabel, FormHelperText, InputLabel, List, MenuItem, Select, Switch, TextField } from "@mui/material";
+import { useDispatch, useSelector } from "react-redux";
+import { ProjectListRequest } from "../store/reducers/timeTracker.ts";
 
 type Dates = string[];
 
@@ -19,6 +21,41 @@ const TimeTrack = () => {
 
 
   const [isAccOpen, setIsAccOpen] = useState<boolean>(false);
+
+  // Show Select Values
+
+  const [showSelectVal1, setShowSelectVal1] = useState<boolean>(false)
+  const [showSelectVal2, setShowSelectVal2] = useState<boolean>(false)
+  const [prjTaskList,setPrjTaskList] = useState([])
+
+  //Get Project List
+  const dispatch = useDispatch()
+  const projectList = useSelector((state: any) => {    
+    if(state.trackerReducer.data?.model){
+      console.log(state.trackerReducer.data.model)
+      setPrjTaskList(state.trackerReducer.data?.model)
+      return state.trackerReducer.data?.model
+    }
+    return state
+  })
+
+  const [formData, setFormData] = useState({
+    project: '',
+    task: '',
+    status: '',
+    notes: '',
+    projectDesc: '',
+    taskTime: '',
+    isManual: false,
+  });
+
+
+
+  // UI Project Name and task
+  const [prjDesc, setPrjDesc] = useState('')
+  const [task, setTask] = useState('')
+  const [taskTime, setTaskTime] = useState('')
+
 
 
   useEffect(() => {
@@ -35,17 +72,34 @@ const TimeTrack = () => {
 
   const timeFormat = moment.utc(runTime * 1000).format("HH:mm:ss");
 
-  // Effect to populate the date list
+
   useEffect(() => {
-    const listOfDate: Dates = [];
-    for (let i = 23; i >= 0; i--) {
-      const date = moment().subtract(i, "days").format("DD ddd");
-      listOfDate.push(date);
-    }
-    setDates(listOfDate);
+    const initialDataPrepare = () => {
+      try {
+        dispatch(ProjectListRequest())
+        // Effect to populate the date list
+        const listOfDate: Dates = [];
+        for (let i = 23; i >= 0; i--) {
+          const date = moment().subtract(i, "days").format("DD ddd");
+          listOfDate.push(date);
+        }
+        
+        setDates(listOfDate);
+
+        // Get the project List
+        
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    initialDataPrepare();
   }, []);
 
-
+useEffect(()=>{
+  setPrjTaskList(projectList.model?.tasks)
+  console.log('sanjai1',prjTaskList);
+},[projectList])
   // Form
   const validationSchema = () => {
     if (!isRunning) {
@@ -58,10 +112,20 @@ const TimeTrack = () => {
         status: Yup.number().required("Please select the status!"),
         notes: Yup.string().required("Please add notes!"),
       });
-      
+
     }
   };
 
+
+  // Start Validaion and data reset
+
+  const startValidation = () => {
+
+  }
+  useEffect(() => {
+    console.log('eeeeeeeeee', formData);
+
+  }, [formData])
 
   return (
     <div className="m-5">
@@ -87,17 +151,40 @@ const TimeTrack = () => {
         <Formik
           initialValues={{ project: '', task: '', status: '', notes: '', isManual: false }}
           validationSchema={validationSchema}
-          onSubmit={(values) => {
-            debugger
+          onSubmit={(values, { resetForm }) => {
+            debugger;
+            if (!isRunning) {
+              setShowSelectVal1(false);
+              if (values.project && values.task) {
+                setShowSelectVal1(true);
+                let prjDesc = projectList.filter((res: any) => res.ProjectID == values.project)[0].Description
+                setPrjDesc(prjDesc)
+                //Same thing we need to get the task descriptiona also for UI
+              }
+            } else {
+              setShowSelectVal1(false);
+              setFormData({
+                project: values.project,
+                task: values.task,
+                status: values.status,
+                notes: values.notes,
+                projectDesc: prjDesc,
+                taskTime: timeFormat,
+                isManual: values.isManual,
+              });
+              setRunTime(0)
+              resetForm()
+            }
             setIsRunning(!isRunning);
-            console.log('Form data', values);
           }}
         >
           {(formik) => (
-            <form onSubmit={formik.handleSubmit} className="mt-4 flex justify-between rounded-lg  p-4">
+            <form onSubmit={formik.handleSubmit} className="mt-4 flex justify-between rounded-lg p-4">
               <div className="flex gap-3">
-                {!isRunning ?
-                  <div className="flex gap-3 ">
+                {showSelectVal1 && <div><h1>{prjDesc}</h1></div>}
+
+                {!isRunning && !showSelectVal1 && !showSelectVal2 && (
+                  <div className="flex gap-3">
                     {/* Project Dropdown */}
                     <div>
                       <FormControl error={formik.touched.project && Boolean(formik.errors.project)} className="formControls">
@@ -110,16 +197,18 @@ const TimeTrack = () => {
                           onChange={formik.handleChange}
                           onBlur={formik.handleBlur}
                         >
-                          <MenuItem value="EmedLogix">EmedLogix</MenuItem>
-                          <MenuItem value="Office">EXO Office</MenuItem>
-                          <MenuItem value="Ejlye">Ejlye</MenuItem>
+                          {/* {projectList.map((data) => (
+                            <MenuItem key={data.ProjectID} value={data.ProjectID}>
+                              {data.Title}
+                            </MenuItem>
+                          ))} */}
                         </Field>
                         <FormHelperText>{formik.touched.project && formik.errors.project}</FormHelperText>
                       </FormControl>
                     </div>
 
                     {/* Task Dropdown */}
-                    <div >
+                    <div>
                       <FormControl className="formControls" error={formik.touched.task && Boolean(formik.errors.task)}>
                         <InputLabel>Task</InputLabel>
                         <Field
@@ -138,11 +227,12 @@ const TimeTrack = () => {
                       </FormControl>
                     </div>
                   </div>
-                  :
-                  <div className="flex gap-3 ">
+                )}
 
+                {isRunning && !showSelectVal2 && (
+                  <div className="flex gap-3">
                     {/* Status Dropdown */}
-                    <div >
+                    <div>
                       <FormControl className="formControls" error={formik.touched.status && Boolean(formik.errors.status)}>
                         <InputLabel>Status</InputLabel>
                         <Field
@@ -151,7 +241,8 @@ const TimeTrack = () => {
                           label="Status"
                           value={formik.values.status}
                           onChange={formik.handleChange}
-                          onBlur={formik.handleBlur}>
+                          onBlur={formik.handleBlur}
+                        >
                           <MenuItem value={1}>WIP</MenuItem>
                           <MenuItem value={2}>Done</MenuItem>
                         </Field>
@@ -160,7 +251,7 @@ const TimeTrack = () => {
                     </div>
 
                     {/* Notes Textarea */}
-                    <div >
+                    <div>
                       <Field
                         name="notes"
                         as={TextField}
@@ -176,15 +267,17 @@ const TimeTrack = () => {
                         helperText={formik.touched.notes && formik.errors.notes}
                       />
                     </div>
-                  </div>}
+                  </div>
+                )}
 
-                <div className="m-2 toggleContain">
+                {/* Manual Switch */}
+                {/* <div className="m-2 toggleContain">
                   <Field name="isManual">
                     {({ field, form }) => (
                       <FormControlLabel
                         control={
                           <Switch
-                            {...field} // use Formik's field props
+                            {...field}
                             checked={field.value}
                             onChange={form.handleChange}
                             onBlur={form.handleBlur}
@@ -194,19 +287,20 @@ const TimeTrack = () => {
                       />
                     )}
                   </Field>
-                </div>
+                </div> */}
               </div>
-
 
               {/* Stopwatch */}
               <div className="flex gap-5">
-                <div className="text-2xl font-bold mt-3" >{timeFormat}</div>
+                <div className="text-2xl font-bold mt-3">{timeFormat}</div>
                 <div>
-                  <button type="submit"
+                  <button
+                    type="submit"
                     className={`mt-2 px-4 py-2 text-white rounded-md ${isRunning ? "stopBtn clicked" : "startBtn"}`}
-                  // onClick={formValidation} 
+                    onClick={startValidation}
                   >
-                    {isRunning ? "Stop" : "Start"} {isRunning ? <i className="fa-solid fa-pause ml-1"></i> : <i className="fa-solid fa-play ml-1"></i>}
+                    {isRunning ? "Stop" : "Start"}
+                    {isRunning ? <i className="fa-solid fa-pause ml-1"></i> : <i className="fa-solid fa-play ml-1"></i>}
                   </button>
                 </div>
               </div>
