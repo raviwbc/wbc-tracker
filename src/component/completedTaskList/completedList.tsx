@@ -13,35 +13,44 @@ interface taskListt{
 const taskList:taskListt[] = [{
     project : 'EXO Office',
     task : "CR-Angular 17 to 19 Convertion",
-    stateTime : "10:20:00",
-    endTime : "11:20:00",
+    stateTime : "2025-02-22T11:20:35.038Z",
+    endTime : "2025-02-22T12:20:35.038Z",
     Status: "WIP"
     
 },
 {
     project : 'EXO Office',
     task : "Meeting With LTI Team",
-    stateTime : "11:20:00",
-    endTime : "13:00:00",
+    stateTime : "2025-02-22T12:20:35.038Z",
+    endTime : "2025-02-22T13:20:35.038Z",
     Status: "Done"
     
 },
 {
     project : 'Interval',
     task : "Lunch",
-    stateTime : "13:00:00",
-    endTime : "14:00:00",
+    stateTime : "2025-02-22T13:20:35.038Z",
+    endTime : "2025-02-22T14:20:35.038Z",
     Status: "Done"
     
 },{
     project : 'EXO Office',
     task : "CR-Angular 17 to 19 Convertion",
-    stateTime : "14:00:00",
-    endTime : "15:30:00",
+    stateTime : "2025-02-22T14:20:35.038Z",
+    endTime : "2025-02-22T15:10:35.038Z",
     Status: "WIP"
     
 },]
 
+
+const returnHours = (endDate, startDate)=>{
+    const diffInMilliseconds = moment(endDate).diff(moment(startDate));
+
+    const duration = moment.duration(diffInMilliseconds);
+
+    // Format the duration as HH:mm:ss
+    return `${String(duration.hours()).padStart(2, '0')}:${String(duration.minutes()).padStart(2, '0')}:${String(duration.seconds()).padStart(2, '0')}`;
+}
 
 
 export const CompletedList = ()=>{
@@ -56,8 +65,8 @@ export const CompletedList = ()=>{
                         {resp.Status}
                         </span>
                     </div>
-                    <div>{resp.stateTime} - {resp.endTime}</div>
-                    <div>Total Hours</div>
+                    <div>{ moment(resp.stateTime).format('HH:mm')} - {moment(resp.endTime).format('HH:mm')  }</div>
+                    <div>{ returnHours(resp.endTime,resp.stateTime)}</div>
                     <div>action</div>
                     </div>
                 ))
