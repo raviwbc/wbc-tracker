@@ -188,7 +188,7 @@ const TimeTrack = () => {
                     onBlur={form.handleBlur}
                   />
                 }
-                label="Manual Entry"
+                label="Manual"
               />
             )}
           </Field>
@@ -203,7 +203,7 @@ const TimeTrack = () => {
           <div className="text-2xl font-bold mt-3" >{timeFormat}</div>
           <div>
             <button
-              className={`mt-2 px-4 py-2 text-white rounded-md ${isRunning ? "stopBtn": "startBtn"}`}
+              className={`mt-2 px-4 py-2 text-white rounded-md ${isRunning ? "stopBtn clicked": "startBtn"}`}
               onClick={stopClock}
             >
               {isRunning ? "Stop" : "Start"} {isRunning ? <i className="fa-solid fa-pause ml-1"></i> : <i className="fa-solid fa-play ml-1"></i>}

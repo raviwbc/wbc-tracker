@@ -1,0 +1,11 @@
+{
+    "posts": [
+      { "id": 1, "title": "Hello World", "content": "This is my first post!" },
+      { "id": 2, "title": "React & JSON Server", "content": "Learning how to integrate React with JSON Server" }
+    ],
+    "comments": [
+      { "id": 1, "postId": 1, "content": "Great post!" },
+      { "id": 2, "postId": 2, "content": "Nice tutorial" }
+    ]
+  }
+  
