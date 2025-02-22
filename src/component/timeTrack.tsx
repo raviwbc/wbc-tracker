@@ -186,7 +186,7 @@ useEffect(()=>{
                           onChange={formik.handleChange}
                           onBlur={formik.handleBlur}
                         >
-                          {prjList.map((data:any) => (
+                          {prjList && prjList.map((data:any) => (
                             <MenuItem key={data.projectID} value={data.ProjectID}>
                               {data.title}
                             </MenuItem>
