@@ -33,7 +33,7 @@ function App() {
         <div className={theme}>
         <HeaderComp></HeaderComp>
         <TimeTrack />
-        <CompletedList/>
+        
         </div>
         </MyContext.Provider>
         </Provider>

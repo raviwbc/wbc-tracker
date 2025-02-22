@@ -7,6 +7,7 @@ import * as Yup from 'yup';
 
 import './timeTracker.css'
 import { Button, FormControl, FormControlLabel, FormHelperText, InputLabel, MenuItem, Select, Switch, TextField } from "@mui/material";
+import { CompletedList } from "./completedTaskList/completedList.tsx";
 
 type Dates = string[];
 
@@ -247,8 +248,8 @@ const TimeTrack = () => {
         {/* Accordion Content */}
         {isAccOpen && (
           <div className="p-5 border border-gray-200 rounded-b-xl">
-            <p className="text-gray-600">
-              This is the content inside the accordion. Click the header to toggle it.
+            <p className="">
+            <CompletedList/>
             </p>
           </div>
         )}
