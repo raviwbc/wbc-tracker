@@ -94,7 +94,7 @@ const TimeTrack = () => {
 useEffect(()=>{
   setPrjList(projectList.data.projectList)
   setTaskList(projectList.data.taskList)
-  console.log('prjList',projectList.data.projectList);
+  console.log('prjList',prjList);
 },[projectList])
   // Form
   const validationSchema = () => {
