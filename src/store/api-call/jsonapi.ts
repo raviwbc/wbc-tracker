@@ -9,5 +9,9 @@ export function fetchPostsAPI() {
 
 export function getProjectList(){
   return axiosInstance.get(`${APP_CONSTANTS.API.GETPROJECTLIST}`)
-  return axios.get(`${APP_CONSTANTS.SERVICE_BASE_URL}${APP_CONSTANTS.API.GETPROJECTLIST}`)
+}
+
+
+export function postManualEntry(){
+  return axiosInstance.get(`${APP_CONSTANTS.API.POSTMANUALENTRY}`)
 }

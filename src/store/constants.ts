@@ -3,5 +3,6 @@ export const APP_CONSTANTS = {
     API: {
     GETPROJECTLIST : '/Task/Get?userid=4',
     GETLOGIN : '/login',
+    POSTMANUALENTRY : '/Task/ManualEntry',
     }
 }
