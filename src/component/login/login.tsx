@@ -16,7 +16,7 @@ export const Login = () => {
         setShowPassword((prev) => !prev);
     };
     return <>
-        <div>
+        <div className="loginContainer">
             <div className="loginPage">
                 <div className="loginTxt">
                     Login
