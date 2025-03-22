@@ -11,6 +11,7 @@ import { Provider } from 'react-redux';
 import { store } from './store/store.ts';
 import { CompletedList } from './component/completedTaskList/completedList.tsx';
 import Tie from './pages/games/tie.tsx';
+import { Login } from './component/login/login.tsx';
 
 function App() {
   const [theme, setTheme] = useState('dark');
@@ -34,6 +35,7 @@ function App() {
         <div className={theme}>
         <HeaderComp></HeaderComp>
         <TimeTrack />
+        <Login/>
         {/* <Tie/> */}
         
         </div>
