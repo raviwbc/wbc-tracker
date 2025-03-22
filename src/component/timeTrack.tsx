@@ -203,7 +203,7 @@ description : string
       {/* taskbar Section */}
 <div className="">
 <div className="d-inline">
-Tracker
+Trackers
 </div>
       <div className="d-inline">
       <ToggleButtonGroup
