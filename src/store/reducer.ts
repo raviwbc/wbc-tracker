@@ -7,10 +7,11 @@ import { loginValidation } from "./reducers/auth.ts";
 import { manualEntryReducer } from "./reducers/manualEntry.ts";
 
 const rootReducer = combineReducers({
+    manualEntryReducer,
     counterReducer,
     postListReducer,
     trackerReducer,
-    manualEntryReducer,
+    
 })
 
 export default rootReducer

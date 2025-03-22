@@ -25,6 +25,7 @@ const trackerAPICalls = createSlice({
     },
     reducers : {
         ProjectListRequest:(state)=>{
+            console.log('asassaas')
             state.Loading = true
         },
         projectListSuccess:(state, action:any)=>{

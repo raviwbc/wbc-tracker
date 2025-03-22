@@ -8,7 +8,8 @@ const manual = createSlice({
         message : ''
     },
     reducers : {
-        ManualEntryRequest: (state)=>{
+        ManualEntryRequest: (state, action)=>{
+            console.log(action)            
             state.Loading = true
         },
         enterySuccess: (state, action)=>{
