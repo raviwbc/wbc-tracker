@@ -1,15 +1,16 @@
 import React, { useEffect, useState } from "react";
 import moment from "moment";
-
-// form 
-import { Formik, Field, Form, ErrorMessage, useFormik } from 'formik';
 import * as Yup from 'yup';
 
 import './timeTracker.css'
-import { Button, FormControl, FormControlLabel, FormHelperText, InputLabel, MenuItem, Select, Switch, TextField } from "@mui/material";
+import { Button, FormControl, FormControlLabel, FormHelperText, Input, InputLabel, MenuItem, OutlinedInput, Select, Switch, TextField, ToggleButton, ToggleButtonGroup  } from "@mui/material";
 import { CompletedList } from "./completedTaskList/completedList.tsx";
 import { useDispatch, useSelector } from "react-redux";
 import { ProjectListRequest } from "../store/reducers/timeTracker.ts";
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { TimePicker } from "@mui/x-date-pickers";
+import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
+import { DemoContainer, DemoItem } from '@mui/x-date-pickers/internals/demo';
 
 type Dates = string[];
 
@@ -19,15 +20,17 @@ const TimeTrack = () => {
   const [isRunning, setIsRunning] = useState<boolean>(false);
   const [runTime, setRunTime] = useState<number>(0);
 
-  const [isAccOpen, setIsAccOpen] = useState<boolean>(false);
+  const [isAccOpen, setIsAccOpen] = useState<boolean>(true);
 
   // Show Select Values
   const [showSelectVal1, setShowSelectVal1] = useState<boolean>(false)
   const [showSelectVal2, setShowSelectVal2] = useState<boolean>(false)
 
   const [prjTaskList,setPrjTaskList] = useState([])
-  const [prjList,setPrjList] = useState([])
-  const [TaskList,setTaskList] = useState([])
+  const [prjList,setPrjList] = useState<projectList[]>()
+  const [totaltaskList,setTotalTaskList] = useState<projectList[]>([])
+  const [taskList,setTaskList] = useState<projectList[]>([])
+  const statusList = ["Done", "WIP"]
 
   //Get Project List
   const dispatch = useDispatch()
@@ -47,10 +50,7 @@ const TimeTrack = () => {
 
 
 
-  // UI Project Name and task
-  const [prjDesc, setPrjDesc] = useState('')
-  const [task, setTask] = useState('')
-  const [taskTime, setTaskTime] = useState('')
+  
 
 
 
@@ -94,24 +94,89 @@ const TimeTrack = () => {
 
 useEffect(()=>{
   setPrjList(projectList.data.projectList)
-  setTaskList(projectList.data.taskList)
-  console.log('prjList',prjList);
+  setTotalTaskList(projectList.data.taskList)
 },[projectList])
-  // Form
-  const validationSchema = () => {
-    if (!isRunning) {
-      return Yup.object({
-        project: Yup.string().required('Please select this project!'),
-        task: Yup.string().required("This field is required!"),
-      });
-    } else {
-      return Yup.object({
-        status: Yup.number().required("Please select the status!"),
-        notes: Yup.string().required("Please add notes!"),
-      });
+  
 
+
+  interface projectList {
+projectID: number;
+taskID: number;
+title : string;
+description : string
+  }
+
+  interface trackerForm {
+    project : string | undefined;
+    notes : string | undefined,
+    status : string | undefined,
+    startTime : string | null,
+    endTime:string | null,
+    task : string | undefined
+  }
+  let defaultValue = {
+    project : '',
+    notes:'',
+    task:'',
+    status :  '',
+    startTime  : '',
+    endTime : ''
+  }
+  const today = moment();
+  const todayStartOfTheDay = today.startOf('day');
+   const [trackerForm, UpdateTrackerForm] = useState<trackerForm>(defaultValue)
+   const [isSubmited, UpdateSubmit] = useState<boolean>(false)
+   const [formErrors, UpdateErrors] = useState<trackerForm>(defaultValue)
+   const [mode, UpdateMode] = useState<boolean>(true)
+
+   let ValidateRecord = Yup.object({
+    project : Yup.string().required("Field is Required"),
+    notes : Yup.string().required("Field is Required"),
+    task : Yup.string().required("Field is Required")
+   })
+  function submitcall(){
+
+  }
+  let formChange = (data: any) => {
+    debugger
+    const { name, value } = data.target
+    console.log(name, value)
+    UpdateTrackerForm(prev => {
+      return { ...prev, [name]: value, }
+    })
+    if(value && name == 'project'){
+      let task = totaltaskList?.filter(resp=>resp.projectID == value)
+      setTaskList(task ? task: [])      
     }
-  };
+  }
+  let updateTime = (data:any, field:string)=>{    
+    UpdateTrackerForm(prev=> {
+      let updatedData = {...prev, [field]: data}
+      console.log(moment(updatedData.startTime).format())
+      return updatedData
+    })    
+
+  }
+  let formBlur = async (data:any)=>{
+    console.log(data)
+    // if(isSubmited){
+      let result :any
+    try{
+      result = await ValidateRecord.validate(trackerForm, { abortEarly: false})
+      UpdateErrors(defaultValue)
+    }catch(err:any){
+      UpdateErrors(defaultValue)
+      console.log(err)
+      err.inner.forEach((res:any)=>{        
+        UpdateErrors(prev=>{
+          console.log({...prev, [res.path]: [res.errors[0]]})
+          return {...prev, [res.path]: [res.errors[0]]}
+        })
+      })
+    }
+     console.log(result)
+    // }
+      }
 
 
 
@@ -134,167 +199,157 @@ useEffect(()=>{
         </button>
       </div>
 
+
       {/* taskbar Section */}
+<div className="">
+<div className="d-inline">
+Tracker
+</div>
+      <div className="d-inline">
+      <ToggleButtonGroup
+  color="primary"
+  value={mode}
+  sx={{
+    transform: "scale(0.8)", // Reduce overall size
+  }}
+  exclusive
+  onChange={()=>UpdateMode(resp=> (resp ? false: true))}
+  aria-label="Mode"
+>
+  <ToggleButton value={true}>Auto</ToggleButton>
+  <ToggleButton value={false}>Manual</ToggleButton>
+</ToggleButtonGroup>
+      </div>
+      </div>
       <div >
         {/* Form */}
-        <Formik
-          initialValues={{ project: '', task: '', status: '', notes: '', isManual: false }}
-          validationSchema={validationSchema}
-          onSubmit={(values, { resetForm }) => {
-            debugger;
-            if (!isRunning) {
-              setShowSelectVal1(false);
-              if (values.project && values.task) {
-                setShowSelectVal1(true);
-                let prjDesc = projectList.filter((res: any) => res.ProjectID == values.project)[0].Description
-                setPrjDesc(prjDesc)
-                //Same thing we need to get the task descriptiona also for UI
-              }
-            } else {
-              setShowSelectVal1(false);
-              setFormData({
-                project: values.project,
-                task: values.task,
-                status: values.status,
-                notes: values.notes,
-                projectDesc: prjDesc,
-                taskTime: timeFormat,
-                isManual: values.isManual,
-              });
-              setRunTime(0)
-              resetForm()
-            }
-            setIsRunning(!isRunning);
-          }}
-        >
-          {(formik) => (
-            <form onSubmit={formik.handleSubmit} className="mt-4 flex justify-between rounded-lg p-4">
-              <div className="flex gap-3">
-                {showSelectVal1 && <div><h1>{prjDesc}</h1></div>}
 
-                {!isRunning && !showSelectVal1 && !showSelectVal2 && (
-                  <div className="flex gap-3">
-                    {/* Project Dropdown */}
-                    <div>
-                      <FormControl error={formik.touched.project && Boolean(formik.errors.project)} className="formControls">
-                        <InputLabel>Project</InputLabel>
-                        <Field
-                          name="project"
-                          as={Select}
-                          label="Project"
-                          value={formik.values.project}
-                          onChange={formik.handleChange}
-                          onBlur={formik.handleBlur}
-                        >
-                          {prjList && prjList.map((data:any) => (
-                            <MenuItem key={data.projectID} value={data.ProjectID}>
-                              {data.title}
-                            </MenuItem>
-                          ))}
-                        </Field>
-                        <FormHelperText>{formik.touched.project && formik.errors.project}</FormHelperText>
-                      </FormControl>
-                    </div>
+        <form onSubmit={submitcall} className="formArea">
+          <div>
+            <FormControl fullWidth error={formErrors.project ? true : false} >
+              <InputLabel id="Project">Project</InputLabel>
+              <Select
+                required
+                labelId="Project"
+                value={trackerForm.project}
+                label="Project"
+                name='project'
+                onChange={formChange}
+                onBlur={formBlur}
+              >
+                {prjList && prjList.map((data: projectList) => (
+                  <MenuItem key={data.projectID} value={data.projectID}>
+                    {data.description}
+                  </MenuItem>
+                ))}
+              </Select>
+              {formErrors.project && <FormHelperText>{formErrors.project[0]}</FormHelperText>}
+            </FormControl>
+          </div>
+          <div>
+            <FormControl fullWidth error={formErrors.task ? true : false} >
+              <InputLabel id="task">Task</InputLabel>
+              <Select
+                labelId="task"
+                value={trackerForm.task}
+                label="task"
+                name='task'
+                onChange={formChange}
+                onBlur={formBlur}
+              >
+                {taskList && taskList.map((data: projectList) => (
+                  <MenuItem key={data.taskID} value={data.taskID}>
+                    {data.title}
+                  </MenuItem>
+                ))}
+              </Select>
+              {formErrors.project && <FormHelperText>{formErrors.project[0]}</FormHelperText>}
+            </FormControl>
+          </div>
+          
+         
+          <div>
+            <LocalizationProvider dateAdapter={AdapterMoment}>
+              <FormControl fullWidth error={formErrors.startTime ? true : false} >
+                {/* <InputLabel id="startDate">TimePicker</InputLabel> */}
+                <TimePicker  label="Start Time" onChange={(value)=> updateTime(value, 'startTime')} value={trackerForm.startTime ? moment(trackerForm.startTime) : null} 
+                slotProps={{
+                  textField: {
+                    variant: "outlined",
+                    fullWidth: true,
+                    placeholder: "hh:mm",
+                    error: !!formErrors.startTime,
+                  },
+                }}
+                 />
+              </FormControl>
 
-                    {/* Task Dropdown */}
-                    <div>
-                      <FormControl className="formControls" error={formik.touched.task && Boolean(formik.errors.task)}>
-                        <InputLabel>Task</InputLabel>
-                        <Field
-                          name="task"
-                          as={Select}
-                          label="Task"
-                          value={formik.values.task}
-                          onChange={formik.handleChange}
-                          onBlur={formik.handleBlur}
-                        >
-                          <MenuItem value="Task1">Task 1</MenuItem>
-                          <MenuItem value="Task2">Task 2</MenuItem>
-                          <MenuItem value="Task3">Task 3</MenuItem>
-                        </Field>
-                        <FormHelperText>{formik.touched.task && formik.errors.task}</FormHelperText>
-                      </FormControl>
-                    </div>
-                  </div>
-                )}
+            </LocalizationProvider>
+          </div>
+          <div>
+            <LocalizationProvider dateAdapter={AdapterMoment}>
+              <FormControl fullWidth error={formErrors.endTime ? true : false} >
+                {/* <InputLabel id="startDate">TimePicker</InputLabel> */}
+                <TimePicker  label="End Time" onChange={(value)=> updateTime(value, 'endTime')} value={trackerForm.endTime ? moment(trackerForm.endTime) : null} 
+                slotProps={{
+                  textField: {
+                    variant: "outlined",
+                    fullWidth: true,
+                    placeholder: "hh:mm",
+                    error: !!formErrors.endTime,
+                  },
+                }}
+                 />
+              </FormControl>
 
-                {isRunning && !showSelectVal2 && (
-                  <div className="flex gap-3">
-                    {/* Status Dropdown */}
-                    <div>
-                      <FormControl className="formControls" error={formik.touched.status && Boolean(formik.errors.status)}>
-                        <InputLabel>Status</InputLabel>
-                        <Field
-                          name="status"
-                          as={Select}
-                          label="Status"
-                          value={formik.values.status}
-                          onChange={formik.handleChange}
-                          onBlur={formik.handleBlur}
-                        >
-                          <MenuItem value={1}>WIP</MenuItem>
-                          <MenuItem value={2}>Done</MenuItem>
-                        </Field>
-                        <FormHelperText>{formik.touched.status && formik.errors.status}</FormHelperText>
-                      </FormControl>
-                    </div>
+            </LocalizationProvider>
+          </div>
+          <div>
 
-                    {/* Notes Textarea */}
-                    <div>
-                      <Field
-                        name="notes"
-                        as={TextField}
-                        label="Notes"
-                        placeholder="Enter your notes here"
-                        value={formik.values.notes}
-                        onChange={formik.handleChange}
-                        onBlur={formik.handleBlur}
-                        multiline
-                        rows={1}
-                        className="formControls"
-                        error={formik.touched.notes && Boolean(formik.errors.notes)}
-                        helperText={formik.touched.notes && formik.errors.notes}
-                      />
-                    </div>
-                  </div>
-                )}
+          </div>
+          <div>
+            <FormControl fullWidth error={formErrors.status ? true : false} >
+              <InputLabel id="status">Status</InputLabel>
+              <Select
+                labelId="status"
+                value={trackerForm.status}
+                label="status"
+                name='status'
+                onChange={formChange}
+                onBlur={formBlur}
+              >
+                {statusList && statusList.map((data: string) => (
+                  <MenuItem key={data} value={data}>
+                    {data}
+                  </MenuItem>
+                ))}
+              </Select>
+              {formErrors.status && <FormHelperText>{formErrors.status[0]}</FormHelperText>}
+            </FormControl>
+          </div>
+          <div>
+            <FormControl fullWidth error={formErrors.notes ? true : false}>
+              <InputLabel id="notes">Notes</InputLabel>
+              <TextField
+              multiline
+              variant="outlined"
+              rows={1}
+                value={trackerForm.notes}
+                name='notes'
+                id='notes'
+                onChange={formChange}
+                onBlur={formBlur}
+              />
+              {formErrors.notes && <FormHelperText>{formErrors.notes[0]}</FormHelperText>}
+            </FormControl>
+          </div>
 
-                {/* Manual Switch */}
-                {/* <div className="m-2 toggleContain">
-                  <Field name="isManual">
-                    {({ field, form }) => (
-                      <FormControlLabel
-                        control={
-                          <Switch
-                            {...field}
-                            checked={field.value}
-                            onChange={form.handleChange}
-                            onBlur={form.handleBlur}
-                          />
-                        }
-                        label="Manual"
-                      />
-                    )}
-                  </Field>
-                </div> */}
-              </div>
+          <button type="submit">Update</button>
 
-              {/* Stopwatch */}
-              <div className="flex gap-5">
-                <div className="text-2xl font-bold mt-3">{timeFormat}</div>
-                <div>
-                  <button
-                    type="submit"
-                    className={`mt-2 px-4 py-2 text-white rounded-md ${isRunning ? "stopBtn clicked" : "startBtn"}`}
-                  >
-                    {isRunning ? "Stop" : "Start"}
-                    {isRunning ? <i className="fa-solid fa-pause ml-1"></i> : <i className="fa-solid fa-play ml-1"></i>}
-                  </button>
-                </div>
-              </div>
-            </form>
-          )}
-        </Formik>
+        </form>
+
+
+       
 
 
       </div>

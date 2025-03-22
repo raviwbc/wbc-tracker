@@ -61,3 +61,20 @@
 /* .css-sc8y68-MuiInputBase-root-MuiOutlinedInput-root-MuiSelect-root { */
     /* height: 40px; */
 /* } */
+
+
+.formArea{
+    display: grid;
+    grid-template-columns: 250px 250px 150px 150px auto 150px 250px 100px;
+    gap: 20px;
+    padding: 20px 0;
+}
+.mode_header{
+    display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 0 0;
+}
+.d-inline{
+    display: inline-block;
+}
