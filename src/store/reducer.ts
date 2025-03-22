@@ -4,13 +4,11 @@ import { postListReducer } from "./reducers/titleList.ts";
 import { trackerReducer } from "./reducers/timeTracker.ts";
 import { manualEntryReducer } from "./reducers/manualEntry.ts";
 
-
 const rootReducer = combineReducers({
     counterReducer,
     postListReducer,
     trackerReducer,
-    manualEntryReducer
-    
+    manualEntryReducer,
 })
 
 export default rootReducer
