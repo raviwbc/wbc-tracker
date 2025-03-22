@@ -47,7 +47,7 @@ function mychnages(e:any){
             <button onClick={()=> dispatch(fetchPostsRequest())} > api call</button>
             <button onClick={()=> dispatch(ProjectListRequest()) }> call project List </button>
           </div> */}
-        <div>
+        <div className="themeToggle">
         <FormControlLabel control={<Switch defaultChecked onChange={toggleTheme} />} label={"Theme"} />
         </div>
 

@@ -15,3 +15,9 @@
     padding: 5px 16px;
     border-radius: 20px;
 }
+@media screen and (max-width:776px) {
+    .themeToggle{
+        display: none;
+
+    }
+}

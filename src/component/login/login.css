@@ -1,0 +1,72 @@
+body {
+    background-color: rgb(255 228 195);
+}
+
+.loginPage {
+    margin: 78px;
+    padding: 55px;
+    width: 409px;
+    height: 700px;
+    background-color: white;
+    border-radius: 30px;
+    display: flex;
+    flex-direction: column;
+
+    .loginTxt {
+        font-size: 30px;
+        font-weight: 700;
+        padding: 8px;
+        color: #1b004e;
+    }
+
+    .welcomeTxt {
+        margin-top: 80px;
+        font-size: 22px;
+        font-weight: 600;
+    }
+    .formControlContanier {
+
+        margin-top: 45px;
+
+        /* .usernameContain{
+        margin: 10px;
+       } */
+        .passwordContain {
+            margin-top: 20px;
+        }
+    }
+  
+    .submitBtn {
+        margin-top: 40px;
+
+        button {
+            background: #1b004e;
+            border: none;
+        }
+    }
+    .copyRightTxt{
+        font-size: 12px;
+        margin-top: 20px;
+    }
+}
+
+@media screen and (max-width:776px) {
+body{
+    background-color: white;
+}
+.loginPage {
+    margin: 0px;
+    padding: 55px;
+    width: auto;
+    height: auto;
+    background-color: white;
+    border-radius: 30px;
+    display: flex;
+    flex-direction: column;
+}
+.welcomeTxt {
+    margin-top: 65px;
+    font-size: 22px;
+    font-weight: 600;
+}
+}
