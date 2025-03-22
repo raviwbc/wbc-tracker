@@ -10,6 +10,7 @@ import TimeTrack from './component/timeTrack.tsx';
 import { Provider } from 'react-redux';
 import { store } from './store/store.ts';
 import { CompletedList } from './component/completedTaskList/completedList.tsx';
+import Tie from './pages/games/tie.tsx';
 
 function App() {
   const [theme, setTheme] = useState('dark');
@@ -33,6 +34,7 @@ function App() {
         <div className={theme}>
         <HeaderComp></HeaderComp>
         <TimeTrack />
+        {/* <Tie/> */}
         
         </div>
         </MyContext.Provider>
