@@ -5,13 +5,15 @@ import * as Yup from 'yup';
 import './timeTracker.css'
 import { Button, FormControl, FormControlLabel, FormHelperText, Input, InputLabel, MenuItem, OutlinedInput, Select, Switch, TextField, ToggleButton, ToggleButtonGroup } from "@mui/material";
 import { CompletedList } from "./completedTaskList/completedList.tsx";
-import { useDispatch, useSelector } from "react-redux";
+import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { ProjectListRequest } from "../store/reducers/timeTracker.ts";
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { TimePicker } from "@mui/x-date-pickers";
 import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
 import { DemoContainer, DemoItem } from '@mui/x-date-pickers/internals/demo';
 import { ManualEntryRequest } from "../store/reducers/manualEntry.ts";
+import { completedEntryRequest } from "../store/reducers/todayCompletedList.ts";
+import { ReducersList, tasklist } from "../model/timetracker.ts";
 
 type Dates = string[];
 
@@ -28,18 +30,26 @@ const TimeTrack = () => {
   const [showSelectVal2, setShowSelectVal2] = useState<boolean>(false)
 
   const [prjTaskList, setPrjTaskList] = useState([])
-  const [prjList, setPrjList] = useState<projectList[]>()
+  const [prjList, setPrjList] = useState<tasklist[]>()
+  const [entryList, setEntryList] = useState<tasklist[]>()
   const [totaltaskList, setTotalTaskList] = useState<projectList[]>([])
   const [taskList, setTaskList] = useState<projectList[]>([])
   const statusList = ["Done", "WIP", "OnHold"]
+
+  useEffect(()=>{
+
+  }, [])
   
 
   //Get Project List
   const dispatch = useDispatch()
   const projectList = useSelector((state: any) => {
-    console.log("statsus", state)
     return state.trackerReducer
   })
+  const manualEntryStatus = useSelector((state:ReducersList)=>{
+    return state.manualEntryReducer
+  })
+  const entryListReducer = useSelector((store:ReducersList)=> store.entryListReducer,  shallowEqual )
 
   const [formData, setFormData] = useState({
     project: '',
@@ -187,14 +197,17 @@ const TimeTrack = () => {
       postData.tlComments = "";
       console.log(postData, minutes);
       try{
-      dispatch(ManualEntryRequest(postData))
-      console.log("sd")
+      dispatch(ManualEntryRequest({
+        ...postData,
+        startTime: postData.startTime.toString?.() ?? postData.startTime,
+        endTime: postData.endTime.toString?.() ?? postData.endTime,
+        timeAdded: postData.timeAdded?.toString?.() ?? postData.timeAdded,
+        timeSheetDate: postData.timeSheetDate?.toString?.() ?? postData.timeSheetDate,
+      }))
       }
       catch{
-        console.log("err")
+      
       }
-
-
     } catch (err: any) {
       UpdateErrors(errorDefaultVlaue);
       err.inner.forEach((res: any) => {
@@ -207,8 +220,7 @@ const TimeTrack = () => {
 
   let formChange = (data: any) => {
     debugger
-    const { name, value } = data.target
-    console.log(name, value)
+    const { name, value } = data.target;
     UpdateTrackerForm(prev => {
       return { ...prev, [name]: value, }
     })
@@ -244,12 +256,37 @@ const TimeTrack = () => {
     // }
   }
 
+  function EntryListCall(){
+    dispatch(completedEntryRequest(''))
+    
+  }
 
 
+useEffect(()=>{
+const datap:tasklist[] = entryListReducer.data
+console.log(prjList)
+if(datap?.length){
+const tasklistsp = datap?.map(resp=>{
+  let project = prjList?.filter((data)=> data.projectID == resp.projectID)
+  let task = totaltaskList?.filter((data)=> data.taskID == resp.taskID)
+  return { ...resp, projectName : project?.length ? project[0].projectName : '', taskName: task?.length ? task[0].title : '' }
+})
+console.log(tasklistsp)
+setEntryList(tasklistsp)
+
+
+
+}
+
+}, [entryListReducer])
 
 
   return (
     <div className="m-5">
+      {entryListReducer.Loading ? 'er': 'ew'} sadasd
+      { manualEntryStatus.Loading  ?? <div>loaging</div> }
+      { entryListReducer.Loading  ?? <div>loaging</div> }
+      
       {/* Calendar */}
       <div className="mt-4 flex gap-4  dateDayContainer">
         {dates.map((item, index) => (
@@ -302,9 +339,9 @@ const TimeTrack = () => {
                 onChange={formChange}
                 onBlur={formBlur}
               >
-                {prjList && prjList.map((data: projectList) => (
+                {prjList && prjList.map((data) => (
                   <MenuItem key={data.projectID} value={data.projectID}>
-                    {data.description}
+                    {data.projectName}
                   </MenuItem>
                 ))}
               </Select>
@@ -411,6 +448,10 @@ const TimeTrack = () => {
         </form>
       </div>
 
+      <div>get data list 
+        <button onClick={EntryListCall}>List Call</button>
+      </div>
+
       {/* Accordion */}
       <div className="mt-4 rounded-lg bg-gray-100 shadow-lg">
         {/* Accordion Header */}
@@ -442,7 +483,7 @@ const TimeTrack = () => {
         {isAccOpen && (
           <div className="p-5 bg-white border border-gray-200 rounded-b-xl">
             <p className="">
-              <CompletedList />
+              <CompletedList entrylist={entryList} />
             </p>
 
           </div>

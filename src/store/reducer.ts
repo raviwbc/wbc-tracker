@@ -5,13 +5,15 @@ import { trackerReducer } from "./reducers/timeTracker.ts";
 import { loginValidationReducer } from "./reducers/auth.ts";
 
 import { manualEntryReducer } from "./reducers/manualEntry.ts";
+import { entryListReducer } from "./reducers/todayCompletedList.ts";
 
 const rootReducer = combineReducers({
     manualEntryReducer,
     counterReducer,
     postListReducer,
     trackerReducer,
-    loginValidationReducer
+    loginValidationReducer,
+    entryListReducer
 })
 
 export default rootReducer
