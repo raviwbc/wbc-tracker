@@ -5,10 +5,13 @@
     left: 0;
     width: 100vw; 
     height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
 .loginPage {
-    margin: 78px;
+    margin-left: 78px;
     padding: 55px;
     width: 409px;
     height: 700px;

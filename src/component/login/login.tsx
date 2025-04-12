@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import './login.css';
 import TextField from "@mui/material/TextField";
 import IconButton from "@mui/material/IconButton";
@@ -8,54 +8,58 @@ import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import Button from "@mui/material/Button";
 import LoginIcon from '@mui/icons-material/Login';
 import * as Yup from 'yup';
-
+import { useDispatch, useSelector } from "react-redux";
+import { loginRequest } from "../../store/reducers/auth.ts";
 
 interface LoginFormData {
-    username: string;
+    userName: string;
     password: string;
 }
 
 export const Login = () => {
-    const [showPassword, setShowPassword] = useState(false);
+    const dispatch = useDispatch();
+    const auth = useSelector((state: any) => state?.auth);
 
-    const [formData, setFormData] = useState<LoginFormData>({
-        username: "",
-        password: "",
+    const [showPassword, setShowPassword] = useState(false);
+    const [formData, setFormData] = useState<LoginFormData>({ 
+        userName: "", 
+        password: "" 
     });
     const [errors, setErrors] = useState<Partial<LoginFormData>>({});
 
+    useEffect(() => {
+        console.log("Updated Errors:", errors);
+    }, [errors]);
+
+    useEffect(() => {
+        console.log("Auth State:", auth);
+    }, [auth]);
 
     const validationSchema = Yup.object().shape({
-        username: Yup.string()
-            .required("This field is required!"),
-        password: Yup.string()
-            .required("This field is required!"),
+        userName: Yup.string().required("This field is required!"),
+        password: Yup.string().required("This field is required!"),
     });
-
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
-        setFormData({ ...formData, [name]: value });
-        setErrors((res: any) => {
-            return { ...res, [name]: '' }
-        })
-        console.log('error', errors);
-
+        setFormData(prev => ({ ...prev, [name]: value }));
+        setErrors(prev => ({ ...prev, [name]: "" }));  
     };
-
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-
         try {
             await validationSchema.validate(formData, { abortEarly: false });
             setErrors({});
             console.log("Form Submitted!", formData);
 
+            
+            dispatch(loginRequest(formData));
+
+        // } catch(e){
+        //     console.log(e)
         } catch (validationError: any) {
             const newErrors: Partial<LoginFormData> = {};
-            console.log("validationError !", validationError);
-
             validationError.inner.forEach((err: any) => {
                 newErrors[err.path as keyof LoginFormData] = err.message;
             });
@@ -68,20 +72,20 @@ export const Login = () => {
             <div className="loginPage">
                 <div className="loginTxt">Login</div>
                 <div className="welcomeTxt">
-                    <div>Welcome to <span style={{ color: "#1b004e" }}> WBC Tracker</span></div>
+                    <div>Welcome to <span style={{ color: "#1b004e" }}>WBC Tracker</span></div>
                 </div>
 
                 <div className="formControlContainer">
                     <form onSubmit={handleSubmit}>
                         <div className="usernameContain">
                             <TextField
-                                id="username"
-                                name="username"
+                                id="userName"
+                                name="userName"
                                 label="Enter the user name"
                                 variant="outlined"
                                 size="small"
                                 fullWidth
-                                value={formData.username}
+                                value={formData.userName}
                                 onChange={handleChange}
                                 error={!!errors.username}
                                 helperText={errors.username}
