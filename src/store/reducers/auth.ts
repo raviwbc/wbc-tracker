@@ -1,8 +1,20 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface AuthData {
-    token: string;
-    user: any;  // Ideally, replace `any` with a proper user type
+    message: "You have successfully logged in.",
+    didError: false,
+    errorMessage: string | null,
+    model: {
+        username: string,
+        password: string,
+        role: string,
+        token: string,
+        email: string,
+        firstName: string,
+        lastName: string,
+        result: string | null,
+        userid: number
+    }
 }
 
 interface AuthState {
@@ -21,7 +33,7 @@ export const loginValidation = createSlice({
     name: "auth",
     initialState,
     reducers: {
-        loginRequest: (state, action: PayloadAction<{ username: string; password: string }>) => {
+        loginRequest: (state, action: PayloadAction<{ userName: string; password: string }>) => {
             state.loading = true;
             state.message = null;
             console.log("Login Request Dispatched:", action.payload);
