@@ -87,8 +87,8 @@ export const Login = () => {
                                 fullWidth
                                 value={formData.userName}
                                 onChange={handleChange}
-                                error={!!errors.username}
-                                helperText={errors.username}
+                                error={!!errors.userName}
+                                helperText={errors.userName}
                             />
                         </div>
 
