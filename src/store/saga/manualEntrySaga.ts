@@ -3,16 +3,18 @@ import {ManualEntryRequest,enterySuccess, Entryfailure} from '../reducers/manual
 import { postManualEntry } from "../api-call/jsonapi.ts";
 
 
-function* postManualEntryData(){
+function* postManualEntryData(action){
     try{
-        let data = yield call(postManualEntry)
+        let jj = action.payload
+        let data = yield call(postManualEntry, jj)
         yield put(enterySuccess(data));
     }catch(err){
         yield put(Entryfailure(err.message))
     }
 }
 
-export function* watchManualEntryRequest() {
+ function* watchManualEntryRequest() {
     yield takeLatest(ManualEntryRequest.type, postManualEntryData)
     
 }
+export default watchManualEntryRequest

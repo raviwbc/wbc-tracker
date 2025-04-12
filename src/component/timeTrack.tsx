@@ -11,6 +11,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { TimePicker } from "@mui/x-date-pickers";
 import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
 import { DemoContainer, DemoItem } from '@mui/x-date-pickers/internals/demo';
+import { ManualEntryRequest } from "../store/reducers/manualEntry.ts";
 
 type Dates = string[];
 
@@ -36,6 +37,7 @@ const TimeTrack = () => {
   //Get Project List
   const dispatch = useDispatch()
   const projectList = useSelector((state: any) => {
+    console.log("statsus", state)
     return state.trackerReducer
   })
 
@@ -184,6 +186,15 @@ const TimeTrack = () => {
       postData.timeAdded = startDateAndTime;
       postData.tlComments = "";
       console.log(postData, minutes);
+      try{
+      dispatch(ManualEntryRequest(postData))
+      console.log("sd")
+      }
+      catch{
+        console.log("err")
+      }
+
+
     } catch (err: any) {
       UpdateErrors(errorDefaultVlaue);
       err.inner.forEach((res: any) => {

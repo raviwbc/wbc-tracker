@@ -26,6 +26,7 @@ function* fetchProjectList(){
 }
 
 export function* watchFetchlist(){
+    console.log('1'+'ravi')
     // yield takeLatest(fetchPostsRequest.type, fetchList),
     yield takeLatest(ProjectListRequest.type, fetchProjectList)
 }
