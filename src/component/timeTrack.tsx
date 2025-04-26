@@ -14,21 +14,69 @@ import { DemoContainer, DemoItem } from '@mui/x-date-pickers/internals/demo';
 import { ManualEntryRequest } from "../store/reducers/manualEntry.ts";
 import { completedEntryRequest } from "../store/reducers/todayCompletedList.ts";
 import { ReducersList, tasklist } from "../model/timetracker.ts";
+import { Autotask } from "./autoTask/autotask.tsx";
 
 type Dates = string[];
+
+
+interface projectList {
+  projectID: number;
+  taskID: number;
+  title: string;
+  description: string
+}
+
+class manualEntryData {
+    projectID: number = 0
+    userID: number =0
+    taskID: number=0
+    startTime: string = ""
+    endTime: string = ""
+    timeSheetDate: string = ""
+    timeAdded: string = ""
+    minutes: number = 0
+    comment: string = ""
+    tlComments: string = ""
+    taskStatus: string = ""
+    flog: boolean = false
+    isAuto: boolean = false
+  }
+
+
+interface trackerForm {
+  project: number | null,
+  notes: string ,
+  status: string,
+  startTime: string | null,
+  endTime: string | null,
+  task: number | null
+}
+let defaultValue = {
+  project: null,
+  notes: '',
+  task: null,
+  status: '',
+  startTime: '',
+  endTime: ''
+}
+let errorDefaultVlaue = {
+  project: null,
+  notes: '',
+  task: null,
+  status: '',
+  startTime: '',
+  endTime: ''
+}
 
 const TimeTrack = () => {
   const [dates, setDates] = useState<Dates>([]);
 
   const [isRunning, setIsRunning] = useState<boolean>(false);
   const [runTime, setRunTime] = useState<number>(0);
-
   const [isAccOpen, setIsAccOpen] = useState<boolean>(true);
-
   // Show Select Values
   const [showSelectVal1, setShowSelectVal1] = useState<boolean>(false)
   const [showSelectVal2, setShowSelectVal2] = useState<boolean>(false)
-
   const [prjTaskList, setPrjTaskList] = useState([])
   const [prjList, setPrjList] = useState<tasklist[]>()
   const [entryList, setEntryList] = useState<tasklist[]>()
@@ -36,9 +84,7 @@ const TimeTrack = () => {
   const [taskList, setTaskList] = useState<projectList[]>([])
   const statusList = ["Done", "WIP", "OnHold"]
 
-  useEffect(()=>{
 
-  }, [])
   
 
   //Get Project List
@@ -76,18 +122,20 @@ const TimeTrack = () => {
   const timeFormat = moment.utc(runTime * 1000).format("HH:mm:ss");
 
 
+
   useEffect(() => {
     const initialDataPrepare = () => {
       try {
-        dispatch(ProjectListRequest())
-        // Effect to populate the date list
+        dispatch(ProjectListRequest());
+        EntryListCall()
+        
         const listOfDate: Dates = [];
-        for (let i = 23; i >= 0; i--) {
+        let k =parseInt((window.innerWidth/100).toFixed())
+        for (let i = (k+2); i > 0; i--) {
           const date = moment().subtract(i, "days").format("DD ddd");
           listOfDate.push(date);
         }
         setDates(listOfDate);
-        // Get the project List
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -102,55 +150,6 @@ const TimeTrack = () => {
   }, [projectList])
 
 
-
-  interface projectList {
-    projectID: number;
-    taskID: number;
-    title: string;
-    description: string
-  }
-
-  class manualEntryData {
-      projectID: number = 0
-      userID: number =0
-      taskID: number=0
-      startTime: string = ""
-      endTime: string = ""
-      timeSheetDate: string = ""
-      timeAdded: string = ""
-      minutes: number = 0
-      comment: string = ""
-      tlComments: string = ""
-      taskStatus: string = ""
-      flog: boolean = false
-      isAuto: boolean = false
-    }
-  
-
-  interface trackerForm {
-    project: number | null,
-    notes: string ,
-    status: string,
-    startTime: string | null,
-    endTime: string | null,
-    task: number | null
-  }
-  let defaultValue = {
-    project: null,
-    notes: '',
-    task: null,
-    status: '',
-    startTime: '',
-    endTime: ''
-  }
-  let errorDefaultVlaue = {
-    project: null,
-    notes: '',
-    task: null,
-    status: '',
-    startTime: '',
-    endTime: ''
-  }
   const today = moment();
   const todayStartOfTheDay = today.startOf('day');
   const [trackerForm, UpdateTrackerForm] = useState<trackerForm>(defaultValue)
@@ -262,23 +261,19 @@ const TimeTrack = () => {
   }
 
 
-useEffect(()=>{
-const datap:tasklist[] = entryListReducer.data
-console.log(prjList)
-if(datap?.length){
-const tasklistsp = datap?.map(resp=>{
-  let project = prjList?.filter((data)=> data.projectID == resp.projectID)
-  let task = totaltaskList?.filter((data)=> data.taskID == resp.taskID)
-  return { ...resp, projectName : project?.length ? project[0].projectName : '', taskName: task?.length ? task[0].title : '' }
-})
-console.log(tasklistsp)
-setEntryList(tasklistsp)
-
-
-
-}
-
-}, [entryListReducer])
+  useEffect(() => {
+    if (prjList?.length) {
+      const datap: tasklist[] = entryListReducer.data;
+      if (datap?.length) {
+        const tasklistsp = datap?.map(resp => {
+          let project = prjList?.filter((data) => data.projectID == resp.projectID)
+          let task = totaltaskList?.filter((data) => data.taskID == resp.taskID)
+          return { ...resp, projectName: project?.length ? project[0].projectName : '', taskName: task?.length ? task[0].title : '' }
+        })
+        setEntryList(tasklistsp)
+      }
+    }
+  }, [entryListReducer, prjList])
 
 
   return (
@@ -307,7 +302,7 @@ setEntryList(tasklistsp)
       {/* taskbar Section */}
       <div className="">
         <div className="d-inline">
-          Trackers 1
+          Trackers
         </div>
         <div className="d-inline">
           <ToggleButtonGroup
@@ -324,7 +319,11 @@ setEntryList(tasklistsp)
           </ToggleButtonGroup>
         </div>
       </div>
-      <div >
+      {
+        mode && <Autotask projectList={projectList}/>
+      }
+      {
+        !mode && <div >
         {/* Form */}
         <form onSubmit={submitcall} className="formArea">
           <div>
@@ -444,13 +443,20 @@ setEntryList(tasklistsp)
               {/* {formErrors.notes && <FormHelperText>{formErrors.notes[0]}</FormHelperText>} */}
             </FormControl>
           </div>
-          <button type="submit">Update</button>
+          <button type="submit" className="manualUpdate">
+            Update
+            {/* <img src="assets/update.svg" alt="Update" width={30} title="update" /> */}
+          </button>
         </form>
       </div>
+      }
+      
 
-      <div>get data list 
-        <button onClick={EntryListCall}>List Call</button>
+      <div>
+      
       </div>
+
+      
 
       {/* Accordion */}
       <div className="mt-4 rounded-lg bg-gray-100 shadow-lg">
@@ -461,7 +467,7 @@ setEntryList(tasklistsp)
             className="flex items-center justify-between w-full p-5 font-medium text-gray-500 border border-b-0 border-gray-200 rounded-t-xl focus:ring-4 focus:ring-gray-200 hover:bg-gray-100 gap-3"
             onClick={() => setIsAccOpen(!isAccOpen)}
           >
-            <span>Today</span>
+            <span>Today Completed Task List</span>
             <svg
               className={`w-3 h-3 transform ${isAccOpen ? "rotate-180" : "rotate-0"}`}
               xmlns="http://www.w3.org/2000/svg"
@@ -485,7 +491,6 @@ setEntryList(tasklistsp)
             <p className="">
               <CompletedList entrylist={entryList} />
             </p>
-
           </div>
         )}
       </div>

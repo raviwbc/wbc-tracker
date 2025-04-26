@@ -2,6 +2,10 @@ import React from "react"
 import moment from "moment"
 import './completedList.css'
 import { ReducersList, tasklist } from "../../model/timetracker.ts";
+import { useDispatch } from "react-redux";
+import { deleteRequest } from "../../store/reducers/todayCompletedList.ts";
+
+
 
 // interface taskListt{
 //     project  :string;
@@ -53,8 +57,21 @@ const returnHours = (endDate, startDate)=>{
     return `${String(duration.hours()).padStart(2, '0')}:${String(duration.minutes()).padStart(2, '0')}:${String(duration.seconds()).padStart(2, '0')}`;
 }
 
+function minutesConverter(min:number){
+    let duration = moment.duration(min, 'minutes')
+    return `${String(duration.hours()).padStart(2, '0')}:${String(duration.minutes()).padStart(2, '0')}`;
+}
+
+
+
 
 export const CompletedList = ({entrylist})=>{
+    const dispatch = useDispatch()
+    function deletefun(id:number | null){
+        console.log(id)
+        dispatch(deleteRequest(id))
+        
+        }
     return <div>         
         <div className="taskListTable">
             {
@@ -62,6 +79,9 @@ export const CompletedList = ({entrylist})=>{
 
                     <div key={resp.taskID + resp.minutes + (Math.random() * 10)} className="parent_div">
                     <div>{resp.taskName} - <span data-status={resp.projectName}>{resp.projectName}</span></div>
+                    
+                    
+                    <div><img title={resp.autoUpdate ? 'Auto Entry' :'Manual Entry'} src={resp.autoUpdate ?'/assets/happy.svg':'/assets/angry.svg'} width={30} alt="Delete" /></div>
                     <div>
                         <span data-status={resp.taskStatus} className="status">
                         {resp.taskStatus}
@@ -70,8 +90,11 @@ export const CompletedList = ({entrylist})=>{
                     {/* <div>{ moment(resp.startTime).format('HH:mm')} - {moment(resp.endTime).format('HH:mm')  }</div> */}
                     <div>{resp.startTime} - {resp.endTime}</div>
                      {/* returnHours(resp.endTime,resp.startTime) */}
-                    <div>{resp.minutes}</div>
-                    <div>action</div>
+                    <div>{minutesConverter(resp.minutes)}</div>
+                    
+                    <div>
+                        <button onClick={()=> deletefun(resp.id)}><img src="/assets/delete.svg" width={35} alt="Delete" /></button>
+                    </div>
                     </div>
                 ))
             }

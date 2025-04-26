@@ -4,7 +4,7 @@ import { watchFetchlist } from "./saga/listApicall/apicall.ts";
 import { watchLoginAuth } from "./saga/loginAuth.ts";
 import watchManualEntryRequest from "./saga/manualEntrySaga.ts";
 import { fork } from "redux-saga/effects";
-import { watchEntryListGet } from "./saga/entryListSaga.ts";
+import { watchDeleteDelete, watchEntryListGet } from "./saga/entryListSaga.ts";
 
   
   // Root Saga
@@ -16,6 +16,7 @@ import { watchEntryListGet } from "./saga/entryListSaga.ts";
         fork(watchIncrementAsync),
         fork(watchLoginAuth),
         fork(watchEntryListGet),
+        fork(watchDeleteDelete),
       ]);
     } catch (error) {
       console.error('🔥 Saga error:', error);
