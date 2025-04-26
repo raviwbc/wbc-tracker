@@ -1,24 +1,31 @@
 .loginContainer {
-    background-color: rgb(255 228 195);
-    position: fixed; 
+    background-position: right;
+    height: "100vh";
+    width: "100%";
+    background-repeat: no-repeat;
+    position: relative;
+    background-size: cover;
     top: 0;
     left: 0;
-    width: 100vw; 
+    width: 100vw;
     height: 100vh;
     display: flex;
     flex-direction: column;
     justify-content: center;
 }
-
+body{
+    margin: 0;
+    padding: 0;
+    overflow: hidden; 
+}
 .loginPage {
-    margin-left: 78px;
+    margin-left: 150px;
     padding: 55px;
     width: 409px;
     height: 700px;
     background-color: white;
     border-radius: 30px;
-    display: flex;
-    flex-direction: column;
+    margin-top: 70px;
 
     .loginTxt {
         font-size: 30px;
@@ -57,7 +64,18 @@
         margin-top: 20px;
     }
 }
-
+@media screen and (max-width:1460px) {
+    .loginPage {
+    margin-left: 100px;
+    margin-top: 45px;
+    }
+}
+@media screen and (max-width:1560px) {
+    .loginPage {
+    margin-left: 80px;
+    margin-top: 45px;
+    }
+}
 @media screen and (max-width:776px) {
 .loginContainer{
     background-color: white;
@@ -71,6 +89,7 @@
     border-radius: 30px;
     display: flex;
     flex-direction: column;
+    border:none
 }
 .welcomeTxt {
     margin-top: 65px;

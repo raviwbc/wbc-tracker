@@ -36,7 +36,6 @@ export const loginValidation = createSlice({
         loginRequest: (state, action: PayloadAction<{ userName: string; password: string }>) => {
             state.loading = true;
             state.message = null;
-            console.log("Login Request Dispatched:", action.payload);
         },
         loginSuccess: (state, action: PayloadAction<AuthData>) => {
             state.loading = false;
@@ -44,6 +43,8 @@ export const loginValidation = createSlice({
             state.message = "Login successful!";
             console.log("Login Success:", action.payload);
             localStorage.setItem("accessToken", action.payload.model.token);
+            localStorage.setItem("userId", JSON.stringify(action.payload.model.userid))
+            localStorage.setItem("currentUser", JSON.stringify(action.payload.model))
         },
         loginFailed: (state, action: PayloadAction<string>) => {
             state.loading = false;

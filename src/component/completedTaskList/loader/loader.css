@@ -1,0 +1,68 @@
+.bg_black_div {
+    background: #00000099;
+    width: 100vw;
+    height: 100vh;
+    z-index: 101;
+    position: fixed;
+    top: 0;
+    font: normal normal normal 14px/20px Roboto;
+    left: 0;
+}
+.clock-loader {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+   
+  }
+  
+  .clock-face {
+    position: relative;
+    width: 80px;
+    height: 80px;
+    border: 6px solid #ddd;
+    border-radius: 50%;
+    background: white;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    z-index: 1001;
+  }
+  
+  .clock-hand {
+    position: absolute;
+    top: 5px;
+    left: 50%;
+    width: 3px;
+    height: 30px;
+    background-color: #1b004e;
+    transform-origin: bottom center;
+    animation: rotate-hand 2s linear infinite;
+  }
+  
+  @keyframes rotate-hand {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  .clock-small-hand {
+    position: absolute;
+    top: 15px;
+    left: 50%;
+    width: 3px;
+    height: 20px;
+    background-color: #8c8a90;
+    transform-origin: bottom center;
+    animation: rotate-smal-hand 3s linear infinite;
+  }
+  
+  @keyframes rotate-smal-hand {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  

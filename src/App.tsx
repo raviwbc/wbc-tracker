@@ -1,19 +1,21 @@
-import React, { useState } from 'react';
+import React, { useState ,useEffect} from 'react';
 // import logo from './logo.svg';
 import './custom_styles/font-style.css';
+
 
 import './App.css';
 import { HeaderComp } from './component/header.tsx';
 import { MyContext } from './myContext.tsx';
 import { MyContextType } from './model/contextApi.ts';
 import TimeTrack from './component/timeTrack.tsx';
-import { Provider } from 'react-redux';
+import { Provider, useSelector } from 'react-redux';
 import { store } from './store/store.ts';
 import { CompletedList } from './component/completedTaskList/completedList.tsx';
 import Tie from './pages/games/tie.tsx';
 import { Login } from './component/login/login.tsx';
 import { BrowserRouter, Link, Route, Router, Routes } from 'react-router-dom';
-
+import { Toaster } from 'react-hot-toast';
+import ClockLoader from './component/completedTaskList/loader/loader.tsx';
 function App() {
   const [theme, setTheme] = useState('dark');
   const [user, setUser] = useState('Guest');
@@ -28,7 +30,8 @@ function App() {
     user,
     toggleTheme,
   };
-
+  
+  
   return (
     <div>
           <BrowserRouter>
@@ -44,9 +47,41 @@ function App() {
       <div className={theme}>
       <HeaderComp></HeaderComp>
       {/* <Router> */}
+    
+      {/* <ClockLoader /> */}
+      <Toaster position="top-center" reverseOrder={false}  toastOptions={{
+    // Default style
+    
+    style: {
+      background: '#fff',
+      color: '#fffff',
+      fontSize: '15px',
+      padding: '15px'
+    },
+    // Customize specific types
+    success: {
+      icon: <img src="/toater-succes.png" alt="success" width={24} height={24} />,
+      style: {
+        background: 'linear-gradient(90deg, rgb(255, 255, 255) 0%, rgb(176 255 129) 50%, rgb(255 255 255) 100%)',
+        color: 'black',
+        border: '1px solid 1px solid #158015',
+        boxShadow: '0 0 10px 2px rgba(0, 0, 0, 0.2)'
+      },
+    },
+    error: {
+      icon: <img src="/toaster-error.png" alt="success" width={24} height={24} />,
+      style: {
+        background: 'linear-gradient(90deg, rgba(255, 255, 255, 1) 0%, rgb(255 157 157) 50%, rgb(255 215 211) 100%)',
+        color: '#fffff',
+        border: '1px solid rgb(249 30 30 / 52%)',
+        boxShadow: '0 0 10px 2px rgba(0, 0, 0, 0.2)'
+      },
+    },
+  }} />
+  
       <Routes>
-        <Route path="/" element={<TimeTrack />}/>
-        <Route path="/login" element={<Login />}/>
+        <Route path="/" element={<Login />}/>
+        <Route path="/Index" element={<TimeTrack />}/>
         <Route path="*" element={<TimeTrack />} />
 
       </Routes>
