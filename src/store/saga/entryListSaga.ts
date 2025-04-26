@@ -1,6 +1,6 @@
 import { call, put, takeLatest } from "redux-saga/effects"
-import { completedEntryList } from "../api-call/jsonapi.ts"
-import { completedEntryFailure, completedEntryRequest, completedEntrySuccess } from "../reducers/todayCompletedList.ts"
+import { completedEntryList, deleteTask } from "../api-call/jsonapi.ts"
+import { completedEntryFailure, completedEntryRequest, completedEntrySuccess, deleteFailer, deleteRequest, deleteSuccess } from "../reducers/todayCompletedList.ts"
 import { AxiosError } from "axios"
 import { startLoading, stopLoading } from "../reducers/loader.ts";
 
@@ -23,9 +23,27 @@ import { startLoading, stopLoading } from "../reducers/loader.ts";
     }finally{
         yield put(stopLoading());  
     }
-
+}
+function* deleteTaskDel(action){    
+    try{
+        debugger
+        const resp = yield call(deleteTask, action.payload)        
+        if(resp.data){
+            yield put(deleteSuccess(resp.data.model))
+        }else{
+            yield put(deleteFailer('Something went wrong try again'))    
+        }
+        
+    }
+    catch(e){
+        yield put(deleteFailer(e.message))
+    }
 }
 
 export function* watchEntryListGet(){
     yield takeLatest(completedEntryRequest.type, entrylistGet)
+}
+
+export function* watchDeleteDelete(){
+    yield takeLatest(deleteRequest.type, deleteTaskDel)
 }

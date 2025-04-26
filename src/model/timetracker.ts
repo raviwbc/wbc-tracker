@@ -34,6 +34,7 @@ export class manualEntryData {
 
   
 export class tasklist{
+  id:number| null
 comment: string | null
 endDate: string | null
 endTime: string | null
@@ -51,4 +52,11 @@ isAuto: boolean = false
 isRestart: boolean = false
 autoUpdate: boolean = false
 projectName: string | null
+}
+
+export class projectListmodel {
+  projectID: number;
+  taskID: number;
+  title: string;
+  description: string
 }

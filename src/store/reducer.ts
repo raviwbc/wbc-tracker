@@ -6,8 +6,9 @@ import { loginValidationReducer } from "./reducers/auth.ts";
 import { logoutReducer } from "./reducers/logout.ts";
 
 import { manualEntryReducer } from "./reducers/manualEntry.ts";
-import { entryListReducer } from "./reducers/todayCompletedList.ts";
+
 import { loaderStatus } from "./reducers/loader.ts";
+import { deleteTaskReducer, entryListReducer } from "./reducers/todayCompletedList.ts";
 
 const rootReducer = combineReducers({
     manualEntryReducer,
@@ -17,8 +18,8 @@ const rootReducer = combineReducers({
     loginValidationReducer,
     entryListReducer,
     logoutReducer,
-    loaderStatus
-    
+    loaderStatus,    
+    deleteTaskReducer
 })
 
 export default rootReducer

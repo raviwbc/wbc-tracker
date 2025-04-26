@@ -27,3 +27,8 @@ export function completedEntryList(payload:string){
   return axiosInstance.get(`${APP_CONSTANTS.API.ENTRYLIST}${payload}`,)
 
 }
+
+export function deleteTask(id:string){
+  return axiosInstance.delete(`${APP_CONSTANTS.API.DELETETASK}${id}`,)
+
+}

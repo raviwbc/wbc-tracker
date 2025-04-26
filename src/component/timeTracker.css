@@ -1,7 +1,8 @@
 .dateDayBox{
-    padding: 0 15px;
+    padding: 5px 20px;
     border: 1px solid #f3e9e9;
     border-radius: 7px;
+    width: 100%;
 }
 .currentDateBtnTxt{
     font-size: 18px;
@@ -9,12 +10,14 @@
     border-radius: 10px;
     font-weight: 500;
     background-color: #4d6bfe;
+    width: 100%;
+    white-space: nowrap;
 }
 .dateDayContainer{
-    padding: 12px;
+    /* padding: 12px;
     border: 1px solid #dfe4eb;
-    border-radius: 8px;
-    gap: 15px;
+    border-radius: 8px; */
+    gap: 10px;
 
 }
 
@@ -77,4 +80,9 @@
 }
 .d-inline{
     display: inline-block;
+}
+.manualUpdate{
+    background: #1a0e67;
+    color: white;
+    border-radius: 4px;
 }
