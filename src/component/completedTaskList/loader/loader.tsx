@@ -4,17 +4,8 @@ import './loader.css';
 import { useSelector } from 'react-redux';
 
 const ClockLoader = () => {
-    const loaderState = useSelector((state: any) => state);
-  
-    useEffect(() => {
-      console.log('Loader state', loaderState);
-    }, [loaderState]);
-  
-    // Only render when loading is true
-    if (!loaderState.loading) {
-      return null;
-    }
-  
+  const loading = useSelector((state: any) => state.loaderStatus.loading); 
+  if (!loading) return null;
     return (
       <div className="clock-loader">
         <div className="bg_black_div"></div>

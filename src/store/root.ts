@@ -2,6 +2,7 @@ import { all } from "redux-saga/effects";
 import watchIncrementAsync from "./saga/counter/counter.ts";
 import { watchFetchlist } from "./saga/listApicall/apicall.ts";
 import { watchLoginAuth } from "./saga/loginAuth.ts";
+import { watchLogout } from "./saga/logout.ts";
 import watchManualEntryRequest from "./saga/manualEntrySaga.ts";
 import { fork } from "redux-saga/effects";
 import { watchEntryListGet } from "./saga/entryListSaga.ts";
@@ -16,6 +17,7 @@ import { watchEntryListGet } from "./saga/entryListSaga.ts";
         fork(watchIncrementAsync),
         fork(watchLoginAuth),
         fork(watchEntryListGet),
+        fork(watchLogout),
       ]);
     } catch (error) {
       console.error('🔥 Saga error:', error);

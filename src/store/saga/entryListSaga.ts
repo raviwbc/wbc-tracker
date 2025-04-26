@@ -2,12 +2,14 @@ import { call, put, takeLatest } from "redux-saga/effects"
 import { completedEntryList } from "../api-call/jsonapi.ts"
 import { completedEntryFailure, completedEntryRequest, completedEntrySuccess } from "../reducers/todayCompletedList.ts"
 import { AxiosError } from "axios"
+import { startLoading, stopLoading } from "../reducers/loader.ts";
 
 
 
 
  function* entrylistGet(action){    
     try{
+         yield put(startLoading());  
         const resp = yield call(completedEntryList, action.payload)        
         if(resp.data){
             yield put(completedEntrySuccess(resp.data.model))
@@ -18,6 +20,8 @@ import { AxiosError } from "axios"
     }
     catch(e){
         yield put(completedEntryFailure(e.message))
+    }finally{
+        yield put(stopLoading());  
     }
 
 }

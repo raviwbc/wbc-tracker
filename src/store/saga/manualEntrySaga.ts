@@ -1,14 +1,18 @@
 import { call, put, takeLatest } from "redux-saga/effects";
 import {ManualEntryRequest,enterySuccess, Entryfailure} from '../reducers/manualEntry.ts'
 import { postManualEntry } from "../api-call/jsonapi.ts";
+import { startLoading, stopLoading } from "../reducers/loader.ts";
 
 
 function* postManualEntryData(action){
     try{
+         yield put(startLoading());  
         let data = yield call(postManualEntry, action.payload)
         yield put(enterySuccess(data));
     }catch(err){
         yield put(Entryfailure(err.message))
+    }finally{
+         yield put(stopLoading());  
     }
 }
 

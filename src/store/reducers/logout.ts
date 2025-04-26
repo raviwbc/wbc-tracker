@@ -13,8 +13,7 @@ interface AuthData {
         firstName: string,
         lastName: string,
         result: string | null,
-        userid: number,
-        profileImage:string
+        userid: number
     }
 }
 
@@ -30,26 +29,19 @@ const initialState: AuthState = {
     message: null
 };
 
-export const loginValidation = createSlice({
-    name: "auth",
+export const logoutValidation = createSlice({
+    name: "logout",
     initialState,
     reducers: {
-        loginRequest: (state, action: PayloadAction<{ userName: string; password: string }>) => {
+        logoutRequest: (state) => {
             state.loading = true;
             state.message = null;
         },
-        loginSuccess: (state, action: PayloadAction<AuthData>) => {
+        logoutsuccess: (state, action: PayloadAction<AuthData>) => {
             state.loading = false;
             state.data = action.payload;
-            state.message = "Login successful!";
-            console.log("Login Success:", action.payload);
-            localStorage.setItem("accessToken", action.payload.model.token);
-            localStorage.setItem("userId", JSON.stringify(action.payload.model.userid))
-            localStorage.setItem("currentUser", JSON.stringify(action.payload.model))
-            localStorage.setItem("username",action.payload.model.username)
-            localStorage.setItem("profileImage", action.payload.model.profileImage)
         },
-        loginFailed: (state, action: PayloadAction<string>) => {
+        logoutFailed: (state, action: PayloadAction<string>) => {
             state.loading = false;
             state.data = null;
             state.message = action.payload;
@@ -59,5 +51,5 @@ export const loginValidation = createSlice({
 });
 
 // Export reducer and actions
-export const loginValidationReducer = loginValidation.reducer;
-export const { loginRequest, loginSuccess, loginFailed } = loginValidation.actions;
+export const logoutReducer = logoutValidation.reducer;
+export const { logoutRequest, logoutsuccess, logoutFailed } = logoutValidation.actions;

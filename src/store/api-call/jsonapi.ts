@@ -16,6 +16,9 @@ export async function getProjectList() {
 export async function login(formData: { username: string; password: string }) {
     return await axiosInstance.post(`${APP_CONSTANTS.API.LOGIN}`, formData);
 }
+export async function logout() {
+    return await axiosInstance.get(`${APP_CONSTANTS.API.LogOff}`);
+}
 export function postManualEntry(payload:manualEntryData){
   return axiosInstance.post(`${APP_CONSTANTS.API.POSTMANUALENTRY}`, payload)
 }

@@ -9,12 +9,58 @@
     color: #fff;
 }
 
-.username{
-    background: #f3f3f3;
+
+.profileImg {
+    width: 65px;
+    height: 65px;
+    border-radius: 50%;
+    border: 2px solid #1b004e;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+  }
+  
+  .profileImg img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* important: 'cover' makes sure it fills without distortion */
+    border-radius: 50%; /* THIS makes even rectangular images round */
+  }
+.container-2{
+    width: 350px;
     color: black;
-    padding: 5px 16px;
-    border-radius: 20px;
+    height: auto;
+    padding: 10px 7px 7px 90px;
+    background-color: #eee;
+    clip-path: polygon(100% 0, 100% 51%, 89% 100%, 0 100%, 32% 0%, 88% 0);
+   
+    .subTxt{
+        font-size: 14px;
+        text-decoration: underline;
+        cursor: pointer;
+        font-weight: 600;
+    }
 }
+.userDetails {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .userWelcome {
+    width: 180px; /* fixed width */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    cursor: pointer;
+  }
+  
+  .username {
+    /* font-weight: bold; */
+    color: black;
+  }
+
 @media screen and (max-width:776px) {
     .themeToggle{
         display: none;

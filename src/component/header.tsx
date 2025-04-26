@@ -1,60 +1,80 @@
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import { MyContext } from "../myContext.tsx";
 import React from "react";
 import './header.css'
 import { Button, FormControlLabel, Switch } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
+import LogoutIcon from '@mui/icons-material/Logout';
 import { decrement, increment, incrementAsync } from "../store/reducers/counter.ts";
 import { fetchPostsRequest } from "../store/reducers/titleList.ts";
 import { ProjectListRequest } from "../store/reducers/timeTracker.ts";
+import { logoutRequest } from "../store/reducers/logout.ts";
+import ClockLoader from "./completedTaskList/loader/loader.tsx";
+import { useLocation } from "react-router-dom";
 
-export const HeaderComp = ()=>{
-const { theme, user, toggleTheme } = useContext(MyContext);
-const dispatch = useDispatch()
-const count= useSelector((state:any) => {
-  
-  return state.counterReducer.count  
-})
-const projectList = useSelector((state:any) => {
-  
-  return state.trackerReducer.data
-})
+export const HeaderComp = () => {
+  const { theme, user, toggleTheme } = useContext(MyContext);
+  const dispatch = useDispatch()
+  const location = useLocation();
+  const logoff = useSelector((state: any) => state.logoutReducer)
+  const [profileSrc, setProfileSrc] = useState<any>('/user-profile.jpg')
+  const [username, setUsername] = useState<any>('WBC Employee')
 
-useEffect(()=>{
-  
-},[projectList])
+  const projectList = useSelector((state: any) => {
 
-function mychnages(e:any){  
-  alert(e.target.value)
-}
+    return state.trackerReducer.data
+  })
 
-    return <div className="pageHeader">
+  useEffect(() => {
+    // if (auth.data?.model) {
+    //   console.log("Hi am Header");
+    //   setProfileSrc(auth.data?.model.profileImage)
+    //   setUsername(auth.data?.model.username)
+    // }
+    if(localStorage.getItem('username') && localStorage.getItem('profileImage')){
+      setUsername(localStorage.getItem('username'))
+      setProfileSrc(localStorage.getItem('profileImage'))
 
-        {/* <div className={theme}>header</div>
+    }
+    console.log('location',location);
+    
+
+  })
+
+
+  const handleLogoff = () => {
+    console.log('Log Off!');
+
+    dispatch(logoutRequest());
+  }
+  return (<div className="pageHeader">
+
+    {/* <div className={theme}>header</div>
         {user}
         as
         <button onClick={toggleTheme}>onClick</button> */}
-        <div  className={theme + ' p-3'}>
-        <div className="flex justify-between">
-        <div className="flex gap-3 items-center">
-          <div><b>TIME TRACKER</b></div>
-        </div>
-        <div className="flex gap-2 items-center">
-          {/* <div>
-            <button onClick={()=> dispatch(increment())}>+ &nbsp;</button>
-            <button onClick={()=> dispatch(decrement())}>- &nbsp;</button>
-            <button onClick={()=> dispatch(incrementAsync())}> + &nbsp; Async</button>
-            <button onClick={()=> dispatch(fetchPostsRequest())} > api call</button>
-            <button onClick={()=> dispatch(ProjectListRequest()) }> call project List </button>
-          </div> */}
-        <div className="themeToggle">
-        <FormControlLabel control={<Switch defaultChecked onChange={toggleTheme} />} label={"Theme"} />
-        </div>
+    {/* {loading && <ClockLoader />}
+           */}
+    {/* <ClockLoader /> */}
 
-          
-          <div className="username">Sanjai G</div>
+    {location.pathname != '/' && (<div className={theme}>
+      <div className="flex justify-between">
+        <div className="flex gap-3 items-center">
+          <div className="pl-3"><b>TIME TRACKER</b></div>
+        </div>
+        <div className="flex gap-2 items-center container-2 ">
+          <div className="profileImg ">
+            <img src={profileSrc} alt="WBC" />
+          </div>
+          <div className="userDetails">
+            <div className="userWelcome">
+              <span style={{ color: '#1b004e', fontWeight: 'bold' }}>Hello </span>
+              <span className="username" title={username}>{username || 'Guest'}</span>{/* fallback if no username */}
+            </div>
+            <div className="subTxt" onClick={handleLogoff}>Log Off</div>
+          </div>
         </div>
       </div>
-      </div>
-    </div>
+    </div>)}
+  </div>)
 }

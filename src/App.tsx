@@ -48,7 +48,7 @@ function App() {
       <HeaderComp></HeaderComp>
       {/* <Router> */}
     
-      {/* <ClockLoader /> */}
+      <ClockLoader />
       <Toaster position="top-center" reverseOrder={false}  toastOptions={{
     // Default style
     
