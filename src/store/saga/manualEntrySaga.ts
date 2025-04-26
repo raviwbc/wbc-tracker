@@ -5,8 +5,7 @@ import { postManualEntry } from "../api-call/jsonapi.ts";
 
 function* postManualEntryData(action){
     try{
-        let jj = action.payload
-        let data = yield call(postManualEntry, jj)
+        let data = yield call(postManualEntry, action.payload)
         yield put(enterySuccess(data));
     }catch(err){
         yield put(Entryfailure(err.message))

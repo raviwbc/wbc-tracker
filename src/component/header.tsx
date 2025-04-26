@@ -12,16 +12,16 @@ export const HeaderComp = ()=>{
 const { theme, user, toggleTheme } = useContext(MyContext);
 const dispatch = useDispatch()
 const count= useSelector((state:any) => {
-  console.log(state)
+  
   return state.counterReducer.count  
 })
 const projectList = useSelector((state:any) => {
-  console.log(state)
+  
   return state.trackerReducer.data
 })
 
 useEffect(()=>{
-  console.log(projectList)
+  
 },[projectList])
 
 function mychnages(e:any){  

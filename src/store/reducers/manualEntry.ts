@@ -25,5 +25,6 @@ const manual = createSlice({
     }
 })
 
+
 export const {ManualEntryRequest, enterySuccess, Entryfailure} = manual.actions;
 export const manualEntryReducer = manual.reducer;

@@ -10,7 +10,7 @@ export async function fetchPostsAPI() {
 
 
 export async function getProjectList() {
-    return await axiosInstance.get(`${APP_CONSTANTS.API.GETPROJECTLIST}`);
+    return await axiosInstance.get(`${APP_CONSTANTS.API.GETPROJECTLIST}93`);
 }
 
 export async function login(formData: { username: string; password: string }) {
@@ -18,4 +18,9 @@ export async function login(formData: { username: string; password: string }) {
 }
 export function postManualEntry(payload:manualEntryData){
   return axiosInstance.post(`${APP_CONSTANTS.API.POSTMANUALENTRY}`, payload)
+}
+
+export function completedEntryList(payload:string){
+  return axiosInstance.get(`${APP_CONSTANTS.API.ENTRYLIST}${payload}`,)
+
 }
