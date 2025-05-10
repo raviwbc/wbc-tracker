@@ -4,11 +4,11 @@ export const APP_CONSTANTS = {
     GETPROJECTLIST : '/Task/Get?userid=',
     LOGIN : '/Auth/Login',
     LogOff : '/Auth/LogOff',
+    GETSTART : '/Task/GetStart',
     POSTMANUALENTRY : '/Task/ManualEntry',
     ENTRYLIST : '/Task/CurrentDayTaskListDetails?TimeSheetDate=',
     DELETETASK : '/Task/TaskDelete?id=',
     POSTAUTOENTRY : '/Task/AutoEntry',
     POSTAUTOENTRYSTOP : '/Task/TimeSheetStopEntry',
-    
     }
 }

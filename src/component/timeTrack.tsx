@@ -11,9 +11,9 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { TimePicker } from "@mui/x-date-pickers";
 import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
 import { DemoContainer, DemoItem } from '@mui/x-date-pickers/internals/demo';
-import { AutoEntryRequest, ManualEntryRequest } from "../store/reducers/manualEntry.ts";
+import { AutoEntryRequest, AutoEntryStopRequest, getStartRequest, ManualEntryRequest } from "../store/reducers/manualEntry.ts";
 import { completedEntryRequest } from "../store/reducers/todayCompletedList.ts";
-import { ReducersList, tasklist } from "../model/timetracker.ts";
+import { getStartRes, ReducersList, tasklist } from "../model/timetracker.ts";
 import { Autotask } from "./autoTask/autotask.tsx";
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 
@@ -84,7 +84,7 @@ const TimeTrack = () => {
   const [totaltaskList, setTotalTaskList] = useState<projectList[]>([])
   const [taskList, setTaskList] = useState<projectList[]>([])
   const statusList = ["Done", "WIP", "OnHold"]
-  const [taskStared, setTaskStared] = useState<boolean>(false)
+  const [taskStared, setTaskStarted] = useState<boolean>(false)
 
 
   
@@ -100,6 +100,17 @@ const TimeTrack = () => {
   const antoEntryStart = useSelector((state:ReducersList)=>{
     return state.autoEntryReducer
   })
+    const stopAutoEntryStart = useSelector((resp:ReducersList)=>{
+    return resp.autoEntryStopReducer
+  })
+    const getStartup:getStartRes = useSelector((state:ReducersList)=>{
+      let  getstartRed = state.getStartReducer;
+      if(getstartRed.data.projectID){
+        return getstartRed.data
+      }else{
+      return {}  
+      }      
+  })
   const entryListReducer = useSelector((store:ReducersList)=> store.entryListReducer,  shallowEqual )
 
   const [formData, setFormData] = useState({
@@ -111,6 +122,19 @@ const TimeTrack = () => {
     taskTime: '',
     isManual: false,
   });
+
+  useEffect(() => {
+  if (getStartup?.projectID) {
+    setTaskStarted(true);
+  }else{
+    setTaskStarted(false);
+  }
+}, [getStartup]);
+
+  useEffect(() => {    
+        dispatch(getStartRequest())    
+}, [stopAutoEntryStart, antoEntryStart]);
+
 
   useEffect(() => {
     let timer: NodeJS.Timeout | undefined;
@@ -199,7 +223,6 @@ const TimeTrack = () => {
       postData.timeSheetDate = startDateAndTime;
       postData.timeAdded = startDateAndTime;
       postData.tlComments = "";
-      console.log(postData, minutes);
       try{
       dispatch(ManualEntryRequest({
         ...postData,
@@ -236,7 +259,7 @@ const TimeTrack = () => {
   let updateTime = (data: any, field: string) => {
     UpdateTrackerForm(prev => {
       let updatedData = { ...prev, [field]: data }
-      console.log(moment(updatedData.startTime).format())
+      
       return updatedData
     })
   }
@@ -250,8 +273,8 @@ const TimeTrack = () => {
       if(formUpdated == true){
       err.inner.forEach((res: any) => {
         UpdateErrors(prev => {
-          console.log("Test", res.path)
-          // console.log({ ...prev, [res.path]: [res.errors[0]] })
+          
+          
           return { ...prev, [res.path]: [res.errors[0]] }
         })
       })
@@ -264,6 +287,9 @@ const TimeTrack = () => {
     dispatch(completedEntryRequest(''))
     
   }
+  useEffect(()=>{
+  dispatch(getStartRequest())
+},[])
 
 
   useEffect(() => {
@@ -279,12 +305,14 @@ const TimeTrack = () => {
       }
     }
   }, [entryListReducer, prjList])
-
   function postAutoEntry(postData:any){
-    console.log(postData)
     dispatch(AutoEntryRequest(postData))
-
   }
+  function stopRunningTask(postData){
+    dispatch(AutoEntryStopRequest(postData))
+  }
+
+
 
 
   return (
@@ -342,7 +370,7 @@ const TimeTrack = () => {
         </div>
       </div>
       {
-        mode && <Autotask projectList={projectList} submitFunc={postAutoEntry} taskStared={taskStared} runningTaskDetails={antoEntryStart}/>
+        mode && <Autotask projectList={projectList} submitFunc={postAutoEntry} stopRunningTask={stopRunningTask} taskStared={taskStared} runningTaskDetails={getStartup}/>
       }
       {
         !mode && <div >

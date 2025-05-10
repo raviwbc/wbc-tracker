@@ -28,6 +28,9 @@ export function autoEntryApi(payload:manualEntryData){
 export function autoEntrystopApi(payload:manualEntryData){
   return axiosInstance.post(`${APP_CONSTANTS.API.POSTAUTOENTRYSTOP}`, payload)
 }
+export function getStartApi(){
+  return axiosInstance.get(`${APP_CONSTANTS.API.GETSTART}`)
+}
 export function completedEntryList(payload:string){
   return axiosInstance.get(`${APP_CONSTANTS.API.ENTRYLIST}${payload}`,)
 }

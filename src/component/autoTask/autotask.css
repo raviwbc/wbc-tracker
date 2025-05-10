@@ -1,0 +1,10 @@
+.d-flex-center {
+        align-items: center;
+    display: flex;
+}
+
+.d-flex-center> button{
+    background: #0b0051;
+    padding: 12px;
+    border-radius: 7px;
+}

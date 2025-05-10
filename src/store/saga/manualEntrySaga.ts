@@ -1,6 +1,6 @@
 import { call, put, takeLatest } from "redux-saga/effects";
-import {ManualEntryRequest,enterySuccess, Entryfailure, AutoEntryRequest, AutoEntryfailure, AutoEntryStopSuccess, AutoEntryStopfailure, AutoEntryStopRequest, AutoEntrySuccess} from '../reducers/manualEntry.ts'
-import { autoEntryApi, autoEntrystopApi, postManualEntry } from "../api-call/jsonapi.ts";
+import {ManualEntryRequest,enterySuccess, Entryfailure, AutoEntryRequest, AutoEntryfailure, AutoEntryStopSuccess, AutoEntryStopfailure, AutoEntryStopRequest, AutoEntrySuccess, getStartSuccess, getStartFailure, getStartRequest} from '../reducers/manualEntry.ts'
+import { autoEntryApi, autoEntrystopApi, getStartApi, postManualEntry } from "../api-call/jsonapi.ts";
 import { startLoading, stopLoading } from "../reducers/loader.ts";
 
 
@@ -53,6 +53,25 @@ function* postAutoEntryStop(action){
 
 export function* watchAutoEntryStopRequest() {
     yield takeLatest(AutoEntryStopRequest.type, postAutoEntryStop)
+    
+}
+ 
+
+function* postgetStart(){
+    try{
+        console.log('raviss')
+        //  yield put(startLoading());  
+        let data = yield call(getStartApi)
+        yield put(getStartSuccess(data));
+    }catch(err){
+        yield put(getStartFailure(err.message))
+    }finally{
+        //  yield put(stopLoading());  
+    }
+}
+
+export function* watchgetStartRequest() {
+    yield takeLatest(getStartRequest.type, postgetStart)
     
 }
  

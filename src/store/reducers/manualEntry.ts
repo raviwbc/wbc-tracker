@@ -14,7 +14,7 @@ const manual = createSlice({
         enterySuccess: (state, action)=>{
             state.data = action.payload
             state.Loading = false
-            state.message = ''
+            state.message = 'success'
         },
         Entryfailure : (state, action)=>{
             state.Loading = false
@@ -48,14 +48,14 @@ const autoEntry = createSlice({
         AutoEntrySuccess: (state, action)=>{
             state.data = action.payload.data
             state.Loading = false
-            state.message = ''
+            state.message = 'success'
         },
         AutoEntryfailure : (state, action)=>{
             state.Loading = false
             state.data =[]
             state.message = action.payload
         }
-    }
+    }   
 })
 
 
@@ -79,7 +79,7 @@ const autoEntryStop = createSlice({
         AutoEntryStopSuccess: (state, action)=>{
             state.data = action.payload
             state.Loading = false
-            state.message = ''
+            state.message = 'success'
         },
         AutoEntryStopfailure : (state, action)=>{
             state.Loading = false
@@ -92,3 +92,35 @@ const autoEntryStop = createSlice({
 
 export const {AutoEntryStopRequest, AutoEntryStopSuccess, AutoEntryStopfailure} = autoEntryStop.actions;
 export const autoEntryStopReducer = autoEntryStop.reducer;
+
+
+
+
+
+const getStart = createSlice({
+    name : 'getStarts',
+    initialState : {
+        Loading : false,
+        data : {},
+        message : ''
+    },
+    reducers : {
+        getStartRequest: (state)=>{       
+            state.Loading = true
+        },
+        getStartSuccess: (state, action)=>{
+            state.data = action.payload.data.model
+            state.Loading = false
+            state.message = 'success'
+        },
+        getStartFailure : (state, action)=>{
+            state.Loading = false
+            state.data =[]
+            state.message = action.payload
+        }
+    }
+})
+
+
+export const {getStartRequest, getStartSuccess, getStartFailure} = getStart.actions;
+export const getStartReducer = getStart.reducer;

@@ -81,7 +81,7 @@ export const CompletedList = ({entrylist})=>{
                     <div>{resp.taskName} - <span data-status={resp.projectName}>{resp.projectName}</span></div>
                     
                     
-                    <div><img title={resp.autoUpdate ? 'Auto Entry' :'Manual Entry'} src={resp.autoUpdate ?'/assets/happy.svg':'/assets/angry.svg'} width={30} alt="Delete" /></div>
+                    <div><img title={resp.isAuto ? 'Auto Entry' :'Manual Entry'} src={resp.isAuto ?'/assets/happy.svg':'/assets/angry.svg'} width={30} alt="Delete" /></div>
                     <div>
                         <span data-status={resp.taskStatus} className="status">
                         {resp.taskStatus}

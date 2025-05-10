@@ -30,6 +30,8 @@ export class manualEntryData {
     loginValidationReducer : responcedata
     entryListReducer: responcedata
     autoEntryReducer : responcedata
+    getStartReducer: responcedata
+    autoEntryStopReducer: responcedata
   }
 
 
@@ -89,4 +91,17 @@ export class stopTimeSheet{
   taskStatus: string = ""
   flog: boolean = true
   isAuto: boolean = true
+}
+
+export class getStartRes{
+   id: number = 0
+    projectID: number = 0
+    userID: number = 0
+    taskID: number = 0
+    startTime: string  = ''
+    startTimeForRefresh: string = ''
+    timeSheetDate: string  = ''
+    timeAdded: string  = ''
+    flog: boolean = false
+    isAuto: boolean = false
 }

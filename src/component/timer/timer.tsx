@@ -1,3 +1,4 @@
+import './timer.css'
 import moment from "moment";
 import { useEffect, useState } from "react";
 
@@ -15,7 +16,7 @@ export const RunningTimer = ({startTime}) => {
   const formatted = moment.utc(duration.asMilliseconds()).format('HH:mm:ss');
     return (
     <div>
-      <p>{formatted}</p>
+      <p className="time">{formatted}</p>
     </div>
   );
 

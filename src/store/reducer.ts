@@ -5,7 +5,7 @@ import { trackerReducer } from "./reducers/timeTracker.ts";
 import { loginValidationReducer } from "./reducers/auth.ts";
 import { logoutReducer } from "./reducers/logout.ts";
 
-import { autoEntryReducer, autoEntryStopReducer, manualEntryReducer } from "./reducers/manualEntry.ts";
+import { autoEntryReducer, autoEntryStopReducer, getStartReducer, manualEntryReducer } from "./reducers/manualEntry.ts";
 
 import { loaderStatus } from "./reducers/loader.ts";
 import { deleteTaskReducer, entryListReducer } from "./reducers/todayCompletedList.ts";
@@ -22,6 +22,7 @@ const rootReducer = combineReducers({
     deleteTaskReducer,
     autoEntryStopReducer,
     autoEntryReducer,
+    getStartReducer
     
 })
 
