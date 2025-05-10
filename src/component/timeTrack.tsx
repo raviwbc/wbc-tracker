@@ -335,7 +335,7 @@ const TimeTrack = () => {
         <button className="wave-btn currentDateBtnTxt relative overflow-hidden px-6 py-4 rounded-md">
           <span className="wave-btn__label flex items-center gap-2 relative z-10">
             <CalendarMonthIcon />
-            {moment().format("MMMM DD ddd")}
+            {moment().format("MMMM Do ddd")}
           </span>
           <div className="dummyDiv">
           <span className="wave absolute pointer-events-none"></span>
