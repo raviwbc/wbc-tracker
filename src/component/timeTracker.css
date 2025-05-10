@@ -86,3 +86,45 @@
     color: white;
     border-radius: 4px;
 }
+
+.currentDateBtnTxt {
+    position: relative;
+    background-color: #1b004e;
+    color: white;
+    font-weight: 600;
+    font-size: 14px;
+    padding: 8px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    /* overflow: hidden;  */
+    width: 100%;
+  }
+  
+  /* .circles {
+    position: absolute;
+    top: 0;
+    left: 0; */
+    /* width: 200%;
+    height: 200%;
+    pointer-events: none;
+    background: radial-gradient(circle at 20% 30%, rgba(255, 255, 255, 0.05) 10%, transparent 20%),
+                radial-gradient(circle at 80% 60%, rgba(255, 255, 255, 0.04) 8%, transparent 16%),
+                radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.06) 10%, transparent 20%);
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    animation: moveBubbles 8s linear infinite;
+    z-index: 0; */
+  /* } */
+  
+  /* @keyframes moveBubbles {
+    0% {
+      transform: translate(0, 0);
+    }
+    50% {
+      transform: translate(-5%, -10%);
+    }
+    100% {
+      transform: translate(0, 0);
+    }
+  } */
+  

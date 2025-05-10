@@ -69,7 +69,7 @@ export const HeaderComp = () => {
           <div className="userDetails">
             <div className="userWelcome">
               <span style={{ color: '#1b004e', fontWeight: 'bold' }}>Hello </span>
-              <span className="username" title={username}>{username || 'Guest'}</span>{/* fallback if no username */}
+              <span className="username" title={username}>{username || 'Guest'}</span>{}
             </div>
             <div className="subTxt" onClick={handleLogoff}>Log Off</div>
           </div>

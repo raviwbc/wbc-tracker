@@ -15,6 +15,7 @@ import { ManualEntryRequest } from "../store/reducers/manualEntry.ts";
 import { completedEntryRequest } from "../store/reducers/todayCompletedList.ts";
 import { ReducersList, tasklist } from "../model/timetracker.ts";
 import { Autotask } from "./autoTask/autotask.tsx";
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 
 type Dates = string[];
 
@@ -293,9 +294,20 @@ const TimeTrack = () => {
             <div className="text-sm text-gray-600">{item.split(" ")[1]}</div>
           </div>
         ))}
-        <button className="bg-blue-500  px-4  rounded-md hover:bg-blue-600 currentDateBtnTxt">
-          {moment().format("MMMM DD ddd")}
+        <button className="px-4  rounded-md hover:bg-blue-600 currentDateBtnTxt">
+        <CalendarMonthIcon /> {moment().format("MMMM DD ddd")}
         </button>
+
+        {/* This below code for elevated Buttton style */}
+        {/* <button className="currentDateBtnTxt relative overflow-hidden px-4 rounded-md hover:bg-blue-600 flex items-center gap-2">
+          <CalendarMonthIcon style={{ fontSize: '20px' }} />
+          {moment().format("MMMM DD ddd")}
+          <div className="circles"></div> ✨ Floating circles inside button
+        </button> */}
+
+
+
+
       </div>
 
 
