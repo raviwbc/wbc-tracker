@@ -149,14 +149,12 @@ export const Autotask: React.FC<AutoTaskProps> = ({ projectList, submitFunc,stop
             } else {
 
                 stopFormUpdateErrors(StopdefaultValue)
-                if (formUpdated == true) {
-                    err.inner.forEach((res: any) => {
-                        
+                    err.inner.forEach((res: any) => {                        
                         stopFormUpdateErrors(prev => {
                             return { ...prev, [res.path]: [res.errors[0]] }
                         })
                     })
-                }
+                
             }
         }
     }
