@@ -11,7 +11,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { TimePicker } from "@mui/x-date-pickers";
 import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
 import { DemoContainer, DemoItem } from '@mui/x-date-pickers/internals/demo';
-import { ManualEntryRequest } from "../store/reducers/manualEntry.ts";
+import { AutoEntryRequest, ManualEntryRequest } from "../store/reducers/manualEntry.ts";
 import { completedEntryRequest } from "../store/reducers/todayCompletedList.ts";
 import { ReducersList, tasklist } from "../model/timetracker.ts";
 import { Autotask } from "./autoTask/autotask.tsx";
@@ -84,6 +84,7 @@ const TimeTrack = () => {
   const [totaltaskList, setTotalTaskList] = useState<projectList[]>([])
   const [taskList, setTaskList] = useState<projectList[]>([])
   const statusList = ["Done", "WIP", "OnHold"]
+  const [taskStared, setTaskStared] = useState<boolean>(false)
 
 
   
@@ -95,6 +96,9 @@ const TimeTrack = () => {
   })
   const manualEntryStatus = useSelector((state:ReducersList)=>{
     return state.manualEntryReducer
+  })
+  const antoEntryStart = useSelector((state:ReducersList)=>{
+    return state.autoEntryReducer
   })
   const entryListReducer = useSelector((store:ReducersList)=> store.entryListReducer,  shallowEqual )
 
@@ -276,6 +280,12 @@ const TimeTrack = () => {
     }
   }, [entryListReducer, prjList])
 
+  function postAutoEntry(postData:any){
+    console.log(postData)
+    dispatch(AutoEntryRequest(postData))
+
+  }
+
 
   return (
     <div className="m-5">
@@ -332,7 +342,7 @@ const TimeTrack = () => {
         </div>
       </div>
       {
-        mode && <Autotask projectList={projectList}/>
+        mode && <Autotask projectList={projectList} submitFunc={postAutoEntry} taskStared={taskStared} runningTaskDetails={antoEntryStart}/>
       }
       {
         !mode && <div >

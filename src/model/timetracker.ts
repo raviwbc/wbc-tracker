@@ -1,4 +1,4 @@
-import { boolean } from "yup"
+import { boolean, number, string } from "yup"
 
 export class manualEntryData {
     projectID: number = 0
@@ -29,6 +29,7 @@ export class manualEntryData {
     trackerReducer : responcedata
     loginValidationReducer : responcedata
     entryListReducer: responcedata
+    autoEntryReducer : responcedata
   }
 
 
@@ -59,4 +60,33 @@ export class projectListmodel {
   taskID: number;
   title: string;
   description: string
+}
+
+export class autoUpdate{
+  id: number = 0
+  projectID:  number = 0
+  userID:  number = 0
+  taskID:  number = 0
+  startTime: string = ""
+  timeSheetDate : string = ""
+  timeAdded: string = ""
+  flog: boolean = true
+  isAuto: boolean = true
+}
+
+export class stopTimeSheet{
+  id: number =0
+  projectID: number =0
+  userID: number =0
+  taskID: number =0
+  startTime: string = ""
+  endTime:  string = ""
+  timeSheetDate: string = ""
+  timeAdded: string = ""
+  minutes: number =0
+  comment: string = ""
+  tlComments: string = ""
+  taskStatus: string = ""
+  flog: boolean = true
+  isAuto: boolean = true
 }

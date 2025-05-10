@@ -22,12 +22,15 @@ export async function logout() {
 export function postManualEntry(payload:manualEntryData){
   return axiosInstance.post(`${APP_CONSTANTS.API.POSTMANUALENTRY}`, payload)
 }
-
+export function autoEntryApi(payload:manualEntryData){
+  return axiosInstance.post(`${APP_CONSTANTS.API.POSTAUTOENTRY}`, payload)
+}
+export function autoEntrystopApi(payload:manualEntryData){
+  return axiosInstance.post(`${APP_CONSTANTS.API.POSTAUTOENTRYSTOP}`, payload)
+}
 export function completedEntryList(payload:string){
   return axiosInstance.get(`${APP_CONSTANTS.API.ENTRYLIST}${payload}`,)
-
 }
-
 export function deleteTask(id:string){
   return axiosInstance.delete(`${APP_CONSTANTS.API.DELETETASK}${id}`,)
 
