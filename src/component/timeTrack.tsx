@@ -332,18 +332,16 @@ const TimeTrack = () => {
             <div className="text-sm text-gray-600">{item.split(" ")[1]}</div>
           </div>
         ))}
-        <button className="px-4  rounded-md hover:bg-blue-600 currentDateBtnTxt">
-        <CalendarMonthIcon /> {moment().format("MMMM DD ddd")}
+        <button className="wave-btn currentDateBtnTxt relative overflow-hidden px-6 py-4 rounded-md">
+          <span className="wave-btn__label flex items-center gap-2 relative z-10">
+            <CalendarMonthIcon />
+            {moment().format("MMMM DD ddd")}
+          </span>
+          <div className="dummyDiv">
+          <span className="wave absolute pointer-events-none"></span>
+
+          </div>
         </button>
-
-        {/* This below code for elevated Buttton style */}
-        {/* <button className="currentDateBtnTxt relative overflow-hidden px-4 rounded-md hover:bg-blue-600 flex items-center gap-2">
-          <CalendarMonthIcon style={{ fontSize: '20px' }} />
-          {moment().format("MMMM DD ddd")}
-          <div className="circles"></div> ✨ Floating circles inside button
-        </button> */}
-
-
 
 
       </div>
