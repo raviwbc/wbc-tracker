@@ -69,6 +69,9 @@
     grid-template-columns: 250px 250px 150px 150px auto 150px 250px 100px;
     gap: 20px;
     padding: 20px 0;
+    .time{
+            border-radius: 27px;
+    }
 }
 
 .mode_header {

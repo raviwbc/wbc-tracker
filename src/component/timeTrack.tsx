@@ -3,19 +3,19 @@ import moment from "moment";
 import * as Yup from 'yup';
 
 import './timeTracker.css'
-import { Button, FormControl, FormControlLabel, FormHelperText, Input, InputLabel, MenuItem, OutlinedInput, Select, Switch, TextField, ToggleButton, ToggleButtonGroup } from "@mui/material";
+import {  FormControl,    InputLabel, MenuItem,  Select, Switch, TextField, ToggleButton, ToggleButtonGroup } from "@mui/material";
 import { CompletedList } from "./completedTaskList/completedList.tsx";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { ProjectListRequest } from "../store/reducers/timeTracker.ts";
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { TimePicker } from "@mui/x-date-pickers";
 import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
-import { DemoContainer, DemoItem } from '@mui/x-date-pickers/internals/demo';
 import { AutoEntryRequest, AutoEntryStopRequest, getStartRequest, ManualEntryRequest } from "../store/reducers/manualEntry.ts";
 import { completedEntryRequest } from "../store/reducers/todayCompletedList.ts";
 import { getStartRes, ReducersList, tasklist } from "../model/timetracker.ts";
 import { Autotask } from "./autoTask/autotask.tsx";
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import TimerIcon from '@mui/icons-material/Timer';
 
 type Dates = string[];
 
