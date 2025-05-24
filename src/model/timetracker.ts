@@ -36,7 +36,7 @@ export class manualEntryData {
 
 
   
-export class tasklist{
+export interface  tasklist{
   id:number| null
 comment: string | null
 endDate: string | null
@@ -51,9 +51,9 @@ projectID: number
 taskID: number
 userID: number
 taskName: string | null
-isAuto: boolean = false
-isRestart: boolean = false
-autoUpdate: boolean = false
+isAuto: boolean 
+isRestart: boolean 
+autoUpdate: boolean
 projectName: string | null
 }
 

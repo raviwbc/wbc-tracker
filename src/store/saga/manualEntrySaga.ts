@@ -8,7 +8,11 @@ function* postManualEntryData(action){
     try{
         //  yield put(startLoading());  
         let data = yield call(postManualEntry, action.payload)
-        yield put(enterySuccess(data));
+        yield put(enterySuccess({
+             data: data.data,
+            headers: { ...data.headers },
+            status: data.message
+        }));
     }catch(err){
         yield put(Entryfailure(err.message))
     }finally{
@@ -27,7 +31,11 @@ function* postAutoEntryData(action){
         console.log('ss')
         //  yield put(startLoading());  
         let data = yield call(autoEntryApi, action.payload)
-        yield put(AutoEntrySuccess(data));
+        yield put(AutoEntrySuccess({
+             data: data.data,
+            headers: { ...data.headers },
+            status: data.message
+        }));
     }catch(err){
         yield put(AutoEntryfailure(err.message))
     }
@@ -43,7 +51,11 @@ function* postAutoEntryStop(action){
     try{
         //  yield put(startLoading());  
         let data = yield call(autoEntrystopApi, action.payload)
-        yield put(AutoEntryStopSuccess(data));
+        yield put(AutoEntryStopSuccess({
+             data: data.data,
+            headers: { ...data.headers },
+            status: data.message
+        }));
     }catch(err){
         yield put(AutoEntryStopfailure(err.message))
     }finally{
@@ -62,7 +74,11 @@ function* postgetStart(){
         console.log('raviss')
         //  yield put(startLoading());  
         let data = yield call(getStartApi)
-        yield put(getStartSuccess(data));
+        yield put(getStartSuccess({
+            data: data.data,
+            headers: { ...data.headers },
+            status: data.message
+        }));
     }catch(err){
         yield put(getStartFailure(err.message))
     }finally{

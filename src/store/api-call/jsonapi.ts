@@ -20,13 +20,14 @@ export async function logout() {
     return await axiosInstance.get(`${APP_CONSTANTS.API.LogOff}`);
 }
 export function postManualEntry(payload:manualEntryData){
-  return axiosInstance.post(`${APP_CONSTANTS.API.POSTMANUALENTRY}`, payload)
+  return axiosInstance.post(`${APP_CONSTANTS.API.POSTMANUALENTRY}`, {...payload})
 }
 export function autoEntryApi(payload:manualEntryData){
-  return axiosInstance.post(`${APP_CONSTANTS.API.POSTAUTOENTRY}`, payload)
+  return axiosInstance.post(`${APP_CONSTANTS.API.POSTAUTOENTRY}`, {...payload})
 }
 export function autoEntrystopApi(payload:manualEntryData){
-  return axiosInstance.post(`${APP_CONSTANTS.API.POSTAUTOENTRYSTOP}`, payload)
+  
+  return axiosInstance.post(`${APP_CONSTANTS.API.POSTAUTOENTRYSTOP}`, {...payload})
 }
 export function getStartApi(){
   return axiosInstance.get(`${APP_CONSTANTS.API.GETSTART}`)

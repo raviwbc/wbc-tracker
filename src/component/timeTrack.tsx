@@ -53,17 +53,17 @@ interface trackerForm {
   task: number | null
 }
 let defaultValue = {
-  project: null,
+  project: 0,
   notes: '',
-  task: null,
+  task: 0,
   status: '',
   startTime: '',
   endTime: ''
 }
 let errorDefaultVlaue = {
-  project: null,
+  project: 0,
   notes: '',
-  task: null,
+  task: 0,
   status: '',
   startTime: '',
   endTime: ''
@@ -108,8 +108,8 @@ const TimeTrack = () => {
       if(getstartRed.data.projectID){
         return getstartRed.data
       }else{
-      return {}  
-      }      
+      return {}
+      }
   })
   const entryListReducer = useSelector((store:ReducersList)=> store.entryListReducer,  shallowEqual )
 
@@ -123,13 +123,13 @@ const TimeTrack = () => {
     isManual: false,
   });
 
-//   useEffect(() => {
-//   if (getStartup?.projectID) {
-//     setTaskStarted(true);
-//   }else{
-//     setTaskStarted(false);
-//   }
-// }, [getStartup]);
+  useEffect(() => {
+    console.log('getStartup 1')
+  if (getStartup?.projectID) {
+    setTaskStarted(true);
+  }
+  // return () => {}
+}, [getStartup]);
 
   useEffect(() => {    
         dispatch(getStartRequest())    
@@ -306,10 +306,10 @@ const TimeTrack = () => {
     }
   }, [entryListReducer, prjList])
   function postAutoEntry(postData:any){
-    dispatch(AutoEntryRequest(postData))
+    dispatch(AutoEntryRequest({...postData}))
   }
   function stopRunningTask(postData){
-    dispatch(AutoEntryStopRequest(postData))
+    dispatch(AutoEntryStopRequest({...postData}))
   }
 
 
@@ -516,7 +516,7 @@ const TimeTrack = () => {
             onClick={() => setIsAccOpen(!isAccOpen)}
           >
             <span>Today Completed Task List</span>
-            <svg
+            <svg enableBackground="new 0 0 100 100"
               className={`w-3 h-3 transform ${isAccOpen ? "rotate-180" : "rotate-0"}`}
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -536,9 +536,9 @@ const TimeTrack = () => {
         {/* Accordion Content */}
         {isAccOpen && (
           <div className="p-5 bg-white border border-gray-200 rounded-b-xl">
-            <p className="">
+            <div className="">
               <CompletedList entrylist={entryList} />
-            </p>
+            </div>
           </div>
         )}
       </div>
