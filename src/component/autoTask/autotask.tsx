@@ -138,7 +138,7 @@ export const Autotask: React.FC<AutoTaskProps> = ({ projectList, submitFunc,stop
             }
             // dispatch(AutoEntryRequest(postData))
 
-        } catch (err: any) {
+        } catch (err: any){
             if (!taskStared) {
                 UpdateErrors(errorDefaultVlaue);
                 err.inner.forEach((res: any) => {
