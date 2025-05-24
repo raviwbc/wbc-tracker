@@ -65,21 +65,21 @@ interface trackerForm {
   task: number | null;
 }
 let defaultValue = {
-  project: null,
-  notes: "",
-  task: null,
-  status: "",
-  startTime: "",
-  endTime: "",
-};
+  project: 0,
+  notes: '',
+  task: 0,
+  status: '',
+  startTime: '',
+  endTime: ''
+}
 let errorDefaultVlaue = {
-  project: null,
-  notes: "",
-  task: null,
-  status: "",
-  startTime: "",
-  endTime: "",
-};
+  project: 0,
+  notes: '',
+  task: 0,
+  status: '',
+  startTime: '',
+  endTime: ''
+}
 
 const TimeTrack = () => {
   const [dates, setDates] = useState<Dates>([]);
@@ -102,29 +102,26 @@ const TimeTrack = () => {
   //Get Project List
   const dispatch = useDispatch();
   const projectList = useSelector((state: any) => {
-    return state.trackerReducer;
-  });
-  const manualEntryStatus = useSelector((state: ReducersList) => {
-    return state.manualEntryReducer;
-  });
-  const antoEntryStart = useSelector((state: ReducersList) => {
-    return state.autoEntryReducer;
-  });
-  const stopAutoEntryStart = useSelector((resp: ReducersList) => {
-    return resp.autoEntryStopReducer;
-  });
-  const getStartup: getStartRes = useSelector((state: ReducersList) => {
-    let getstartRed = state.getStartReducer;
-    if (getstartRed.data.projectID) {
-      return getstartRed.data;
-    } else {
-      return {};
-    }
-  });
-  const entryListReducer = useSelector(
-    (store: ReducersList) => store.entryListReducer,
-    shallowEqual
-  );
+    return state.trackerReducer
+  })
+  const manualEntryStatus = useSelector((state:ReducersList)=>{
+    return state.manualEntryReducer
+  })
+  const antoEntryStart = useSelector((state:ReducersList)=>{
+    return state.autoEntryReducer
+  })
+    const stopAutoEntryStart = useSelector((resp:ReducersList)=>{
+    return resp.autoEntryStopReducer
+  })
+    const getStartup:getStartRes = useSelector((state:ReducersList)=>{
+      let  getstartRed = state.getStartReducer;
+      if(getstartRed.data.projectID){
+        return getstartRed.data
+      }else{
+      return {}
+      }
+  })
+  const entryListReducer = useSelector((store:ReducersList)=> store.entryListReducer,  shallowEqual )
 
   const [formData, setFormData] = useState({
     project: "",
@@ -136,17 +133,18 @@ const TimeTrack = () => {
     isManual: false,
   });
 
-  //   useEffect(() => {
-  //   if (getStartup?.projectID) {
-  //     setTaskStarted(true);
-  //   }else{
-  //     setTaskStarted(false);
-  //   }
-  // }, [getStartup]);
-
   useEffect(() => {
-    dispatch(getStartRequest());
-  }, [stopAutoEntryStart, antoEntryStart]);
+    console.log('getStartup 1')
+  if (getStartup?.projectID) {
+    setTaskStarted(true);
+  }
+  // return () => {}
+}, [getStartup]);
+
+  useEffect(() => {    
+        dispatch(getStartRequest())    
+}, [stopAutoEntryStart, antoEntryStart]);
+
 
   useEffect(() => {
     let timer: NodeJS.Timeout | undefined;
@@ -335,12 +333,12 @@ const TimeTrack = () => {
         setEntryList(tasklistsp);
       }
     }
-  }, [entryListReducer, prjList]);
-  function postAutoEntry(postData: any) {
-    dispatch(AutoEntryRequest(postData));
+  }, [entryListReducer, prjList])
+  function postAutoEntry(postData:any){
+    dispatch(AutoEntryRequest({...postData}))
   }
-  function stopRunningTask(postData) {
-    dispatch(AutoEntryStopRequest(postData));
+  function stopRunningTask(postData){
+    dispatch(AutoEntryStopRequest({...postData}))
   }
 
   return (
@@ -554,10 +552,8 @@ const TimeTrack = () => {
             onClick={() => setIsAccOpen(!isAccOpen)}
           >
             <span>Today Completed Task List</span>
-            <svg
-              className={`w-3 h-3 transform ${
-                isAccOpen ? "rotate-180" : "rotate-0"
-              }`}
+            <svg enableBackground="new 0 0 100 100"
+              className={`w-3 h-3 transform ${isAccOpen ? "rotate-180" : "rotate-0"}`}
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
               viewBox="0 0 10 6"
@@ -576,9 +572,9 @@ const TimeTrack = () => {
         {/* Accordion Content */}
         {isAccOpen && (
           <div className="p-5 bg-white border border-gray-200 rounded-b-xl">
-            <p className="">
+            <div className="">
               <CompletedList entrylist={entryList} />
-            </p>
+            </div>
           </div>
         )}
       </div>

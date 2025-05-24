@@ -101,6 +101,6 @@ export const CompletedList = ({entrylist})=>{
         </div>
     </div>
 }
-CompletedList.propTypes = { 
-    entrylist : tasklist
-  };
+// CompletedList.propTypes = { 
+//     entrylist :
+//   };

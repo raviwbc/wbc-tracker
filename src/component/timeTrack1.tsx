@@ -359,7 +359,7 @@ description : string
         {isAccOpen && (
           <div className="p-5 bg-white border border-gray-200 rounded-b-xl">
             <p className="">
-            <CompletedList/>
+            <CompletedList entrylist={undefined}/>
             </p>
             
           </div>
