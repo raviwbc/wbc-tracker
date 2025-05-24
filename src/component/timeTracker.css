@@ -6,13 +6,11 @@
 }
 
 .dateDayContainer {
-    /* padding: 12px;
-    border: 1px solid #dfe4eb;
-    border-radius: 8px; */
     gap: 10px;
-
 }
-
+.margin-20{
+    margin: 20px;
+}
 /* stop clock css
  */
 .startBtn {
@@ -115,7 +113,7 @@
 
 .dummyDiv {
     overflow: hidden;
-    width: 100%;
+    width: 190px;
     height: 100%;
     position: absolute;
     border-radius: 12px;
