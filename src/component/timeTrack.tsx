@@ -123,13 +123,13 @@ const TimeTrack = () => {
     isManual: false,
   });
 
-  useEffect(() => {
-  if (getStartup?.projectID) {
-    setTaskStarted(true);
-  }else{
-    setTaskStarted(false);
-  }
-}, [getStartup]);
+//   useEffect(() => {
+//   if (getStartup?.projectID) {
+//     setTaskStarted(true);
+//   }else{
+//     setTaskStarted(false);
+//   }
+// }, [getStartup]);
 
   useEffect(() => {    
         dispatch(getStartRequest())    
