@@ -42,8 +42,6 @@ class manualEntryData {
     flog: boolean = false
     isAuto: boolean = false
   }
-
-
 interface trackerForm {
   project: number | null,
   notes: string ,
