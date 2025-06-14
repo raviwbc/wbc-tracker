@@ -7,11 +7,12 @@ import { startLoading, stopLoading } from "../reducers/loader.ts";
 function* postManualEntryData(action){
     try{
         //  yield put(startLoading());  
-        let data = yield call(postManualEntry, action.payload)
+        let resp = yield call(postManualEntry, action.payload)
         yield put(enterySuccess({
-             data: data.data,
-            headers: { ...data.headers },
-            status: data.message
+             data: resp.data,
+            headers: { ...resp.headers },
+            status: resp.data.message,
+            didError : resp.data.didError
         }));
     }catch(err){
         yield put(Entryfailure(err.message))

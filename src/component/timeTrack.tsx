@@ -30,6 +30,7 @@ import { getStartRes, ReducersList, tasklist } from "../model/timetracker.ts";
 import { Autotask } from "./autoTask/autotask.tsx";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import TimerIcon from "@mui/icons-material/Timer";
+import { toast } from "react-hot-toast";
 
 type Dates = string[];
 
@@ -109,7 +110,7 @@ const TimeTrack = () => {
   const antoEntryStart = useSelector((state:ReducersList)=>{
     return state.autoEntryReducer
   })
-    const stopAutoEntryStart = useSelector((resp:ReducersList)=>{
+    const stopAutoEntry = useSelector((resp:ReducersList)=>{
     return resp.autoEntryStopReducer
   })
     const getStartup:getStartRes = useSelector((state:ReducersList)=>{
@@ -132,6 +133,24 @@ const TimeTrack = () => {
     isManual: false,
   });
 
+  function resetManualForm(){
+    UpdateTrackerForm(defaultValue)
+    UpdateErrors(errorDefaultVlaue)
+    toast.success("Your entry updated successfully", { duration: 3000});
+    EntryListCall();
+  }
+
+  useEffect(()=>{
+    console.log(manualEntryStatus);
+    if(manualEntryStatus.Loading == false){
+    if(manualEntryStatus.data?.didError == false){
+      resetManualForm();
+    }else if(manualEntryStatus.data?.didError == true){
+      toast.error(manualEntryStatus.message || "Something went wrong!", { duration: 3000});
+    }    
+  }
+  },[manualEntryStatus])
+
   useEffect(() => {
     console.log('getStartup 1')
   if (getStartup?.projectID) {
@@ -141,8 +160,15 @@ const TimeTrack = () => {
 }, [getStartup]);
 
   useEffect(() => {    
-        dispatch(getStartRequest())    
-}, [stopAutoEntryStart, antoEntryStart]);
+        dispatch(getStartRequest())
+        console.log(stopAutoEntry)
+        if(stopAutoEntry.data?.message){
+          teskUpdated()
+        }
+        
+    
+        // AutoentryStoped()
+}, [stopAutoEntry, antoEntryStart]);
 
 
   useEffect(() => {
@@ -338,6 +364,16 @@ const TimeTrack = () => {
   }
   function stopRunningTask(postData){
     dispatch(AutoEntryStopRequest({...postData}))
+  }
+
+  function teskUpdated(){
+    if(stopAutoEntry.data?.didError == false && stopAutoEntry.Loading == false){
+            toast.success("Task updated", { duration: 3000});
+            dispatch(completedEntryRequest(""));
+            setTaskStarted(false)
+        }else if(stopAutoEntry.data?.didError == true && stopAutoEntry.Loading == false){
+            toast.error(stopAutoEntry.data.message || "Something went wrong!", { duration: 3000});
+        }
   }
 
   return (

@@ -1,9 +1,10 @@
-import React from "react"
+import React, { useEffect } from "react"
 import moment from "moment"
 import './completedList.css'
 import { ReducersList, tasklist } from "../../model/timetracker.ts";
-import { useDispatch } from "react-redux";
-import { deleteRequest } from "../../store/reducers/todayCompletedList.ts";
+import { useDispatch, useSelector } from "react-redux";
+import { completedEntryRequest, deleteRequest } from "../../store/reducers/todayCompletedList.ts";
+import { toast } from "react-hot-toast";
 
 
 
@@ -48,30 +49,45 @@ import { deleteRequest } from "../../store/reducers/todayCompletedList.ts";
 // },]
 
 
+
+
 const returnHours = (endDate, startDate)=>{
     const diffInMilliseconds = moment(endDate).diff(moment(startDate));
-
     const duration = moment.duration(diffInMilliseconds);
-
     // Format the duration as HH:mm:ss
     return `${String(duration.hours()).padStart(2, '0')}:${String(duration.minutes()).padStart(2, '0')}:${String(duration.seconds()).padStart(2, '0')}`;
 }
+
 
 function minutesConverter(min:number){
     let duration = moment.duration(min, 'minutes')
     return `${String(duration.hours()).padStart(2, '0')}:${String(duration.minutes()).padStart(2, '0')}`;
 }
 
-
-
-
 export const CompletedList = ({entrylist})=>{
     const dispatch = useDispatch()
+      const deleteOperation = useSelector((state: any) => { 
+        return state.deleteTaskReducer 
+    });
+
     function deletefun(id:number | null){
         console.log(id)
         dispatch(deleteRequest(id))
-        
+    }
+
+    
+
+
+
+    useEffect(()=>{
+        if(deleteOperation.data?.didError == false && deleteOperation.Loading == false){
+            toast.success("Your entry updated successfully", { duration: 3000});
+            dispatch(completedEntryRequest(""));
+        }else if(deleteOperation.data?.didError == true && deleteOperation.Loading == false){
+            toast.error(deleteOperation.data.message || "Something went wrong!", { duration: 3000});
         }
+    },[deleteOperation])
+
     return <div>         
         <div className="taskListTable">
             {

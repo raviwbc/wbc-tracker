@@ -8,13 +8,14 @@ const manual = createSlice({
         message : ''
     },
     reducers : {
-        ManualEntryRequest: (state, action)=>{    
+        ManualEntryRequest: (state, action)=>{
             state.Loading = true
         },
         enterySuccess: (state, action)=>{
-            state.data = action.payload
+            let resp = action.payload
+            state.data = resp
             state.Loading = false
-            state.message = 'success'
+            state.message = resp.status
         },
         Entryfailure : (state, action)=>{
             state.Loading = false
@@ -41,9 +42,10 @@ const autoEntry = createSlice({
         message : ''
     },
     reducers : {
-        AutoEntryRequest: (state, action)=>{
-                      
+        AutoEntryRequest: (state, action)=>{                    
             state.Loading = true
+            state.message = ''
+            state.data  = {}
         },
         AutoEntrySuccess: (state, action)=>{
             state.data = action.payload.data
@@ -77,7 +79,7 @@ const autoEntryStop = createSlice({
             state.Loading = true
         },
         AutoEntryStopSuccess: (state, action)=>{
-            state.data = action.payload
+            state.data = action.payload.data
             state.Loading = false
             state.message = 'success'
         },

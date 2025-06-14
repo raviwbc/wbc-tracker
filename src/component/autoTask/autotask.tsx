@@ -131,8 +131,7 @@ export const Autotask: React.FC<AutoTaskProps> = ({ projectList, submitFunc,stop
                 postData.taskID = trackerForm.task ? trackerForm.task : 0;
                 postData.startTime = currentTime;
                 postData.timeAdded = currentTime;
-                postData.timeSheetDate = currentTime;
-                
+                postData.timeSheetDate = currentTime;                
                 submitFunc(postData)
                 formReset()
             }

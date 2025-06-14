@@ -29,7 +29,8 @@ function* deleteTaskDel(action){
         debugger
         const resp = yield call(deleteTask, action.payload)        
         if(resp.data){
-            yield put(deleteSuccess(resp.data.model))
+            console.log(resp)
+            yield put(deleteSuccess(resp.data))
         }else{
             yield put(deleteFailer('Something went wrong try again'))    
         }
