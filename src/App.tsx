@@ -8,14 +8,14 @@ import { HeaderComp } from './component/header.tsx';
 import { MyContext } from './myContext.tsx';
 import { MyContextType } from './model/contextApi.ts';
 import TimeTrack from './component/timeTrack.tsx';
-import { Provider, useSelector } from 'react-redux';
+import { Provider } from 'react-redux';
 import { store } from './store/store.ts';
-import { CompletedList } from './component/completedTaskList/completedList.tsx';
-import Tie from './pages/games/tie.tsx';
 import { Login } from './component/login/login.tsx';
-import { BrowserRouter, Link, Route, Router, Routes } from 'react-router-dom';
+import { BrowserRouter, Route,  Routes } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import ClockLoader from './component/completedTaskList/loader/loader.tsx';
+import { TimePicker } from '@mui/x-date-pickers';
+import TimePk from './component/time-picker/time-picker.tsx';
 function App() {
   const [theme, setTheme] = useState('dark');
   const [user, setUser] = useState('Guest');
@@ -82,6 +82,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Login />}/>
         <Route path="/Index" element={<TimeTrack />}/>
+        <Route path="/picker" element={<TimePk />}/>
         <Route path="*" element={<TimeTrack />} />
 
       </Routes>

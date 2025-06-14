@@ -1,0 +1,52 @@
+
+/* clock CUstomization */
+.css-1n0lrk4-MuiTimeClock-root {
+    width: auto !important;
+}
+
+.timepicker-contain .css-umzx0k-MuiClock-pin,
+.css-pncb2q-MuiClockPointer-root,
+.css-5wpvtd-MuiClockNumber-root.Mui-selected {
+    background-color: #1b004e !important;
+}
+
+.timepicker-contain .MuiClockPointer-thumb {
+    border: 16px solid #1b004e !important;
+}
+
+.timePicker .MuiPickersLayout-root {
+min-width: 250px !important;
+         box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+.timepicker-contain .MuiClock-root {
+    margin: 0 !important;
+}
+
+.timePicker {
+    width: 250px;
+}
+
+/* Hide the nav arrow in time picker */
+.timepicker-contain .css-15vw5kf-MuiPickersArrowSwitcher-root-MuiTimeClock-arrowSwitcher {
+    display: none !important;
+}
+
+.timepicker-contain .css-15fu35s-MuiDialogActions-root button:nth-of-type(1) {
+    color: #716666;
+}
+
+.timepicker-contain .css-15fu35s-MuiDialogActions-root button:nth-of-type(2) {
+    color: #1b004e;
+}
+
+.timepicker-contain .css-jdw6pu-MuiTypography-root-MuiPickersToolbarText-root.Mui-selected {
+    color: rgb(27 0 78);
+    background-color: #e6d9ff;
+    padding: 0 9px;
+    border-radius: 10px;
+}
+
+.timepicker-contain .css-1tht8iq-MuiTypography-root-MuiPickersToolbarText-root.Mui-selected {
+    color: rgb(27 0 78);
+    font-weight: 600;
+}

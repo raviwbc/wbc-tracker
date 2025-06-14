@@ -114,9 +114,13 @@ export const Login = () => {
                     Your browser does not support the video tag.
                 </video>
 
+<div className="mobileRoundCrnr1"></div>
+<div className="mobileRoundCrnrSub1"></div>
+
+<div className="mobileRoundCrnr2"></div>
+<div className="mobileRoundCrnrSub2"></div>
                 {/* Optional Foreground Content */}
                 <div className="loginPage">
-
                     <div className="loginTxt">Login</div>
                     <div className="welcomeTxt">
                         <div>Welcome to <span style={{ color: "#1b004e" }}>WBC Tracker</span></div>

@@ -307,7 +307,6 @@ const TimeTrack = () => {
   let updateTime = (data: any, field: string) => {
     UpdateTrackerForm((prev) => {
       let updatedData = { ...prev, [field]: data };
-
       return updatedData;
     });
   };
