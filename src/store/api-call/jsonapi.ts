@@ -33,6 +33,7 @@ export function getStartApi(){
   return axiosInstance.get(`${APP_CONSTANTS.API.GETSTART}`)
 }
 export function completedEntryList(payload:string){
+  console.log(payload)
   return axiosInstance.get(`${APP_CONSTANTS.API.ENTRYLIST}${payload}`,)
 }
 export function deleteTask(id:string){

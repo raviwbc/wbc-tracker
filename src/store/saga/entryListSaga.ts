@@ -7,7 +7,7 @@ import { startLoading, stopLoading } from "../reducers/loader.ts";
 
 
 
- function* entrylistGet(action){    
+ function* entrylistGet(action){
     try{
          yield put(startLoading());  
         const resp = yield call(completedEntryList, action.payload)        

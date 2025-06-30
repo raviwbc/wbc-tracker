@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import moment from "moment";
 import * as Yup from "yup";
+import { useLocation, useNavigate } from 'react-router-dom';
+
 
 import "./timeTracker.css";
 import {
@@ -32,7 +34,7 @@ import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import TimerIcon from "@mui/icons-material/Timer";
 import { toast } from "react-hot-toast";
 
-type Dates = string[];
+type Dates = {dateString: string, paramsday: string};
 
 interface projectList {
   projectID: number;
@@ -82,7 +84,7 @@ let errorDefaultVlaue = {
 }
 
 const TimeTrack = () => {
-  const [dates, setDates] = useState<Dates>([]);
+  const [dates, setDates] = useState<Dates[]>();
 
   const [isRunning, setIsRunning] = useState<boolean>(false);
   const [runTime, setRunTime] = useState<number>(0);
@@ -98,6 +100,10 @@ const TimeTrack = () => {
   const [taskList, setTaskList] = useState<projectList[]>([]);
   const statusList = ["Done", "WIP", "OnHold"];
   const [taskStared, setTaskStarted] = useState<boolean>(false);
+  const [selectedDate, updateSelectedDate] = useState<string | null>('');
+  const location = useLocation();
+    const navigate = useNavigate();
+
 
   //Get Project List
   const dispatch = useDispatch();
@@ -121,6 +127,10 @@ const TimeTrack = () => {
       return {}
       }
   })
+      
+      let searchParams = new URLSearchParams(location.search);
+      let selectedDatenew = searchParams.get('date');      
+      // updateSelectedDate(selectedDatenew)
   const entryListReducer = useSelector((store:ReducersList)=> store.entryListReducer,  shallowEqual )
 
   const [formData, setFormData] = useState({
@@ -163,7 +173,7 @@ const TimeTrack = () => {
         dispatch(getStartRequest())
         console.log(stopAutoEntry)
         if(stopAutoEntry.data?.message){
-          teskUpdated()
+          taskUpdated()
         }
         
     
@@ -191,16 +201,16 @@ const TimeTrack = () => {
         dispatch(ProjectListRequest());
         EntryListCall();
 
-        const listOfDate: Dates = [];
+        const listOfDate: Dates[] = [];
         let k = (window.innerWidth - 40 - 190) / 75;     
         k = Math.floor(k)
         let data = (window.innerWidth - 40 - 190) / 75
-        console.log('Before:',data);
-        console.log('date count:',k);
         for (let i = k; i > 0; i--) {
           const date = moment().subtract(i, "days").format("DD ddd");
-          listOfDate.push(date);
+          const fulldate = moment().subtract(i, "days").format("MM-DD-YYYY");
+          listOfDate.push({dateString: date, paramsday: fulldate});
         }
+        console.log(listOfDate)
         setDates(listOfDate);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -331,7 +341,7 @@ const TimeTrack = () => {
   };
 
   function EntryListCall() {
-    dispatch(completedEntryRequest(""));
+    dispatch(completedEntryRequest(selectedDate));
   }
   useEffect(() => {
     dispatch(getStartRequest());
@@ -340,7 +350,7 @@ const TimeTrack = () => {
   useEffect(() => {
     if (prjList?.length) {
       const datap: tasklist[] = entryListReducer.data;
-      if (datap?.length) {
+      if (datap?.length != entryList?.length) {
         const tasklistsp = datap?.map((resp) => {
           let project = prjList?.filter(
             (data) => data.projectID == resp.projectID
@@ -365,27 +375,39 @@ const TimeTrack = () => {
     dispatch(AutoEntryStopRequest({...postData}))
   }
 
-  function teskUpdated(){
+  function taskUpdated(){
     if(stopAutoEntry.data?.didError == false && stopAutoEntry.Loading == false){
             toast.success("Task updated", { duration: 3000});
-            dispatch(completedEntryRequest(""));
+            dispatch(completedEntryRequest(selectedDate));
             setTaskStarted(false)
         }else if(stopAutoEntry.data?.didError == true && stopAutoEntry.Loading == false){
             toast.error(stopAutoEntry.data.message || "Something went wrong!", { duration: 3000});
         }
   }
+  const callcompletedList = (date) => {
+    navigate(`/index?date=${date}`)
+  }
+
+    useEffect(() => {
+    const searchParams = new URLSearchParams(location.search);
+    const selectedDateLocal = searchParams.get('date');
+    updateSelectedDate(selectedDateLocal)
+    if (selectedDateLocal) {
+      dispatch(completedEntryRequest(selectedDateLocal));
+    }
+  }, [location.search]); 
 
   return (
     <div className="margin-20">
       {/* Calendar */}
       <div className="mt-4 flex gap-4  dateDayContainer">
-        {dates.map((item, index) => (
-          <div
+        {dates?.map((item, index) => (
+          <div onClick={()=> callcompletedList(item.paramsday)}
             key={index}
             className="flex flex-col items-center bg-gray-100 dateDayBox "
           >
-            <div className="text-lg font-bold">{item.split(" ")[0]}</div>
-            <div className="text-sm text-gray-600">{item.split(" ")[1]}</div>
+            <div className="text-lg font-bold">{item.dateString.split(" ")[0]}</div>
+            <div className="text-sm text-gray-600">{item.dateString.split(" ")[1]}</div>
           </div>
         ))}
         <button className="wave-btn currentDateBtnTxt relative overflow-hidden px-6 py-4 rounded-md">
@@ -607,7 +629,7 @@ const TimeTrack = () => {
         {isAccOpen && (
           <div className="p-5 bg-white border border-gray-200 rounded-b-xl">
             <div className="">
-              <CompletedList entrylist={entryList} />
+              <CompletedList entrylist={entryList} date={selectedDate} />
             </div>
           </div>
         )}
