@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import moment from "moment";
+import moment, { Moment } from "moment";
 import * as Yup from "yup";
 import { useLocation, useNavigate } from 'react-router-dom';
 
@@ -7,8 +7,11 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import "./timeTracker.css";
 import {
   FormControl,
+  IconButton,
+  InputAdornment,
   InputLabel,
   MenuItem,
+  Popover,
   Select,
   Switch,
   TextField,
@@ -31,8 +34,9 @@ import { completedEntryRequest } from "../store/reducers/todayCompletedList.ts";
 import { getStartRes, ReducersList, tasklist } from "../model/timetracker.ts";
 import { Autotask } from "./autoTask/autotask.tsx";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
-import TimerIcon from "@mui/icons-material/Timer";
+import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import { toast } from "react-hot-toast";
+import TimePk from "./time-picker/time-picker.tsx";
 
 type Dates = {dateString: string, paramsday: string};
 
@@ -397,6 +401,56 @@ const TimeTrack = () => {
     }
   }, [location.search]); 
 
+
+// Time Picker Logic
+	  const [pickerStartValue, setpickerStartValue] = useState<Moment | null>(
+    moment().hour(12).minute(0)
+  );
+  const [pickerEndValue, setpickerEndValue] = useState<Moment | null>(
+    moment().hour(12).minute(0)
+  );
+  const [anchorEl, setAnchorEl] = useState(null);
+
+  const open = Boolean(anchorEl);
+
+  const handleIconClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const getStartPickerData = (time) => {
+    if (time) {
+      UpdateTrackerForm((resp) => {
+        console.log(resp);
+        return { ...resp, startTime: moment(time).format("HH:mm") };
+      });
+      console.log("Time from child:", time);
+      setpickerStartValue(time);
+      setAnchorEl(null);
+    } else {
+      setAnchorEl(null);
+    }
+  };
+  const getEndPickerData = (time) => {
+    debugger;
+    if (time) {
+      UpdateTrackerForm((resp) => {
+        console.log(resp);
+        return { ...resp, endTime: moment(time).format("HH:mm") };
+      });
+      console.log("Time from child:", time);
+      setpickerEndValue(time);
+      setAnchorEl(null);
+    } else {
+      setAnchorEl(null);
+    }
+  };
+
+
+
   return (
     <div className="margin-20">
       {/* Calendar */}
@@ -496,13 +550,13 @@ const TimeTrack = () => {
               </FormControl>
             </div>
 
-            <div>
+            {/* <div>
               <LocalizationProvider dateAdapter={AdapterMoment}>
                 <FormControl
                   fullWidth
                   error={formErrors.startTime ? true : false}
                 >
-                  {/* <InputLabel id="startDate">TimePicker</InputLabel> */}
+                
                   <TimePicker
                     label="Start Time"
                     onChange={(value) => updateTime(value, "startTime")}
@@ -522,7 +576,46 @@ const TimeTrack = () => {
                   />
                 </FormControl>
               </LocalizationProvider>
-            </div>
+            </div> */}
+
+
+              <FormControl
+                fullWidth
+                error={formErrors.startTime ? true : false}
+              >
+                <TextField
+                  label="Start Time"
+                  value={trackerForm.startTime}
+                  onClick={handleIconClick}
+                  fullWidth
+                  variant="outlined"
+                  placeholder="hh:mm"
+                  // error={!!error}
+                  InputProps={{
+                    readOnly: true,
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton onClick={handleIconClick}>
+                          <AccessTimeIcon />
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  }}
+                />
+
+                <Popover
+                  open={open}
+                  anchorEl={anchorEl}
+                  onClose={handleClose}
+                  anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
+                >
+                  <TimePk
+                    selectedTime={pickerStartValue}
+                    onTimeSelect={getStartPickerData}
+                  />
+                </Popover>
+              </FormControl>
+
             <div>
               <LocalizationProvider dateAdapter={AdapterMoment}>
                 <FormControl

@@ -1,86 +1,91 @@
 import * as React from "react";
-import { LocalizationProvider, StaticTimePicker } from "@mui/x-date-pickers";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import Button from "@mui/material/Button";
+import {
+  LocalizationProvider,
+  StaticTimePicker,
+} from "@mui/x-date-pickers";
 import "./time-picker.css";
-import dayjs, { Dayjs } from "dayjs";
-import ClickAwayListener from '@mui/material/ClickAwayListener';
+import ClickAwayListener from "@mui/material/ClickAwayListener";
+import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
+import { useState, useRef } from "react";
 
+const TimePk = ({ selectedTime , onTimeSelect }) => {
+  const [isOpen, setIsOpen] = useState(true);
+  const [hasSelected, setHasSelected] = useState(false);
 
-function TimePk() {
-  const [pickervalue, setPickervalue] = React.useState<Dayjs | null>(
-    dayjs().hour(12).minute(0)
-  );
-  const [isOpen, setIsOpen] = React.useState(false);
-  
-//   Invoke when user click ok in time picker
-  const handleAccept = (val:any) => {
-    setPickervalue(val);
-    setIsOpen(!val);
-    console.log(pickervalue);
+  const acceptedRef = useRef(false); // <-- To track if Accept was clicked
+
+  const handleAccept = (val: any) => {
+    if (!val) return;
+    acceptedRef.current = true;
+    onTimeSelect(val);
   };
-  //invoke when user clicks cancel in time picker
-   const handleCancel = () => {
-    setPickervalue(pickervalue); // Reset temporary value
+
+  const handleClose = () => {
+    debugger
+    if (!acceptedRef.current && hasSelected) {
+      onTimeSelect(selectedTime); 
+    }
+    acceptedRef.current = false; 
     setIsOpen(false);
-    console.log('User cancelled selection');
+     onTimeSelect(null); 
   };
-  
 
-//Handle outter click close
- const pickerRef = React.useRef<HTMLDivElement>(null);
-React.useEffect(() => {
-  if (!isOpen) return;
+  //Handle outter click close
+  const pickerRef = React.useRef<HTMLDivElement>(null);
+  React.useEffect(() => {
+    if (!isOpen) return;
 
-  const timeout = setTimeout(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (pickerRef.current && !pickerRef.current.contains(event.target as Node)) {
-        setIsOpen(false);
-      }
+    const timeout = setTimeout(() => {
+      const handleClickOutside = (event: MouseEvent) => {
+        if (
+          pickerRef.current &&
+          !pickerRef.current.contains(event.target as Node)
+        ) {
+          setIsOpen(false);
+        }
+      };
+
+      document.addEventListener("mousedown", handleClickOutside);
+
+      // Cleanup
+      cleanup = () => {
+        document.removeEventListener("mousedown", handleClickOutside);
+      };
+    });
+
+    let cleanup = () => {};
+    return () => {
+      clearTimeout(timeout);
+      cleanup();
     };
+  }, [isOpen]);
 
-    document.addEventListener('mousedown', handleClickOutside);
-
-    // Cleanup
-    cleanup = () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  });
-
-  let cleanup = () => {};
-
-  return () => {
-    clearTimeout(timeout);
-    cleanup();
-  };
-}, [isOpen]);
 
   return (
-    <div className="timepicker-contain">
-      <LocalizationProvider dateAdapter={AdapterDayjs}>
-        <Button
-          variant="contained"
-          type="submit"
-          onClick={() => setIsOpen(!isOpen)}
-        >
-          Click Me
-        </Button>
-        <div className="">
-          {isOpen && (
-            <ClickAwayListener onClickAway={() => setIsOpen(false)}>
+    <div>
+      <div className="timepicker-contain">
+        <LocalizationProvider dateAdapter={AdapterMoment}>
+          <ClickAwayListener onClickAway={() => setIsOpen(false)}>
             <div className="timePicker">
               <StaticTimePicker
-                defaultValue={pickervalue}
-                onAccept={handleAccept} // triggered on OK
-                onClose={handleCancel} // Called on both Cancel and OK (after Accept)
-                onChange={(newValue) => setPickervalue(pickervalue)} // optional for live update
+                value={selectedTime}
+                onAccept={handleAccept}
+                onClose={handleClose}
+                onChange={(newValue) => {
+                  setHasSelected(true);
+                }}
+                slotProps={{
+                  actionBar: {
+                    actions: hasSelected ? [ "accept"] : ["cancel"],
+                  },
+                }}
               />
             </div>
-            </ClickAwayListener>
-          )}
-        </div>
-      </LocalizationProvider>
+          </ClickAwayListener>
+        </LocalizationProvider>
+      </div>
     </div>
   );
-}
+};
+
 export default TimePk;

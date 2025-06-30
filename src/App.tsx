@@ -82,7 +82,6 @@ function App() {
       <Routes>
         <Route path="/" element={<Login />}/>
         <Route path="/Index" element={<TimeTrack />}/>
-        <Route path="/picker" element={<TimePk />}/>
         <Route path="*" element={<TimeTrack />} />
 
       </Routes>
