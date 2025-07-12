@@ -41,8 +41,3 @@ span.status[data-status = 'Done']{
     border: 1px solid #827cbf;
     color: #000a57;
 }
-.nrf{
-        text-align: center;
-    color: #b0b0b0;
-    font-weight: 600;
-}

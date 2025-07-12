@@ -96,7 +96,7 @@ export const CompletedList = ({entrylist, date})=>{
     return <div>         
         <div className="taskListTable">
             {
-                entrylist ? entrylist.map((resp:tasklist)=>(
+                entrylist && entrylist.map((resp:tasklist)=>(
                     <div key={resp.taskID + resp.minutes + (Math.random() * 10)} className="parent_div">
                     <div>{resp.taskName} - <span data-status={resp.projectName}>{resp.projectName}</span></div>
                     <div><img title={resp.isAuto ? 'Auto Entry' :'Manual Entry'} src={resp.isAuto ?'/assets/happy.svg':'/assets/angry.svg'} width={30} alt="Delete" /></div>
@@ -114,8 +114,11 @@ export const CompletedList = ({entrylist, date})=>{
                         <button onClick={()=> deletefun(resp.id)}><img src="/assets/delete.svg" width={35} alt="Delete" /></button>
                     </div>
                     </div>
-                )) : <div className="nrf">No Record Found</div>
+                ))
             }
         </div>
     </div>
 }
+// CompletedList.propTypes = { 
+//     entrylist :
+//   };
