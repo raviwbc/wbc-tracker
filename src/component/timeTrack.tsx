@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
 import moment, { Moment } from "moment";
 import * as Yup from "yup";
-import { useLocation, useNavigate } from 'react-router-dom';
-
+import { useLocation, useNavigate } from "react-router-dom";
 
 import "./timeTracker.css";
 import {
@@ -13,7 +12,6 @@ import {
   MenuItem,
   Popover,
   Select,
-  Switch,
   TextField,
   ToggleButton,
   ToggleButtonGroup,
@@ -21,9 +19,6 @@ import {
 import { CompletedList } from "./completedTaskList/completedList.tsx";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { ProjectListRequest } from "../store/reducers/timeTracker.ts";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { TimePicker } from "@mui/x-date-pickers";
-import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
 import {
   AutoEntryRequest,
   AutoEntryStopRequest,
@@ -38,7 +33,7 @@ import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import { toast } from "react-hot-toast";
 import TimePk from "./time-picker/time-picker.tsx";
 
-type Dates = {dateString: string, paramsday: string};
+type Dates = { dateString: string; paramsday: string };
 
 interface projectList {
   projectID: number;
@@ -48,20 +43,20 @@ interface projectList {
 }
 
 class manualEntryData {
-    projectID: number = 0
-    userID: number =0
-    taskID: number=0
-    startTime: string = ""
-    endTime: string = ""
-    timeSheetDate: string = ""
-    timeAdded: string = ""
-    minutes: number = 0
-    comment: string = ""
-    tlComments: string = ""
-    taskStatus: string = ""
-    flog: boolean = false
-    isAuto: boolean = false
-  }
+  projectID: number = 0;
+  userID: number = 0;
+  taskID: number = 0;
+  startTime: string = "";
+  endTime: string = "";
+  timeSheetDate: string = "";
+  timeAdded: string = "";
+  minutes: number = 0;
+  comment: string = "";
+  tlComments: string = "";
+  taskStatus: string = "";
+  flog: boolean = false;
+  isAuto: boolean = false;
+}
 interface trackerForm {
   project: number | null;
   notes: string;
@@ -72,20 +67,20 @@ interface trackerForm {
 }
 let defaultValue = {
   project: 0,
-  notes: '',
+  notes: "",
   task: 0,
-  status: '',
-  startTime: '',
-  endTime: ''
-}
+  status: "",
+  startTime: "",
+  endTime: "",
+};
 let errorDefaultVlaue = {
   project: 0,
-  notes: '',
+  notes: "",
   task: 0,
-  status: '',
-  startTime: '',
-  endTime: ''
-}
+  status: "",
+  startTime: "",
+  endTime: "",
+};
 
 const TimeTrack = () => {
   const [dates, setDates] = useState<Dates[]>();
@@ -104,38 +99,40 @@ const TimeTrack = () => {
   const [taskList, setTaskList] = useState<projectList[]>([]);
   const statusList = ["Done", "WIP", "OnHold"];
   const [taskStared, setTaskStarted] = useState<boolean>(false);
-  const [selectedDate, updateSelectedDate] = useState<string | null>('');
+  const [selectedDate, updateSelectedDate] = useState<string | null>("");
   const location = useLocation();
-    const navigate = useNavigate();
-
+  const navigate = useNavigate();
 
   //Get Project List
   const dispatch = useDispatch();
   const projectList = useSelector((state: any) => {
-    return state.trackerReducer
-  })
-  const manualEntryStatus = useSelector((state:ReducersList)=>{
-    return state.manualEntryReducer
-  })
-  const antoEntryStart = useSelector((state:ReducersList)=>{
-    return state.autoEntryReducer
-  })
-    const stopAutoEntry = useSelector((resp:ReducersList)=>{
-    return resp.autoEntryStopReducer
-  })
-    const getStartup:getStartRes = useSelector((state:ReducersList)=>{
-      let  getstartRed = state.getStartReducer;
-      if(getstartRed.data.projectID){
-        return getstartRed.data
-      }else{
-      return {}
-      }
-  })
-      
-      let searchParams = new URLSearchParams(location.search);
-      let selectedDatenew = searchParams.get('date');      
-      // updateSelectedDate(selectedDatenew)
-  const entryListReducer = useSelector((store:ReducersList)=> store.entryListReducer,  shallowEqual )
+    return state.trackerReducer;
+  });
+  const manualEntryStatus = useSelector((state: ReducersList) => {
+    return state.manualEntryReducer;
+  });
+  const antoEntryStart = useSelector((state: ReducersList) => {
+    return state.autoEntryReducer;
+  });
+  const stopAutoEntry = useSelector((resp: ReducersList) => {
+    return resp.autoEntryStopReducer;
+  });
+  const getStartup: getStartRes = useSelector((state: ReducersList) => {
+    let getstartRed = state.getStartReducer;
+    if (getstartRed.data.projectID) {
+      return getstartRed.data;
+    } else {
+      return {};
+    }
+  });
+
+  let searchParams = new URLSearchParams(location.search);
+  let selectedDatenew = searchParams.get("date");
+  // updateSelectedDate(selectedDatenew)
+  const entryListReducer = useSelector(
+    (store: ReducersList) => store.entryListReducer,
+    shallowEqual
+  );
 
   const [formData, setFormData] = useState({
     project: "",
@@ -147,43 +144,43 @@ const TimeTrack = () => {
     isManual: false,
   });
 
-  function resetManualForm(){
-    UpdateTrackerForm(defaultValue)
-    UpdateErrors(errorDefaultVlaue)
-    toast.success("Your entry updated successfully", { duration: 3000});
+  function resetManualForm() {
+    UpdateTrackerForm(defaultValue);
+    UpdateErrors(errorDefaultVlaue);
+    toast.success("Your entry updated successfully", { duration: 3000 });
     EntryListCall();
   }
 
-  useEffect(()=>{
+  useEffect(() => {
     console.log(manualEntryStatus);
-    if(manualEntryStatus.Loading == false){
-    if(manualEntryStatus.data?.didError == false){
-      resetManualForm();
-    }else if(manualEntryStatus.data?.didError == true){
-      toast.error(manualEntryStatus.message || "Something went wrong!", { duration: 3000});
-    }    
-  }
-  },[manualEntryStatus])
+    if (manualEntryStatus.Loading == false) {
+      if (manualEntryStatus.data?.didError == false) {
+        resetManualForm();
+      } else if (manualEntryStatus.data?.didError == true) {
+        toast.error(manualEntryStatus.message || "Something went wrong!", {
+          duration: 3000,
+        });
+      }
+    }
+  }, [manualEntryStatus]);
 
   useEffect(() => {
-    console.log('getStartup 1')
-  if (getStartup?.projectID) {
-    setTaskStarted(true);
-  }
-  // return () => {}
-}, [getStartup]);
+    console.log("getStartup 1");
+    if (getStartup?.projectID) {
+      setTaskStarted(true);
+    }
+    // return () => {}
+  }, [getStartup]);
 
-  useEffect(() => {    
-        dispatch(getStartRequest())
-        console.log(stopAutoEntry)
-        if(stopAutoEntry.data?.message){
-          taskUpdated()
-        }
-        
-    
-        // AutoentryStoped()
-}, [stopAutoEntry, antoEntryStart]);
+  useEffect(() => {
+    dispatch(getStartRequest());
+    console.log(stopAutoEntry);
+    if (stopAutoEntry.data?.message) {
+      taskUpdated();
+    }
 
+    // AutoentryStoped()
+  }, [stopAutoEntry, antoEntryStart]);
 
   useEffect(() => {
     let timer: NodeJS.Timeout | undefined;
@@ -206,15 +203,15 @@ const TimeTrack = () => {
         EntryListCall();
 
         const listOfDate: Dates[] = [];
-        let k = (window.innerWidth - 40 - 190) / 75;     
-        k = Math.floor(k)
-        let data = (window.innerWidth - 40 - 190) / 75
+        let k = (window.innerWidth - 40 - 190) / 75;
+        k = Math.floor(k);
+        let data = (window.innerWidth - 40 - 190) / 75;
         for (let i = k; i > 0; i--) {
           const date = moment().subtract(i, "days").format("DD ddd");
           const fulldate = moment().subtract(i, "days").format("MM-DD-YYYY");
-          listOfDate.push({dateString: date, paramsday: fulldate});
+          listOfDate.push({ dateString: date, paramsday: fulldate });
         }
-        console.log(listOfDate)
+        console.log(listOfDate);
         setDates(listOfDate);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -245,19 +242,15 @@ const TimeTrack = () => {
     startTime: Yup.mixed()
       .nullable()
       .required("Start time is required")
-      .test(
-        "validTime",
-        "Invalid time format",
-        (value) => value && moment(value, "HH:mm", true).isValid()
-      ),
+       .test("isMoment", "Invalid start time", (value) =>
+      moment.isMoment(value) && value.isValid()
+      )      ,
     endTime: Yup.mixed()
       .nullable()
       .required("End time is required")
-      .test(
-        "validTime",
-        "Invalid time format",
-        (value) => value && moment(value, "HH:mm", true).isValid()
-      ),
+      .test("isMoment", "Invalid end time", (value) =>
+      moment.isMoment(value) && value.isValid()
+    )
   });
   async function submitcall(event: any) {
     event.preventDefault();
@@ -268,12 +261,11 @@ const TimeTrack = () => {
         abortEarly: false,
       });
       UpdateErrors(errorDefaultVlaue);
-      let startTime: any = trackerForm.startTime;
-      let endTime: any = trackerForm.endTime;
-      let endDateAndTime = moment(trackerForm.endTime).format();
-      let startDateAndTime = moment(trackerForm.startTime).format();
-      let minutes = endTime.diff(startTime, "minutes");
-      // let minutes = 0;
+      SetstTime24Hrs('')
+      SetedTime24Hrs('')
+      let startDateAndTime = moment(trackerForm.startTime).format("YYYY-MM-DDTHH:mm:ssZ");
+      let endDateAndTime = moment(trackerForm.endTime).format("YYYY-MM-DDTHH:mm:ssZ");
+      const minutes = moment(trackerForm.endTime).diff(moment(trackerForm.startTime), "minutes");
       let postData = new manualEntryData();
       postData.comment = trackerForm.notes;
       postData.endTime = endDateAndTime;
@@ -371,64 +363,107 @@ const TimeTrack = () => {
         setEntryList(tasklistsp);
       }
     }
-  }, [entryListReducer, prjList])
-  function postAutoEntry(postData:any){
-    dispatch(AutoEntryRequest({...postData}))
+  }, [entryListReducer, prjList]);
+  function postAutoEntry(postData: any) {
+    dispatch(AutoEntryRequest({ ...postData }));
   }
-  function stopRunningTask(postData){
-    dispatch(AutoEntryStopRequest({...postData}))
+  function stopRunningTask(postData) {
+    dispatch(AutoEntryStopRequest({ ...postData }));
   }
 
-  function taskUpdated(){
-    if(stopAutoEntry.data?.didError == false && stopAutoEntry.Loading == false){
-            toast.success("Task updated", { duration: 3000});
-            dispatch(completedEntryRequest(selectedDate));
-            setTaskStarted(false)
-        }else if(stopAutoEntry.data?.didError == true && stopAutoEntry.Loading == false){
-            toast.error(stopAutoEntry.data.message || "Something went wrong!", { duration: 3000});
-        }
+  function taskUpdated() {
+    if (
+      stopAutoEntry.data?.didError == false &&
+      stopAutoEntry.Loading == false
+    ) {
+      toast.success("Task updated", { duration: 3000 });
+      dispatch(completedEntryRequest(selectedDate));
+      setTaskStarted(false);
+    } else if (
+      stopAutoEntry.data?.didError == true &&
+      stopAutoEntry.Loading == false
+    ) {
+      toast.error(stopAutoEntry.data.message || "Something went wrong!", {
+        duration: 3000,
+      });
+    }
   }
   const callcompletedList = (date) => {
-    navigate(`/index?date=${date}`)
-  }
+    navigate(`/index?date=${date}`);
+  };
 
-    useEffect(() => {
+  useEffect(() => {
     const searchParams = new URLSearchParams(location.search);
-    const selectedDateLocal = searchParams.get('date');
-    updateSelectedDate(selectedDateLocal)
+    const selectedDateLocal = searchParams.get("date");
+    updateSelectedDate(selectedDateLocal);
     if (selectedDateLocal) {
       dispatch(completedEntryRequest(selectedDateLocal));
     }
-  }, [location.search]); 
+  }, [location.search]);
 
-
-// Time Picker Logic
-	  const [pickerStartValue, setpickerStartValue] = useState<Moment | null>(
+  // Time Picker Logic
+  const [pickerStartValue, setpickerStartValue] = useState<Moment | null>(
     moment().hour(12).minute(0)
   );
   const [pickerEndValue, setpickerEndValue] = useState<Moment | null>(
     moment().hour(12).minute(0)
   );
   const [anchorEl, setAnchorEl] = useState(null);
+  const [anchorE2, setAnchorE2] = useState(null);
 
-  const open = Boolean(anchorEl);
+  const stTimeopen = Boolean(anchorEl);
+  const edTimeopen = Boolean(anchorE2);
 
-  const handleIconClick = (event) => {
-    setAnchorEl(event.currentTarget);
+  const [stTime24Hrs, SetstTime24Hrs] = useState("");
+  const [edTime24Hrs, SetedTime24Hrs] = useState("");
+
+  const handleIconClick = async (event, type: number) => {
+    debugger
+    try {
+      if (type === 1) {
+        setAnchorEl(event.currentTarget);
+      }
+
+      if (type === 2 ) {
+        if(trackerForm.startTime){
+          UpdateErrors(errorDefaultVlaue);
+        setAnchorE2(event.currentTarget);
+        } else {
+        await ValidateRecord.validateAt('startTime', trackerForm, {
+          abortEarly: false,
+        });
+      }
+        
+      }
+    } catch (err) {
+      console.log('EROOOR',err)
+      if (err instanceof Yup.ValidationError) {
+        const errors = { ...errorDefaultVlaue };
+
+        err.inner.forEach((e) => {
+          if (e.path && e.message) {
+            errors[e.path] = e.message;
+          }
+        });
+
+        UpdateErrors(errors);
+      } else {
+        console.error("Unexpected error during validation:", err);
+      }
+    }
   };
 
-  const handleClose = () => {
-    setAnchorEl(null);
+  const handleClose = (type: number) => {
+    type === 1 ? setAnchorEl(null) : setAnchorE2(null);
   };
 
   const getStartPickerData = (time) => {
     if (time) {
       UpdateTrackerForm((resp) => {
-        console.log(resp);
-        return { ...resp, startTime: moment(time).format("HH:mm") };
+        return { ...resp, startTime: time };
       });
-      console.log("Time from child:", time);
       setpickerStartValue(time);
+      SetstTime24Hrs(moment(time).format("hh:mm A"));
       setAnchorEl(null);
     } else {
       setAnchorEl(null);
@@ -438,30 +473,32 @@ const TimeTrack = () => {
     debugger;
     if (time) {
       UpdateTrackerForm((resp) => {
-        console.log(resp);
-        return { ...resp, endTime: moment(time).format("HH:mm") };
+        return { ...resp, endTime: time };
       });
-      console.log("Time from child:", time);
       setpickerEndValue(time);
-      setAnchorEl(null);
+      SetedTime24Hrs(moment(time).format("hh:mm A"));
+      setAnchorE2(null);
     } else {
-      setAnchorEl(null);
+      setAnchorE2(null);
     }
   };
-
-
 
   return (
     <div className="margin-20">
       {/* Calendar */}
       <div className="mt-4 flex gap-4  dateDayContainer">
         {dates?.map((item, index) => (
-          <div onClick={()=> callcompletedList(item.paramsday)}
+          <div
+            onClick={() => callcompletedList(item.paramsday)}
             key={index}
             className="flex flex-col items-center bg-gray-100 dateDayBox "
           >
-            <div className="text-lg font-bold">{item.dateString.split(" ")[0]}</div>
-            <div className="text-sm text-gray-600">{item.dateString.split(" ")[1]}</div>
+            <div className="text-lg font-bold">
+              {item.dateString.split(" ")[0]}
+            </div>
+            <div className="text-sm text-gray-600">
+              {item.dateString.split(" ")[1]}
+            </div>
           </div>
         ))}
         <button className="wave-btn currentDateBtnTxt relative overflow-hidden px-6 py-4 rounded-md">
@@ -578,51 +615,50 @@ const TimeTrack = () => {
               </LocalizationProvider>
             </div> */}
 
-
-              <FormControl
+            <FormControl fullWidth error={formErrors.startTime ? true : false}>
+              <TextField
+                label="Start Time"
+                value={stTime24Hrs}
+                onClick={(event) => handleIconClick(event, 1)}
                 fullWidth
-                error={formErrors.startTime ? true : false}
+                variant="outlined"
+                placeholder="hh:mm"
+                error={!!formErrors.startTime}
+                // error={!!error}
+                InputProps={{
+                  readOnly: true,
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                        onClick={(event) => handleIconClick(event, 1)}
+                      >
+                        <AccessTimeIcon />
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
+              />
+
+              <Popover
+                open={stTimeopen}
+                anchorEl={anchorEl}
+                onClose={() => handleClose(1)}
+                anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
               >
-                <TextField
-                  label="Start Time"
-                  value={trackerForm.startTime}
-                  onClick={handleIconClick}
-                  fullWidth
-                  variant="outlined"
-                  placeholder="hh:mm"
-                  // error={!!error}
-                  InputProps={{
-                    readOnly: true,
-                    endAdornment: (
-                      <InputAdornment position="end">
-                        <IconButton onClick={handleIconClick}>
-                          <AccessTimeIcon />
-                        </IconButton>
-                      </InputAdornment>
-                    ),
-                  }}
+                <TimePk
+                  selectedTime={pickerStartValue}
+                  onTimeSelect={getStartPickerData}
+                  selectedStartTime=""
                 />
+              </Popover>
+            </FormControl>
 
-                <Popover
-                  open={open}
-                  anchorEl={anchorEl}
-                  onClose={handleClose}
-                  anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
-                >
-                  <TimePk
-                    selectedTime={pickerStartValue}
-                    onTimeSelect={getStartPickerData}
-                  />
-                </Popover>
-              </FormControl>
-
-            <div>
+            {/* <div>
               <LocalizationProvider dateAdapter={AdapterMoment}>
                 <FormControl
                   fullWidth
                   error={formErrors.endTime ? true : false}
                 >
-                  {/* <InputLabel id="startDate">TimePicker</InputLabel> */}
                   <TimePicker
                     label="End Time"
                     onChange={(value) => updateTime(value, "endTime")}
@@ -640,11 +676,49 @@ const TimeTrack = () => {
                   />
                 </FormControl>
               </LocalizationProvider>
+            </div> */}
+            <div>
+              <FormControl fullWidth error={formErrors.endTime ? true : false}>
+                <TextField
+                  label="End Time"
+                  value={edTime24Hrs}
+                  onClick={(event) => handleIconClick(event, 2)}
+                  fullWidth
+                  variant="outlined"
+                  placeholder="hh:mm"
+                  error={!!formErrors.endTime}
+                  // error={!!error}
+                  InputProps={{
+                    readOnly: true,
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton
+                          onClick={(event) => handleIconClick(event, 2)}
+                        >
+                          <AccessTimeIcon />
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  }}
+                />
+
+                <Popover
+                  open={edTimeopen}
+                  anchorEl={anchorE2}
+                  onClose={() => handleClose(2)}
+                  anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
+                >
+                  <TimePk
+                    selectedTime={pickerEndValue}
+                    onTimeSelect={getEndPickerData}
+                    selectedStartTime={trackerForm.startTime}
+                  />
+                </Popover>
+              </FormControl>
             </div>
-            <div></div>
             <div>
               <FormControl fullWidth error={formErrors.status ? true : false}>
-                <InputLabel id="status">Status</InputLabel>
+                <InputLabel id="status" >Status</InputLabel>
                 <Select
                   labelId="status"
                   value={trackerForm.status}
@@ -701,8 +775,11 @@ const TimeTrack = () => {
             onClick={() => setIsAccOpen(!isAccOpen)}
           >
             <span>Today Completed Task List</span>
-            <svg enableBackground="new 0 0 100 100"
-              className={`w-3 h-3 transform ${isAccOpen ? "rotate-180" : "rotate-0"}`}
+            <svg
+              enableBackground="new 0 0 100 100"
+              className={`w-3 h-3 transform ${
+                isAccOpen ? "rotate-180" : "rotate-0"
+              }`}
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
               viewBox="0 0 10 6"
