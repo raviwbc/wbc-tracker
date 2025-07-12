@@ -15,7 +15,7 @@ function* postManualEntryData(action){
             didError : resp.data.didError
         }));
     }catch(err){
-        yield put(Entryfailure(err.message))
+        yield put(Entryfailure(err))
     }finally{
         //  yield put(stopLoading());  
     }

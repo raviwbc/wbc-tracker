@@ -29,7 +29,7 @@ import {
   ManualEntryRequest,
 } from "../store/reducers/manualEntry.ts";
 import { completedEntryRequest } from "../store/reducers/todayCompletedList.ts";
-import { getStartRes, manualEntryData, ReducersList, tasklist,trackerForm , projectList} from "../model/timetracker.ts";
+import { getStartRes, manualEntryData, ReducersList, tasklist, trackerForm, projectList } from "../model/timetracker.ts";
 import { Autotask } from "./autoTask/autotask.tsx";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
@@ -91,9 +91,6 @@ const TimeTrack = () => {
       return {}
     }
   })
-
-  let searchParams = new URLSearchParams(location.search);
-  let selectedDatenew = searchParams.get('date');
   const entryListReducer = useSelector((store: ReducersList) => store.entryListReducer, shallowEqual)
 
   const [formData, setFormData] = useState({
@@ -157,7 +154,6 @@ const TimeTrack = () => {
       let endDateAndTime = moment(trackerForm.endTime).format();
       let startDateAndTime = moment(trackerForm.startTime).format();
       let minutes = endTime.diff(startTime, "minutes");
-      // let minutes = 0;
       let postData = new manualEntryData();
       postData.comment = trackerForm.notes;
       postData.endTime = endDateAndTime;
@@ -228,8 +224,28 @@ const TimeTrack = () => {
     // }
   };
 
+  function isValidDate(dateStr) {
+    const regex = /^(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])-(\d{4})$/;
+    if (!regex.test(dateStr)) return false;
+    const [month, day, year] = dateStr.split('-').map(Number);
+    const date = new Date(`${year}-${month}-${day}`);
+    return (
+      date.getFullYear() === year &&
+      date.getMonth() + 1 === month &&
+      date.getDate() === day
+    );
+  }
+
   function EntryListCall() {
-    dispatch(completedEntryRequest(selectedDate));
+    debugger
+    const searchParams = new URLSearchParams(location.search);
+    const selectedDateLocal = searchParams.get('date');
+    if (isValidDate(selectedDateLocal)) {
+      updateSelectedDate(isValidDate(selectedDateLocal) ? selectedDateLocal : '')
+      UpdateMode(false)
+      dispatch(completedEntryRequest(isValidDate(selectedDateLocal) ? selectedDateLocal : ''));
+    }
+
   }
 
   function postAutoEntry(postData: any) {
@@ -242,14 +258,21 @@ const TimeTrack = () => {
   function taskUpdated() {
     if (stopAutoEntry.data?.didError == false && stopAutoEntry.Loading == false) {
       toast.success("Task updated", { duration: 3000 });
-      dispatch(completedEntryRequest(selectedDate));
+      dispatch(completedEntryRequest(isValidDate(selectedDate) ? selectedDate : ''));
       setTaskStarted(false)
     } else if (stopAutoEntry.data?.didError == true && stopAutoEntry.Loading == false) {
       toast.error(stopAutoEntry.data.message || "Something went wrong!", { duration: 3000 });
     }
   }
   const callcompletedList = (date) => {
-    navigate(`/index?date=${date}`)
+    updateSelectedDate(date);
+    UpdateMode(false);
+    navigate(`/index?date=${date}`);
+  }
+  const callCurrentDate = () => {
+    updateSelectedDate('');
+    UpdateMode(true);
+    navigate(`/index`);
   }
 
 
@@ -329,13 +352,11 @@ const TimeTrack = () => {
   useEffect(() => {
     const searchParams = new URLSearchParams(location.search);
     const selectedDateLocal = searchParams.get('date');
-    updateSelectedDate(selectedDateLocal)
-    if (selectedDateLocal) {
-      dispatch(completedEntryRequest(selectedDateLocal));
-    }
+    dispatch(completedEntryRequest(isValidDate(selectedDateLocal) ? selectedDateLocal : ''));
   }, [location.search]);
-  
+
   useEffect(() => {
+    debugger
     console.log(manualEntryStatus);
     if (manualEntryStatus.Loading == false) {
       if (manualEntryStatus.data?.didError == false) {
@@ -381,7 +402,7 @@ const TimeTrack = () => {
         let k = (window.innerWidth - 40 - 190) / 75;
         k = Math.floor(k)
         let data = (window.innerWidth - 40 - 190) / 75
-        for (let i = k; i > 0; i--) {
+        for (let i = k; i >= 0; i--) {
           const date = moment().subtract(i, "days").format("DD ddd");
           const fulldate = moment().subtract(i, "days").format("MM-DD-YYYY");
           listOfDate.push({ dateString: date, paramsday: fulldate });
@@ -408,29 +429,32 @@ const TimeTrack = () => {
       {/* Calendar */}
       <div className="mt-4 flex gap-4  dateDayContainer">
         {dates?.map((item, index) => (
-          <div onClick={() => callcompletedList(item.paramsday)}
-            key={index}
-            className="flex flex-col items-center bg-gray-100 dateDayBox "
-          >
-            <div className="text-lg font-bold">{item.dateString.split(" ")[0]}</div>
-            <div className="text-sm text-gray-600">{item.dateString.split(" ")[1]}</div>
-          </div>
+          selectedDate != item.paramsday && (dates.length != index+1 || selectedDate) ? (
+            <div onClick={() => callcompletedList(item.paramsday)}
+              key={index}
+              className="flex flex-col items-center bg-gray-100 dateDayBox "
+            >
+              <div className="text-lg font-bold">{item.dateString.split(" ")[0]}</div>
+              <div className="text-sm text-gray-600">{item.dateString.split(" ")[1]}</div>
+            </div>) : (
+
+            <button onClick={() => callCurrentDate()} className="wave-btn currentDateBtnTxt relative overflow-hidden px-6 py-4 rounded-md">
+              <span className="wave-btn__label flex items-center gap-2 relative z-10">
+                <CalendarMonthIcon />
+                {moment(item.paramsday).format("MMMM Do ddd")}
+              </span>
+              <div className="dummyDiv">
+                <span className="wave absolute pointer-events-none"></span>
+              </div>
+            </button>)
         ))}
-        <button className="wave-btn currentDateBtnTxt relative overflow-hidden px-6 py-4 rounded-md">
-          <span className="wave-btn__label flex items-center gap-2 relative z-10">
-            <CalendarMonthIcon />
-            {moment().format("MMMM Do ddd")}
-          </span>
-          <div className="dummyDiv">
-            <span className="wave absolute pointer-events-none"></span>
-          </div>
-        </button>
+
       </div>
 
       {/* taskbar Section */}
       <div className="mt-4">
         <div className="d-inline">Trackers</div>
-        <div className="d-inline">
+        {!selectedDate && <div className="d-inline">
           <ToggleButtonGroup
             color="primary"
             value={mode}
@@ -444,7 +468,7 @@ const TimeTrack = () => {
             <ToggleButton value={true}>Auto</ToggleButton>
             <ToggleButton value={false}>Manual</ToggleButton>
           </ToggleButtonGroup>
-        </div>
+        </div>}
       </div>
       {mode && (
         <Autotask
@@ -497,7 +521,7 @@ const TimeTrack = () => {
                     ))}
                 </Select>
               </FormControl>
-            </div>  
+            </div>
             <FormControl
               fullWidth
               error={formErrors.startTime ? true : false}
