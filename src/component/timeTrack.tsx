@@ -287,6 +287,9 @@ const TimeTrack = () => {
   }
   const callcompletedList = (date) => {
     updateSelectedDate(date);
+    UpdateTrackerForm(errorDefaultVlaue)
+    SetstTime24Hrs('')
+    SetedTime24Hrs('')
     UpdateMode(false);
     navigate(`/index?date=${date}`);
   }
@@ -314,7 +317,6 @@ const TimeTrack = () => {
   const [edTime24Hrs, SetedTime24Hrs] = useState("");
 
   const handleIconClick = async (event, type: number) => {
-    debugger
     try {
       if (type === 1) {
         setAnchorEl(event.currentTarget);
@@ -332,7 +334,6 @@ const TimeTrack = () => {
         
       }
     } catch (err) {
-      console.log('EROOOR',err)
       if (err instanceof Yup.ValidationError) {
         const errors = { ...errorDefaultVlaue };
 
@@ -354,6 +355,7 @@ const TimeTrack = () => {
   };
 
   const getStartPickerData = (time) => {
+    debugger
     if (time) {
       UpdateTrackerForm((resp) => {
         return { ...resp, startTime: time };
@@ -378,6 +380,8 @@ const TimeTrack = () => {
       setAnchorE2(null);
     }
   };
+
+  // End
   useEffect(() => {
     dispatch(getStartRequest());
   }, []);
@@ -439,7 +443,7 @@ const TimeTrack = () => {
     let timer: NodeJS.Timeout | undefined;
     if (isRunning) {
       timer = setInterval(() => {
-        setRunTime((prevTime) => prevTime + 1);
+        // setRunTime((prevTime) => prevTime + 1);
       }, 1000);
     } else {
       if (timer) clearInterval(timer);
