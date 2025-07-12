@@ -19,8 +19,8 @@ const manual = createSlice({
         },
         Entryfailure : (state, action)=>{
             state.Loading = false
-            state.data =[]
-            state.message = action.payload
+            state.data = action.payload;
+            state.message = action.payload.message
         }
     }
 })
