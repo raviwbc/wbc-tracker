@@ -57,9 +57,7 @@
     width: 200px;
 }
 
-.projectField{
-    max-height: calc(100% - 511px) !important;
-}
+
 
 .formArea {
     display: grid;
