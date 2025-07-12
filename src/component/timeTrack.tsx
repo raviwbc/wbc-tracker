@@ -55,6 +55,7 @@ let errorDefaultVlaue = {
   endTime: ''
 }
 
+
 const TimeTrack = () => {
   const [dates, setDates] = useState<Dates[]>();
   const [isRunning, setIsRunning] = useState<boolean>(false);
@@ -140,6 +141,15 @@ const TimeTrack = () => {
         (value) => value && moment(value, "HH:mm", true).isValid()
       ),
   });
+  function dateFormatFunction(momentDate) {
+    const hours = momentDate.hour();
+    const minutes = momentDate.minute();
+    const seconds = momentDate.second();
+    let newDate = moment(selectedDate, "MM-DD-YYYY");
+    newDate.hour(hours).minute(minutes).second(seconds);
+    return newDate
+  }
+
   async function submitcall(event: any) {
     event.preventDefault();
     setformUpdated(true);
@@ -151,10 +161,19 @@ const TimeTrack = () => {
       UpdateErrors(errorDefaultVlaue);
       SetstTime24Hrs('')
       SetedTime24Hrs('')
+      debugger
       let startTime: any = trackerForm.startTime;
       let endTime: any = trackerForm.endTime;
-      let endDateAndTime = moment(trackerForm.endTime).format();
-      let startDateAndTime = moment(trackerForm.startTime).format();
+      if(selectedDate){
+        debugger
+        startTime = dateFormatFunction(startTime)
+        endTime = dateFormatFunction(endTime)
+      }
+      
+
+      
+      let endDateAndTime = moment(endTime).format();
+      let startDateAndTime = moment(startTime).format();
       let minutes = endTime.diff(startTime, "minutes");
       let postData = new manualEntryData();
       postData.comment = trackerForm.notes;
