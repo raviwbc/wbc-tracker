@@ -1,20 +1,6 @@
 import { boolean, number, string } from "yup"
 
-export class manualEntryData {
-    projectID: number = 0
-    userID: number =0
-    taskID: number=0
-    startTime: string = ""
-    endTime: string = ""
-    timeSheetDate: string = ""
-    timeAdded: string = ""
-    minutes: number = 0
-    comment: string = ""
-    tlComments: string = ""
-    taskStatus: string = ""
-    flog: boolean = false
-    isAuto: boolean = false
-  }
+
   export class responcedata {
     Loading : boolean = false
     data: any
@@ -104,4 +90,37 @@ export class getStartRes{
     timeAdded: string  = ''
     flog: boolean = false
     isAuto: boolean = false
+}
+
+
+export interface projectList {
+  projectID: number;
+  taskID: number;
+  title: string;
+  description: string;
+}
+
+export  class manualEntryData {
+  projectID: number = 0
+  userID: number = 0
+  taskID: number = 0
+  startTime: string = ""
+  endTime: string = ""
+  timeSheetDate: string = ""
+  timeAdded: string = ""
+  minutes: number = 0
+  comment: string = ""
+  tlComments: string = ""
+  taskStatus: string = ""
+  flog: boolean = false
+  isAuto: boolean = false
+}
+
+export  interface trackerForm {
+  project: number | null;
+  notes: string;
+  status: string;
+  startTime: string | null;
+  endTime: string | null;
+  task: number | null;
 }

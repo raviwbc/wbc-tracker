@@ -2,8 +2,6 @@ import React, { useEffect, useState } from "react";
 import moment, { Moment } from "moment";
 import * as Yup from "yup";
 import { useLocation, useNavigate } from 'react-router-dom';
-
-
 import "./timeTracker.css";
 import {
   FormControl,
@@ -31,45 +29,15 @@ import {
   ManualEntryRequest,
 } from "../store/reducers/manualEntry.ts";
 import { completedEntryRequest } from "../store/reducers/todayCompletedList.ts";
-import { getStartRes, ReducersList, tasklist } from "../model/timetracker.ts";
+import { getStartRes, manualEntryData, ReducersList, tasklist,trackerForm , projectList} from "../model/timetracker.ts";
 import { Autotask } from "./autoTask/autotask.tsx";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import { toast } from "react-hot-toast";
 import TimePk from "./time-picker/time-picker.tsx";
 
-type Dates = {dateString: string, paramsday: string};
+type Dates = { dateString: string, paramsday: string };
 
-interface projectList {
-  projectID: number;
-  taskID: number;
-  title: string;
-  description: string;
-}
-
-class manualEntryData {
-    projectID: number = 0
-    userID: number =0
-    taskID: number=0
-    startTime: string = ""
-    endTime: string = ""
-    timeSheetDate: string = ""
-    timeAdded: string = ""
-    minutes: number = 0
-    comment: string = ""
-    tlComments: string = ""
-    taskStatus: string = ""
-    flog: boolean = false
-    isAuto: boolean = false
-  }
-interface trackerForm {
-  project: number | null;
-  notes: string;
-  status: string;
-  startTime: string | null;
-  endTime: string | null;
-  task: number | null;
-}
 let defaultValue = {
   project: 0,
   notes: '',
@@ -89,15 +57,8 @@ let errorDefaultVlaue = {
 
 const TimeTrack = () => {
   const [dates, setDates] = useState<Dates[]>();
-
   const [isRunning, setIsRunning] = useState<boolean>(false);
-  const [runTime, setRunTime] = useState<number>(0);
   const [isAccOpen, setIsAccOpen] = useState<boolean>(true);
-  // Show Select Values
-  const [showSelectVal1, setShowSelectVal1] = useState<boolean>(false);
-  const [showSelectVal2, setShowSelectVal2] = useState<boolean>(false);
-  const [prjTaskList, setPrjTaskList] = useState([]);
-  const [windowHeight, setwindowHeight] = useState(Number);
   const [prjList, setPrjList] = useState<tasklist[]>();
   const [entryList, setEntryList] = useState<tasklist[]>();
   const [totaltaskList, setTotalTaskList] = useState<projectList[]>([]);
@@ -106,36 +67,34 @@ const TimeTrack = () => {
   const [taskStared, setTaskStarted] = useState<boolean>(false);
   const [selectedDate, updateSelectedDate] = useState<string | null>('');
   const location = useLocation();
-    const navigate = useNavigate();
-
+  const navigate = useNavigate();
 
   //Get Project List
   const dispatch = useDispatch();
   const projectList = useSelector((state: any) => {
     return state.trackerReducer
   })
-  const manualEntryStatus = useSelector((state:ReducersList)=>{
+  const manualEntryStatus = useSelector((state: ReducersList) => {
     return state.manualEntryReducer
   })
-  const antoEntryStart = useSelector((state:ReducersList)=>{
+  const antoEntryStart = useSelector((state: ReducersList) => {
     return state.autoEntryReducer
   })
-    const stopAutoEntry = useSelector((resp:ReducersList)=>{
+  const stopAutoEntry = useSelector((resp: ReducersList) => {
     return resp.autoEntryStopReducer
   })
-    const getStartup:getStartRes = useSelector((state:ReducersList)=>{
-      let  getstartRed = state.getStartReducer;
-      if(getstartRed.data.projectID){
-        return getstartRed.data
-      }else{
+  const getStartup: getStartRes = useSelector((state: ReducersList) => {
+    let getstartRed = state.getStartReducer;
+    if (getstartRed.data.projectID) {
+      return getstartRed.data
+    } else {
       return {}
-      }
+    }
   })
-      
-      let searchParams = new URLSearchParams(location.search);
-      let selectedDatenew = searchParams.get('date');      
-      // updateSelectedDate(selectedDatenew)
-  const entryListReducer = useSelector((store:ReducersList)=> store.entryListReducer,  shallowEqual )
+
+  let searchParams = new URLSearchParams(location.search);
+  let selectedDatenew = searchParams.get('date');
+  const entryListReducer = useSelector((store: ReducersList) => store.entryListReducer, shallowEqual)
 
   const [formData, setFormData] = useState({
     project: "",
@@ -147,87 +106,12 @@ const TimeTrack = () => {
     isManual: false,
   });
 
-  function resetManualForm(){
+  function resetManualForm() {
     UpdateTrackerForm(defaultValue)
     UpdateErrors(errorDefaultVlaue)
-    toast.success("Your entry updated successfully", { duration: 3000});
+    toast.success("Your entry updated successfully", { duration: 3000 });
     EntryListCall();
   }
-
-  useEffect(()=>{
-    console.log(manualEntryStatus);
-    if(manualEntryStatus.Loading == false){
-    if(manualEntryStatus.data?.didError == false){
-      resetManualForm();
-    }else if(manualEntryStatus.data?.didError == true){
-      toast.error(manualEntryStatus.message || "Something went wrong!", { duration: 3000});
-    }    
-  }
-  },[manualEntryStatus])
-
-  useEffect(() => {
-    console.log('getStartup 1')
-  if (getStartup?.projectID) {
-    setTaskStarted(true);
-  }
-  // return () => {}
-}, [getStartup]);
-
-  useEffect(() => {    
-        dispatch(getStartRequest())
-        console.log(stopAutoEntry)
-        if(stopAutoEntry.data?.message){
-          taskUpdated()
-        }
-        
-    
-        // AutoentryStoped()
-}, [stopAutoEntry, antoEntryStart]);
-
-
-  useEffect(() => {
-    let timer: NodeJS.Timeout | undefined;
-    if (isRunning) {
-      timer = setInterval(() => {
-        setRunTime((prevTime) => prevTime + 1);
-      }, 1000);
-    } else {
-      if (timer) clearInterval(timer);
-    }
-    return () => clearInterval(timer);
-  }, [isRunning]);
-
-  const timeFormat = moment.utc(runTime * 1000).format("HH:mm:ss");
-
-  useEffect(() => {
-    const initialDataPrepare = () => {
-      try {
-        dispatch(ProjectListRequest());
-        EntryListCall();
-
-        const listOfDate: Dates[] = [];
-        let k = (window.innerWidth - 40 - 190) / 75;     
-        k = Math.floor(k)
-        let data = (window.innerWidth - 40 - 190) / 75
-        for (let i = k; i > 0; i--) {
-          const date = moment().subtract(i, "days").format("DD ddd");
-          const fulldate = moment().subtract(i, "days").format("MM-DD-YYYY");
-          listOfDate.push({dateString: date, paramsday: fulldate});
-        }
-        console.log(listOfDate)
-        setDates(listOfDate);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-
-    initialDataPrepare();
-  }, []);
-
-  useEffect(() => {
-    setPrjList(projectList.data.projectList);
-    setTotalTaskList(projectList.data.taskList);
-  }, [projectList]);
 
   const today = moment();
   const todayStartOfTheDay = today.startOf("day");
@@ -296,7 +180,7 @@ const TimeTrack = () => {
               postData.timeSheetDate?.toString?.() ?? postData.timeSheetDate,
           })
         );
-      } catch {}
+      } catch { }
     } catch (err: any) {
       UpdateErrors(errorDefaultVlaue);
       err.inner.forEach((res: any) => {
@@ -347,63 +231,30 @@ const TimeTrack = () => {
   function EntryListCall() {
     dispatch(completedEntryRequest(selectedDate));
   }
-  useEffect(() => {
-    dispatch(getStartRequest());
-  }, []);
 
-  useEffect(() => {
-    if (prjList?.length) {
-      const datap: tasklist[] = entryListReducer.data;
-      if (datap?.length != entryList?.length) {
-        const tasklistsp = datap?.map((resp) => {
-          let project = prjList?.filter(
-            (data) => data.projectID == resp.projectID
-          );
-          let task = totaltaskList?.filter(
-            (data) => data.taskID == resp.taskID
-          );
-          return {
-            ...resp,
-            projectName: project?.length ? project[0].projectName : "",
-            taskName: task?.length ? task[0].title : "",
-          };
-        });
-        setEntryList(tasklistsp);
-      }
+  function postAutoEntry(postData: any) {
+    dispatch(AutoEntryRequest({ ...postData }))
+  }
+  function stopRunningTask(postData) {
+    dispatch(AutoEntryStopRequest({ ...postData }))
+  }
+
+  function taskUpdated() {
+    if (stopAutoEntry.data?.didError == false && stopAutoEntry.Loading == false) {
+      toast.success("Task updated", { duration: 3000 });
+      dispatch(completedEntryRequest(selectedDate));
+      setTaskStarted(false)
+    } else if (stopAutoEntry.data?.didError == true && stopAutoEntry.Loading == false) {
+      toast.error(stopAutoEntry.data.message || "Something went wrong!", { duration: 3000 });
     }
-  }, [entryListReducer, prjList])
-  function postAutoEntry(postData:any){
-    dispatch(AutoEntryRequest({...postData}))
-  }
-  function stopRunningTask(postData){
-    dispatch(AutoEntryStopRequest({...postData}))
-  }
-
-  function taskUpdated(){
-    if(stopAutoEntry.data?.didError == false && stopAutoEntry.Loading == false){
-            toast.success("Task updated", { duration: 3000});
-            dispatch(completedEntryRequest(selectedDate));
-            setTaskStarted(false)
-        }else if(stopAutoEntry.data?.didError == true && stopAutoEntry.Loading == false){
-            toast.error(stopAutoEntry.data.message || "Something went wrong!", { duration: 3000});
-        }
   }
   const callcompletedList = (date) => {
     navigate(`/index?date=${date}`)
   }
 
-    useEffect(() => {
-    const searchParams = new URLSearchParams(location.search);
-    const selectedDateLocal = searchParams.get('date');
-    updateSelectedDate(selectedDateLocal)
-    if (selectedDateLocal) {
-      dispatch(completedEntryRequest(selectedDateLocal));
-    }
-  }, [location.search]); 
 
-
-// Time Picker Logic
-	  const [pickerStartValue, setpickerStartValue] = useState<Moment | null>(
+  // Time Picker Logic
+  const [pickerStartValue, setpickerStartValue] = useState<Moment | null>(
     moment().hour(12).minute(0)
   );
   const [pickerEndValue, setpickerEndValue] = useState<Moment | null>(
@@ -449,6 +300,107 @@ const TimeTrack = () => {
     }
   };
 
+  useEffect(() => {
+    dispatch(getStartRequest());
+  }, []);
+
+  useEffect(() => {
+    if (prjList?.length) {
+      const datap: tasklist[] = entryListReducer.data;
+      if (datap?.length != entryList?.length) {
+        const tasklistsp = datap?.map((resp) => {
+          let project = prjList?.filter(
+            (data) => data.projectID == resp.projectID
+          );
+          let task = totaltaskList?.filter(
+            (data) => data.taskID == resp.taskID
+          );
+          return {
+            ...resp,
+            projectName: project?.length ? project[0].projectName : "",
+            taskName: task?.length ? task[0].title : "",
+          };
+        });
+        setEntryList(tasklistsp);
+      }
+    }
+  }, [entryListReducer, prjList])
+
+  useEffect(() => {
+    const searchParams = new URLSearchParams(location.search);
+    const selectedDateLocal = searchParams.get('date');
+    updateSelectedDate(selectedDateLocal)
+    if (selectedDateLocal) {
+      dispatch(completedEntryRequest(selectedDateLocal));
+    }
+  }, [location.search]);
+  
+  useEffect(() => {
+    console.log(manualEntryStatus);
+    if (manualEntryStatus.Loading == false) {
+      if (manualEntryStatus.data?.didError == false) {
+        resetManualForm();
+      } else if (manualEntryStatus.data?.didError == true) {
+        toast.error(manualEntryStatus.message || "Something went wrong!", { duration: 3000 });
+      }
+    }
+  }, [manualEntryStatus])
+
+  useEffect(() => {
+    if (getStartup?.projectID) {
+      setTaskStarted(true);
+    }
+  }, [getStartup]);
+
+  useEffect(() => {
+    dispatch(getStartRequest())
+    console.log(stopAutoEntry)
+    if (stopAutoEntry.data?.message) {
+      taskUpdated()
+    }
+  }, [stopAutoEntry, antoEntryStart]);
+  useEffect(() => {
+    let timer: NodeJS.Timeout | undefined;
+    if (isRunning) {
+      timer = setInterval(() => {
+        setRunTime((prevTime) => prevTime + 1);
+      }, 1000);
+    } else {
+      if (timer) clearInterval(timer);
+    }
+    return () => clearInterval(timer);
+  }, [isRunning]);
+
+  useEffect(() => {
+    const initialDataPrepare = () => {
+      try {
+        dispatch(ProjectListRequest());
+        EntryListCall();
+
+        const listOfDate: Dates[] = [];
+        let k = (window.innerWidth - 40 - 190) / 75;
+        k = Math.floor(k)
+        let data = (window.innerWidth - 40 - 190) / 75
+        for (let i = k; i > 0; i--) {
+          const date = moment().subtract(i, "days").format("DD ddd");
+          const fulldate = moment().subtract(i, "days").format("MM-DD-YYYY");
+          listOfDate.push({ dateString: date, paramsday: fulldate });
+        }
+        console.log(listOfDate)
+        setDates(listOfDate);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    initialDataPrepare();
+  }, []);
+
+  useEffect(() => {
+    setPrjList(projectList.data.projectList);
+    setTotalTaskList(projectList.data.taskList);
+  }, [projectList]);
+
 
 
   return (
@@ -456,7 +408,7 @@ const TimeTrack = () => {
       {/* Calendar */}
       <div className="mt-4 flex gap-4  dateDayContainer">
         {dates?.map((item, index) => (
-          <div onClick={()=> callcompletedList(item.paramsday)}
+          <div onClick={() => callcompletedList(item.paramsday)}
             key={index}
             className="flex flex-col items-center bg-gray-100 dateDayBox "
           >
@@ -505,7 +457,6 @@ const TimeTrack = () => {
       )}
       {!mode && (
         <div>
-          {/* Form */}
           <form onSubmit={submitcall} className="formArea">
             <div>
               <FormControl fullWidth error={formErrors.project ? true : false}>
@@ -525,7 +476,6 @@ const TimeTrack = () => {
                       </MenuItem>
                     ))}
                 </Select>
-                {/* {formErrors.project && <FormHelperText>{formErrors.project[0]}</FormHelperText>} */}
               </FormControl>
             </div>
             <div>
@@ -546,75 +496,44 @@ const TimeTrack = () => {
                       </MenuItem>
                     ))}
                 </Select>
-                {/* {formErrors.project && <FormHelperText>{formErrors.project[0]}</FormHelperText>} */}
               </FormControl>
-            </div>
-
-            {/* <div>
-              <LocalizationProvider dateAdapter={AdapterMoment}>
-                <FormControl
-                  fullWidth
-                  error={formErrors.startTime ? true : false}
-                >
-                
-                  <TimePicker
-                    label="Start Time"
-                    onChange={(value) => updateTime(value, "startTime")}
-                    value={
-                      trackerForm.startTime
-                        ? moment(trackerForm.startTime)
-                        : null
-                    }
-                    slotProps={{
-                      textField: {
-                        variant: "outlined",
-                        fullWidth: true,
-                        placeholder: "hh:mm",
-                        error: !!formErrors.startTime,
-                      },
-                    }}
-                  />
-                </FormControl>
-              </LocalizationProvider>
-            </div> */}
-
-
-              <FormControl
+            </div>  
+            <FormControl
+              fullWidth
+              error={formErrors.startTime ? true : false}
+            >
+              <TextField
+                label="Start Time"
+                value={trackerForm.startTime}
+                onClick={handleIconClick}
                 fullWidth
-                error={formErrors.startTime ? true : false}
-              >
-                <TextField
-                  label="Start Time"
-                  value={trackerForm.startTime}
-                  onClick={handleIconClick}
-                  fullWidth
-                  variant="outlined"
-                  placeholder="hh:mm"
-                  // error={!!error}
-                  InputProps={{
-                    readOnly: true,
-                    endAdornment: (
-                      <InputAdornment position="end">
-                        <IconButton onClick={handleIconClick}>
-                          <AccessTimeIcon />
-                        </IconButton>
-                      </InputAdornment>
-                    ),
-                  }}
-                />
+                variant="outlined"
+                placeholder="hh:mm"
+                // error={!!error}
+                InputProps={{
+                  readOnly: true,
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton onClick={handleIconClick}>
+                        <AccessTimeIcon />
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
+              />
 
-                <Popover
-                  open={open}
-                  anchorEl={anchorEl}
-                  onClose={handleClose}
-                  anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
-                >
-                  <TimePk
-                    selectedTime={pickerStartValue}
-                    onTimeSelect={getStartPickerData}
-                  />
-                </Popover>
-              </FormControl>
+              <Popover
+                open={open}
+                anchorEl={anchorEl}
+                onClose={handleClose}
+                anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
+              >
+                <TimePk
+                  selectedTime={pickerStartValue}
+                  onTimeSelect={getStartPickerData}
+                />
+              </Popover>
+            </FormControl>
 
             <div>
               <LocalizationProvider dateAdapter={AdapterMoment}>
@@ -678,22 +597,15 @@ const TimeTrack = () => {
                   onChange={formChange}
                   onBlur={formBlur}
                 />
-                {/* {formErrors.notes && <FormHelperText>{formErrors.notes[0]}</FormHelperText>} */}
               </FormControl>
             </div>
-            <button type="submit" className="manualUpdate">
-              Update
-              {/* <img src="assets/update.svg" alt="Update" width={30} title="update" /> */}
-            </button>
+            <button type="submit" className="manualUpdate">Update</button>
           </form>
         </div>
       )}
 
       <div></div>
-
-      {/* Accordion */}
       <div className="mt-4 rounded-lg bg-gray-100 shadow-lg">
-        {/* Accordion Header */}
         <h2>
           <button
             type="button"
@@ -730,5 +642,8 @@ const TimeTrack = () => {
     </div>
   );
 };
+
+
+
 
 export default TimeTrack;
