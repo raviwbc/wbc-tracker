@@ -1,18 +1,21 @@
 import * as React from "react";
-import {
-  LocalizationProvider,
-  StaticTimePicker,
-} from "@mui/x-date-pickers";
+import { LocalizationProvider, StaticTimePicker } from "@mui/x-date-pickers";
 import "./time-picker.css";
 import ClickAwayListener from "@mui/material/ClickAwayListener";
 import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
 import { useState, useRef } from "react";
+import moment from "moment";
 
-const TimePk = ({ selectedTime , onTimeSelect }) => {
+const TimePk = ({ selectedTime, onTimeSelect, selectedStartTime }) => {
   const [isOpen, setIsOpen] = useState(true);
   const [hasSelected, setHasSelected] = useState(false);
+  debugger
+  if(selectedStartTime !== ''){
+    selectedTime = moment(selectedStartTime, "HH:mm")
+  }
+   
 
-  const acceptedRef = useRef(false); // <-- To track if Accept was clicked
+  const acceptedRef = useRef(false);
 
   const handleAccept = (val: any) => {
     if (!val) return;
@@ -21,13 +24,13 @@ const TimePk = ({ selectedTime , onTimeSelect }) => {
   };
 
   const handleClose = () => {
-    debugger
+    debugger;
     if (!acceptedRef.current && hasSelected) {
-      onTimeSelect(selectedTime); 
+      onTimeSelect(selectedTime);
     }
-    acceptedRef.current = false; 
+    acceptedRef.current = false;
     setIsOpen(false);
-     onTimeSelect(null); 
+    onTimeSelect(null);
   };
 
   //Handle outter click close
@@ -60,10 +63,9 @@ const TimePk = ({ selectedTime , onTimeSelect }) => {
     };
   }, [isOpen]);
 
-
   return (
     <div>
-      <div className="timepicker-contain">
+      <div className="timepicker-contain">  
         <LocalizationProvider dateAdapter={AdapterMoment}>
           <ClickAwayListener onClickAway={() => setIsOpen(false)}>
             <div className="timePicker">
@@ -74,9 +76,12 @@ const TimePk = ({ selectedTime , onTimeSelect }) => {
                 onChange={(newValue) => {
                   setHasSelected(true);
                 }}
+                minTime={
+                  selectedStartTime !== "" ? moment(selectedStartTime, "HH:mm") : null
+                }
                 slotProps={{
                   actionBar: {
-                    actions: hasSelected ? [ "accept"] : ["cancel"],
+                    actions: hasSelected ? ["accept"] : ["cancel"],
                   },
                 }}
               />
@@ -89,3 +94,5 @@ const TimePk = ({ selectedTime , onTimeSelect }) => {
 };
 
 export default TimePk;
+
+

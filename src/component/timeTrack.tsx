@@ -149,6 +149,8 @@ const TimeTrack = () => {
         abortEarly: false,
       });
       UpdateErrors(errorDefaultVlaue);
+      SetstTime24Hrs('')
+      SetedTime24Hrs('')
       let startTime: any = trackerForm.startTime;
       let endTime: any = trackerForm.endTime;
       let endDateAndTime = moment(trackerForm.endTime).format();
@@ -284,25 +286,61 @@ const TimeTrack = () => {
     moment().hour(12).minute(0)
   );
   const [anchorEl, setAnchorEl] = useState(null);
+  const [anchorE2, setAnchorE2] = useState(null);
 
-  const open = Boolean(anchorEl);
+  const stTimeopen = Boolean(anchorEl);
+  const edTimeopen = Boolean(anchorE2);
 
-  const handleIconClick = (event) => {
-    setAnchorEl(event.currentTarget);
+  const [stTime24Hrs, SetstTime24Hrs] = useState("");
+  const [edTime24Hrs, SetedTime24Hrs] = useState("");
+
+  const handleIconClick = async (event, type: number) => {
+    debugger
+    try {
+      if (type === 1) {
+        setAnchorEl(event.currentTarget);
+      }
+
+      if (type === 2 ) {
+        if(trackerForm.startTime){
+          UpdateErrors(errorDefaultVlaue);
+        setAnchorE2(event.currentTarget);
+        } else {
+        await ValidateRecord.validateAt('startTime', trackerForm, {
+          abortEarly: false,
+        });
+      }
+        
+      }
+    } catch (err) {
+      console.log('EROOOR',err)
+      if (err instanceof Yup.ValidationError) {
+        const errors = { ...errorDefaultVlaue };
+
+        err.inner.forEach((e) => {
+          if (e.path && e.message) {
+            errors[e.path] = e.message;
+          }
+        });
+
+        UpdateErrors(errors);
+      } else {
+        console.error("Unexpected error during validation:", err);
+      }
+    }
   };
 
-  const handleClose = () => {
-    setAnchorEl(null);
+  const handleClose = (type: number) => {
+    type === 1 ? setAnchorEl(null) : setAnchorE2(null);
   };
 
   const getStartPickerData = (time) => {
     if (time) {
       UpdateTrackerForm((resp) => {
-        console.log(resp);
-        return { ...resp, startTime: moment(time).format("HH:mm") };
+        return { ...resp, startTime: time };
       });
-      console.log("Time from child:", time);
       setpickerStartValue(time);
+      SetstTime24Hrs(moment(time).format("hh:mm A"));
       setAnchorEl(null);
     } else {
       setAnchorEl(null);
@@ -312,17 +350,15 @@ const TimeTrack = () => {
     debugger;
     if (time) {
       UpdateTrackerForm((resp) => {
-        console.log(resp);
-        return { ...resp, endTime: moment(time).format("HH:mm") };
+        return { ...resp, endTime: time };
       });
-      console.log("Time from child:", time);
       setpickerEndValue(time);
-      setAnchorEl(null);
+      SetedTime24Hrs(moment(time).format("hh:mm A"));
+      setAnchorE2(null);
     } else {
-      setAnchorEl(null);
+      setAnchorE2(null);
     }
   };
-
   useEffect(() => {
     dispatch(getStartRequest());
   }, []);
@@ -522,23 +558,24 @@ const TimeTrack = () => {
                 </Select>
               </FormControl>
             </div>
-            <FormControl
-              fullWidth
-              error={formErrors.startTime ? true : false}
-            >
+            
+            <FormControl fullWidth error={formErrors.startTime ? true : false}>
               <TextField
                 label="Start Time"
-                value={trackerForm.startTime}
-                onClick={handleIconClick}
+                value={stTime24Hrs}
+                onClick={(event) => handleIconClick(event, 1)}
                 fullWidth
                 variant="outlined"
                 placeholder="hh:mm"
+                error={!!formErrors.startTime}
                 // error={!!error}
                 InputProps={{
                   readOnly: true,
                   endAdornment: (
                     <InputAdornment position="end">
-                      <IconButton onClick={handleIconClick}>
+                      <IconButton
+                        onClick={(event) => handleIconClick(event, 1)}
+                      >
                         <AccessTimeIcon />
                       </IconButton>
                     </InputAdornment>
@@ -547,25 +584,26 @@ const TimeTrack = () => {
               />
 
               <Popover
-                open={open}
+                open={stTimeopen}
                 anchorEl={anchorEl}
-                onClose={handleClose}
+                onClose={() => handleClose(1)}
                 anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
               >
                 <TimePk
                   selectedTime={pickerStartValue}
                   onTimeSelect={getStartPickerData}
+                  selectedStartTime=""
                 />
               </Popover>
             </FormControl>
 
-            <div>
+            {/* <div>
               <LocalizationProvider dateAdapter={AdapterMoment}>
                 <FormControl
                   fullWidth
                   error={formErrors.endTime ? true : false}
                 >
-                  {/* <InputLabel id="startDate">TimePicker</InputLabel> */}
+                  
                   <TimePicker
                     label="End Time"
                     onChange={(value) => updateTime(value, "endTime")}
@@ -583,8 +621,46 @@ const TimeTrack = () => {
                   />
                 </FormControl>
               </LocalizationProvider>
+            </div> */}
+            <div>
+              <FormControl fullWidth error={formErrors.endTime ? true : false}>
+                <TextField
+                  label="End Time"
+                  value={edTime24Hrs}
+                  onClick={(event) => handleIconClick(event, 2)}
+                  fullWidth
+                  variant="outlined"
+                  placeholder="hh:mm"
+                  error={!!formErrors.endTime}
+                  // error={!!error}
+                  InputProps={{
+                    readOnly: true,
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton
+                          onClick={(event) => handleIconClick(event, 2)}
+                        >
+                          <AccessTimeIcon />
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  }}
+                />
+
+                <Popover
+                  open={edTimeopen}
+                  anchorEl={anchorE2}
+                  onClose={() => handleClose(2)}
+                  anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
+                >
+                  <TimePk
+                    selectedTime={pickerEndValue}
+                    onTimeSelect={getEndPickerData}
+                    selectedStartTime={trackerForm.startTime}
+                  />
+                </Popover>
+              </FormControl>
             </div>
-            <div></div>
             <div>
               <FormControl fullWidth error={formErrors.status ? true : false}>
                 <InputLabel id="status">Status</InputLabel>
