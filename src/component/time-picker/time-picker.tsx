@@ -12,10 +12,6 @@ const TimePk = ({ selectedTime, onTimeSelect, selectedStartTime }) => {
   const [tempVal, setTempVal] = useState<Moment | null>(selectedTime ?? null);
   const acceptedRef = useRef(false);
 
-  
-  if(selectedStartTime !== ''){
-    selectedTime = moment(selectedStartTime, "HH:mm")
-  }
 
   const handleAccept = (val: Moment | null) => {
     if (!val) return;
@@ -51,11 +47,11 @@ const TimePk = ({ selectedTime, onTimeSelect, selectedStartTime }) => {
                   setTempVal(newValue);
                 }
               }}
-              minTime={
-                selectedStartTime
-                  ? moment(selectedStartTime, "HH:mm")
-                  : undefined
-              }
+              // minTime={
+              //   selectedStartTime
+              //     ? moment(selectedStartTime, "HH:mm")
+              //     : undefined
+              // }
               slotProps={{
                 actionBar: {
                   actions: hasSelected ? ["accept"] : ["cancel"],
