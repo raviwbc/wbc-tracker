@@ -137,11 +137,9 @@ const TimeTrack = () => {
         (value) => value && moment(value, "HH:mm", true).isValid()
       )
       .test("endAfterStart", "End time must be after start time", function () {
-        console.log("raviuu");
         const { startTime, endTime } = this.parent;
         let end = moment(endTime);
         if (!startTime || !endTime) return true;
-        console.log("raviuu", end.diff(startTime, "minutes"));
         return end.diff(startTime, "minutes") > 0;
       }),
   });
@@ -469,11 +467,10 @@ const TimeTrack = () => {
 
   useEffect(() => {
     debugger;
-    console.log(manualEntryStatus);
-    if (manualEntryStatus.Loading == false) {
-      if (manualEntryStatus.data?.didError == false) {
+    if (manualEntryStatus.Loading === false) {
+      if (manualEntryStatus.data?.didError === false) {
         resetManualForm();
-      } else if (manualEntryStatus.data?.didError == true) {
+      } else if (manualEntryStatus.data?.didError === true) {
         toast.error(manualEntryStatus.message || "Something went wrong!", {
           duration: 3000,
         });
@@ -489,7 +486,6 @@ const TimeTrack = () => {
 
   useEffect(() => {
     dispatch(getStartRequest());
-    console.log(stopAutoEntry);
     if (stopAutoEntry.data?.message) {
       taskUpdated();
     }
@@ -519,7 +515,6 @@ const TimeTrack = () => {
           const fulldate = moment().subtract(i, "days").format("MM-DD-YYYY");
           listOfDate.push({ dateString: date, paramsday: fulldate });
         }
-        console.log(listOfDate);
         setDates(listOfDate);
       } catch (error) {
         console.error("Error fetching data:", error);
