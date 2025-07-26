@@ -293,12 +293,12 @@ export const Autotask: React.FC<AutoTaskProps> = ({ projectList, submitFunc,stop
                                 <TextField
                                     label="Notes"
                                     value={trackerForm.comments}
+                                    error={stopForm.comments ? true : false}
                                     variant="outlined"
                                     name='comments'
                                     onChange={formChange}
                                     onBlur={formBlur}
                                 />
-                                {stopForm.comments && <FormHelperText>{stopForm.comments[0]}</FormHelperText>}
                             </FormControl>
                         </div>
                               
