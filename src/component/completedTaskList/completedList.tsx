@@ -18,7 +18,7 @@ function minutesConverter(min: number) {
 }
 
 export const CompletedList = ({ entrylist, date }) => {
-  const [isCommentShowID, setisCommentShowID] = useState();
+  const [isCommentShowID, setisCommentShowID] = useState(null);
   const dispatch = useDispatch();
   const deleteOperation = useSelector((state: any) => {
     return state.deleteTaskReducer;
@@ -90,7 +90,7 @@ export const CompletedList = ({ entrylist, date }) => {
                   height={30}
                   alt=""
                   onMouseEnter={() => setisCommentShowID(index)}
-                  onMouseLeave={() => setisCommentShowID(index)}
+                  onMouseLeave={() => setisCommentShowID(null)}
                 />
                 {isCommentShowID === index && (
                   <div>
