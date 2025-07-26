@@ -25,6 +25,7 @@ export const Login = () => {
     
     const navigate = useNavigate();
     useEffect(() => {
+        debugger
         if(auth.data?.model?.token){
             console.log("State auth", auth);
             navigate('/index')
