@@ -458,7 +458,7 @@ const TimeTrack = () => {
             taskName: task?.length ? task[0].title : "",
           };
         });
-        const finalCmpTask = tasklistsp.filter((res)=>res.endDate && res.taskStatus)
+        const finalCmpTask = tasklistsp?.filter((res)=>res.endDate && res.taskStatus)
         setEntryList(finalCmpTask);
       }
     }
