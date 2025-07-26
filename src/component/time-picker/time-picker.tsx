@@ -20,6 +20,7 @@ const TimePk = ({ selectedTime, onTimeSelect, selectedStartTime }) => {
   };
 
   const handleClose = () => {
+    debugger
     setIsOpen(false);
     if (!acceptedRef.current && hasSelected && tempVal) {
       if (!moment(tempVal).isSame(selectedTime)) {

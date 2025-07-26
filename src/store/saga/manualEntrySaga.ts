@@ -6,7 +6,7 @@ import { startLoading, stopLoading } from "../reducers/loader.ts";
 
 function* postManualEntryData(action){
     try{
-        //  yield put(startLoading());  
+         yield put(startLoading());  
         let resp = yield call(postManualEntry, action.payload)
         yield put(enterySuccess({
              data: resp.data,
@@ -17,7 +17,7 @@ function* postManualEntryData(action){
     }catch(err){
         yield put(Entryfailure(err.message))
     }finally{
-        //  yield put(stopLoading());  
+         yield put(stopLoading());  
     }
 }
 
@@ -29,8 +29,7 @@ export function* watchManualEntryRequest() {
 
 function* postAutoEntryData(action){
     try{
-        console.log('ss')
-        //  yield put(startLoading());  
+         yield put(startLoading());  
         let data = yield call(autoEntryApi, action.payload)
         yield put(AutoEntrySuccess({
              data: data.data,
@@ -39,6 +38,8 @@ function* postAutoEntryData(action){
         }));
     }catch(err){
         yield put(AutoEntryfailure(err.message))
+    }finally{
+         yield put(stopLoading());  
     }
 }
 
@@ -50,7 +51,7 @@ export function* watchAutoEntryRequest() {
 
 function* postAutoEntryStop(action){
     try{
-        //  yield put(startLoading());  
+         yield put(startLoading());  
         let data = yield call(autoEntrystopApi, action.payload)
         yield put(AutoEntryStopSuccess({
              data: data.data,
@@ -60,7 +61,7 @@ function* postAutoEntryStop(action){
     }catch(err){
         yield put(AutoEntryStopfailure(err.message))
     }finally{
-        //  yield put(stopLoading());  
+         yield put(stopLoading());  
     }
 }
 
@@ -72,8 +73,7 @@ export function* watchAutoEntryStopRequest() {
 
 function* postgetStart(){
     try{
-        console.log('raviss')
-        //  yield put(startLoading());  
+         yield put(startLoading());  
         let data = yield call(getStartApi)
         yield put(getStartSuccess({
             data: data.data,
@@ -83,7 +83,7 @@ function* postgetStart(){
     }catch(err){
         yield put(getStartFailure(err.message))
     }finally{
-        //  yield put(stopLoading());  
+         yield put(stopLoading());  
     }
 }
 

@@ -49,7 +49,7 @@
   }
   
   .userWelcome {
-    width: 180px; /* fixed width */
+    max-width: 100px; /* fixed width */
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;

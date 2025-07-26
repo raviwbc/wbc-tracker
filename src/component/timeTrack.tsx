@@ -441,15 +441,16 @@ const TimeTrack = () => {
   }, []);
 
   useEffect(() => {
+    debugger
     if (prjList?.length) {
       const datap: tasklist[] = entryListReducer.data;
-      if (datap?.length != entryList?.length) {
+      if (datap?.length !== entryList?.length) {
         const tasklistsp = datap?.map((resp) => {
           let project = prjList?.filter(
-            (data) => data.projectID == resp.projectID
+            (data) => data.projectID === resp.projectID
           );
           let task = totaltaskList?.filter(
-            (data) => data.taskID == resp.taskID
+            (data) => data.taskID === resp.taskID
           );
           return {
             ...resp,
@@ -457,7 +458,8 @@ const TimeTrack = () => {
             taskName: task?.length ? task[0].title : "",
           };
         });
-        setEntryList(tasklistsp);
+        const finalCmpTask = tasklistsp.filter((res)=>res.endDate && res.taskStatus)
+        setEntryList(finalCmpTask);
       }
     }
   }, [entryListReducer, prjList])
