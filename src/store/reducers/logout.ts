@@ -45,7 +45,6 @@ export const logoutValidation = createSlice({
             state.loading = false;
             state.data = null;
             state.message = action.payload;
-            console.log("Login Failed:", action.payload);
         }
     }
 });

@@ -28,13 +28,13 @@ export const Login = () => {
         if(auth.data?.model?.token){
             console.log("State auth", auth);
             navigate('/index')
-            toast.success(auth.message || "Something went wrong!", {
-                duration: 3000, // Freeze the toast
+            toast.success(auth.message, {
+                duration: 3000,
               });
 
         }else if(!auth.data && auth.message){
             toast.error(auth.message || "Something went wrong!", {
-                duration: 3000, // Freeze the toast
+                duration: 3000, 
               });
             
         }

@@ -26,7 +26,7 @@ import { startLoading, stopLoading } from "../reducers/loader.ts";
 }
 function* deleteTaskDel(action){    
     try{
-        debugger
+         yield put(startLoading());  
         const resp = yield call(deleteTask, action.payload)        
         if(resp.data){
             console.log(resp)
@@ -38,6 +38,8 @@ function* deleteTaskDel(action){
     }
     catch(e){
         yield put(deleteFailer(e.message))
+    }finally{
+        yield put(stopLoading());  
     }
 }
 
