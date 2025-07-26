@@ -158,9 +158,8 @@ const TimeTrack = () => {
     event.preventDefault();
     setformUpdated(true);
     formSubmitClicked(true);
-    let result;
     try {
-      result = await ValidateRecord.validate(trackerForm, {
+      await ValidateRecord.validate(trackerForm, {
         abortEarly: false,
       });
       UpdateErrors(errorDefaultVlaue);
@@ -223,11 +222,9 @@ const TimeTrack = () => {
   };
 
   let formBlur = async (data: any) => {
-    debugger;
-    const { name, value } = data;
     let result: any;
     try {
-      result = await ValidateRecord.validate(trackerForm, {
+      await ValidateRecord.validate(trackerForm, {
         abortEarly: false,
       });
       UpdateErrors(errorDefaultVlaue);
