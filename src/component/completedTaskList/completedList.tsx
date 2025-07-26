@@ -66,8 +66,6 @@ function minutesConverter(min:number){
 }
 
 export const CompletedList = ({entrylist, date})=>{
-    console.log(entrylist)
-
     
     const dispatch = useDispatch()
       const deleteOperation = useSelector((state: any) => { 
