@@ -43,18 +43,18 @@ import TimePk from "./time-picker/time-picker.tsx";
 type Dates = { dateString: string; paramsday: string };
 
 let defaultValue = {
-  project: 0,
+  project: null,
   notes: "",
-  task: 0,
+  task: null,
   status: "",
   startTime: "",
   endTime: "",
   hours: "",
 };
 let errorDefaultVlaue = {
-  project: 0,
+  project: null,
   notes: "",
-  task: 0,
+  task: null,
   status: "",
   startTime: "",
   endTime: "",
@@ -136,10 +136,11 @@ const TimeTrack = () => {
         "Invalid time format",
         (value) => value && moment(value, "HH:mm", true).isValid()
       )
-      .test("endAfterStart", "End time must be after start time", function () {
+      .test("endAfterStart", "End time must be after start time", function () {        
         const { startTime, endTime } = this.parent;
         let end = moment(endTime);
         if (!startTime || !endTime) return true;
+        console.log('raviuu', end.diff(startTime, "minutes"))
         return end.diff(startTime, "minutes") > 0;
       }),
   });
@@ -388,27 +389,38 @@ const TimeTrack = () => {
       SetedTime24Hrs(moment(time).format("hh:mm A"));
       setAnchorE2(null);
       checkDifferentInUpdatedTime(trackerForm.startTime, time);
-      updateErrorOnendTime();
+      updateErrorOnendTime(time);
     } else {
       setAnchorE2(null);
     }
   };
-  async function updateErrorOnendTime() {
-    try {
-      await ValidateRecord.validate(trackerForm, {
-        abortEarly: false,
-      });
-      UpdateErrors(errorDefaultVlaue);
-    } catch (err: any) {
-      UpdateErrors(errorDefaultVlaue);
-      err.inner.forEach((res: any) => {
-        UpdateErrors((prev) => {
-          return res.path == "endTime"
-            ? { ...prev, [res.path]: [res.errors[0]] }
-            : prev;
-        });
-      });
+  function updateErrorOnendTime(endTime:any) {
+    const {startTime} = trackerForm;
+    let end = moment(endTime);
+    console.log(end.diff(startTime, "minutes") )
+    if(end.diff(startTime, "minutes") < 0){
+      console.log(formErrors)
+      UpdateErrors(resp=>{
+        return {...resp, endTime : 'End time must be after start time'}
+      })
     }
+// sa
+    // try {
+    //   await ValidateRecord.validate(trackerForm, {
+    //     abortEarly: false,
+    //   });
+    //   UpdateErrors(errorDefaultVlaue);
+    // } catch (err: any) {
+    //   UpdateErrors(errorDefaultVlaue);
+    //   err.inner.forEach((res: any) => {
+    //     UpdateErrors((prev) => {
+    //       console.log(res.errors[0])
+    //       return res.path === "endTime"
+    //         ? { ...prev, [res.path]: [res.errors[0]] }
+    //         : prev;
+    //     });
+    //   });
+    // }
   }
   function checkDifferentInUpdatedTime(startTime: any, endTime: any) {
     if (startTime && endTime) {
@@ -618,7 +630,8 @@ const TimeTrack = () => {
                   onChange={formChange}
                   onBlur={formBlur}
                 >
-                  {prjList &&
+                  <MenuItem>Select Project</MenuItem>
+                  { prjList &&
                     prjList.map((data) => (
                       <MenuItem key={data.projectID} value={data.projectID}>
                         {data.projectName}
@@ -725,7 +738,23 @@ const TimeTrack = () => {
                 </Popover>
               </FormControl>
             </div>
-            <div>{trackerForm.hours}</div>
+            <div>
+              {/* error={formErrors.notes ? true : false} */}
+              <FormControl fullWidth>
+                <TextField
+                  error={formErrors.notes ? true : false}
+                  multiline
+                  variant="outlined"
+                  rows={1}
+                  value={trackerForm.notes}
+                  name="notes"
+                  label="Notes"
+                  id="notes"
+                  onChange={formChange}
+                  onBlur={formBlur}
+                />
+              </FormControl>
+            </div>
             <div>
               <FormControl fullWidth error={formErrors.status ? true : false}>
                 <InputLabel id="status">Status</InputLabel>
@@ -747,25 +776,9 @@ const TimeTrack = () => {
                 {/* {formErrors.status && <FormHelperText>{formErrors.status[0]}</FormHelperText>} */}
               </FormControl>
             </div>
-            <div>
-              {/* error={formErrors.notes ? true : false} */}
-              <FormControl fullWidth>
-                <TextField
-                  error={formErrors.notes ? true : false}
-                  multiline
-                  variant="outlined"
-                  rows={1}
-                  value={trackerForm.notes}
-                  name="notes"
-                  label="Notes"
-                  id="notes"
-                  onChange={formChange}
-                  onBlur={formBlur}
-                />
-              </FormControl>
-            </div>
+            
             <button type="submit" className="manualUpdate">
-              Update
+              {trackerForm.hours} Update
             </button>
           </form>
         </div>

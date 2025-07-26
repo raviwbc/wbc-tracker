@@ -23,8 +23,8 @@ interface stopErrortrackerForm {
 }
 
 let defaultValue = {
-    project: 0,
-    task: 0,
+    project: null,
+    task: null,
     comments: '',
     status : ''
 }
@@ -34,8 +34,8 @@ let StopdefaultValue = {
 }
 
 interface trackerForm {
-    project: number ,
-    task: number ,
+    project: number | null,
+    task: number | null,
     comments: string | null,
     status : string | null
 }
@@ -75,7 +75,6 @@ export const Autotask: React.FC<AutoTaskProps> = ({ projectList, submitFunc,stop
         useEffect(() => {
         if(runningTaskDetails.projectID){
             debugger
-            
              let projname = prjList?.find(resp=> resp.projectID == runningTaskDetails.projectID)?.projectName
             setProject(projname)
         }
