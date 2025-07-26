@@ -83,14 +83,14 @@ export const CompletedList = ({ entrylist, date }) => {
               </div>
               {/* returnHours(resp.endTime,resp.startTime) */}
               <div>{minutesConverter(resp.minutes)}</div>
-              <div className="cursor-pointer relative">
+              <div className="cursor-pointer relative p-3"  onMouseEnter={() => setisCommentShowID(index)}
+                  onMouseLeave={() => setisCommentShowID(null)}>
                 <img
                   src="/icon/notes.svg"
                   width={30}
                   height={30}
                   alt=""
-                  onMouseEnter={() => setisCommentShowID(index)}
-                  onMouseLeave={() => setisCommentShowID(null)}
+                 
                 />
                 {isCommentShowID === index && (
                   <div>
