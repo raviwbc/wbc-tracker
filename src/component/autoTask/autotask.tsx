@@ -257,32 +257,15 @@ export const Autotask: React.FC<AutoTaskProps> = ({ projectList, submitFunc,stop
                                 {/* {formErrors.project && <FormHelperText>{formErrors.project[0]}</FormHelperText>} */}
                             </FormControl>
                     </div>
-                    <div className='d-flex-center'>
-                    <button type='submit'>
-                    {!taskStared ?
-                        <svg  fill="#ffffff" width="20px" viewBox="0 0 32 32"  version="1.1">
-                            <g>
-                                <path d="M4.993,2.496C4.516,2.223,4,2.45,4,3v26c0,0.55,0.516,0.777,0.993,0.504l22.826-13.008    c0.478-0.273,0.446-0.719-0.031-0.992L4.993,2.496z" />
-                                <path d="M4.585,30.62L4.585,30.62C3.681,30.62,3,29.923,3,29V3c0-0.923,0.681-1.62,1.585-1.62c0.309,0,0.621,0.085,0.904,0.248    l22.794,13.007c0.559,0.319,0.878,0.823,0.878,1.382c0,0.548-0.309,1.039-0.847,1.347L5.488,30.373    C5.206,30.534,4.894,30.62,4.585,30.62z M5,3.651v24.698l21.655-12.34L5,3.651z" />
-                            </g>
-                        </svg>
-                        :
-                        <svg fill="#ffffff" width="18px" viewBox="0 0 32 32"  version="1.1">
-                            <g>
-                                <path d="M28,27c0,0.55-0.45,1-1,1H5c-0.55,0-1-0.45-1-1V5c0-0.55,0.45-1,1-1h22c0.55,0,1,0.45,1,1V27z" />
-                                <path d="M27,29H5c-1.103,0-2-0.897-2-2V5c0-1.103,0.897-2,2-2h22c1.103,0,2,0.897,2,2v22C29,28.103,28.103,29,27,29z M27,27v1V27    L27,27L27,27z M5,5v22h21.997L27,5H5z" />
-                            </g>
-                        </svg>
-                    }
+                    <button className='manualUpdate' type='submit'>
+                    {!taskStared ? 'Start Task' : 'Complete Task'}
                 </button>
-                </div>
                     </div>}
                     {taskStared &&
-                    <div className='formArea'>
-                        <div>
-                            <div>Project : {selectedProject}</div>
-                        <div>Task : {selectedTask}</div>
-                        </div>
+                    <>
+                     {selectedProject && <div className='proj_details'><div className='proj'>Project : {selectedProject}</div><div className='proj'>Task : {selectedTask}</div></div>}
+                    <div className='autoForm'>
+                       
                         <div><RunningTimer startTime={runningTaskDetails.startTime} /></div>
                         <div>
                                     <FormControl fullWidth error={stopForm.status ? true : false} >
@@ -308,7 +291,7 @@ export const Autotask: React.FC<AutoTaskProps> = ({ projectList, submitFunc,stop
                             {/* {stopForm.comments} */}
                             <FormControl fullWidth error={stopForm.comments ? true : false} >
                                 <TextField
-                                    label="comments"
+                                    label="Notes"
                                     value={trackerForm.comments}
                                     variant="outlined"
                                     name='comments'
@@ -318,8 +301,11 @@ export const Autotask: React.FC<AutoTaskProps> = ({ projectList, submitFunc,stop
                                 {stopForm.comments && <FormHelperText>{stopForm.comments[0]}</FormHelperText>}
                             </FormControl>
                         </div>
-                              <div className='d-flex-center'>
-                    <button type='submit'>
+                              
+                                  <button className='manualUpdate' type='submit'>
+                    {!taskStared ? 'Start Task' : 'Complete Task'}
+                </button>
+                    {/* <button type='submit'>
                     {!taskStared ?
                         <svg fill="#ffffff" width="20px" viewBox="0 0 32 32"  version="1.1">
                             <g>
@@ -335,9 +321,11 @@ export const Autotask: React.FC<AutoTaskProps> = ({ projectList, submitFunc,stop
                             </g>
                         </svg>
                     }
-                </button>
-                </div>
-                    </div>}
+                </button> */}
+                
+                    </div>
+                    </>
+                    }
                 
                 
             </form>

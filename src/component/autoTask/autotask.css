@@ -3,8 +3,27 @@
     display: flex;
 }
 
-.d-flex-center> button{
-    background: #0b0051;
-    padding: 12px;
-    border-radius: 7px;
+button.manualUpdate{
+    background: #1a0e67;
+    color: white;
+    border-radius: 4px;
+    width: 100%;
+    /* text-transform: uppercase; */
+}
+.autoForm{
+    display: grid;
+    grid-template-columns: 170px 150px 450px 200px auto;
+    gap: 20px;
+       
+}
+.proj{
+    display: inline-block;
+    background: #4CAF50;
+    color: #fff;
+    padding: 5px 20px;
+    border-radius: 5px;
+    margin-right: 10px;
+}
+.proj_details{
+    padding: 10px 0;
 }
