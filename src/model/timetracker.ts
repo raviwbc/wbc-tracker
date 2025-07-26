@@ -123,4 +123,5 @@ export  interface trackerForm {
   startTime: string | null;
   endTime: string | null;
   task: number | null;
+  hours: string | null;
 }

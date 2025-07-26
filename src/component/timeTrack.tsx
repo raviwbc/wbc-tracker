@@ -33,7 +33,7 @@ import { getStartRes, manualEntryData, ReducersList, tasklist, trackerForm, proj
 import { Autotask } from "./autoTask/autotask.tsx";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
-import { toast } from "react-hot-toast";
+import { toast, Toaster } from "react-hot-toast";
 import TimePk from "./time-picker/time-picker.tsx";
 
 type Dates = { dateString: string, paramsday: string };
@@ -44,7 +44,8 @@ let defaultValue = {
   task: 0,
   status: '',
   startTime: '',
-  endTime: ''
+  endTime: '',
+  hours:''
 }
 let errorDefaultVlaue = {
   project: 0,
@@ -52,7 +53,8 @@ let errorDefaultVlaue = {
   task: 0,
   status: '',
   startTime: '',
-  endTime: ''
+  endTime: '',
+  hours:''
 }
 
 
@@ -112,12 +114,11 @@ const TimeTrack = () => {
   }
 
   const today = moment();
-  const todayStartOfTheDay = today.startOf("day");
-  const [trackerForm, UpdateTrackerForm] = useState<trackerForm>(defaultValue);
-  const [isSubmited, UpdateSubmit] = useState<boolean>(false);
+  const [trackerForm, UpdateTrackerForm] = useState<trackerForm>(defaultValue);  
   const [formErrors, UpdateErrors] = useState<trackerForm>(errorDefaultVlaue);
   const [mode, UpdateMode] = useState<boolean>(true);
   const [formUpdated, setformUpdated] = useState<boolean>(false);
+  const [submitclick, formSubmitClicked] = useState<boolean>(false);
 
   let ValidateRecord = Yup.object({
     project: Yup.number().required("Field is Required"),
@@ -139,7 +140,21 @@ const TimeTrack = () => {
         "validTime",
         "Invalid time format",
         (value) => value && moment(value, "HH:mm", true).isValid()
-      ),
+      ).test(
+        "endAfterStart",
+        "End time must be after start time",
+        function(endtime){
+          console.log('raviuu')
+          const {startTime} = this.parent;
+           let end = moment(endtime)
+           console.log(startTime)
+           console.log('raviuu', end.diff(startTime, "minutes"))
+            return end.diff(startTime, "minutes") < 0;
+        }
+
+      )
+      ,
+      
   });
   function dateFormatFunction(momentDate) {
     const hours = momentDate.hour();
@@ -149,10 +164,19 @@ const TimeTrack = () => {
     newDate.hour(hours).minute(minutes).second(seconds);
     return newDate
   }
+    function errorToaster(){
+    let formData = formErrors
+    for(let err in formData){
+      if(formData[err]){
+        toast.error(`${err}: ${formData[err][0]}`, { duration: 3000 });
+      }
+    }
+  }
 
   async function submitcall(event: any) {
     event.preventDefault();
     setformUpdated(true);
+    formSubmitClicked(true);
     let result;
     try {
       result = await ValidateRecord.validate(trackerForm, {
@@ -209,7 +233,6 @@ const TimeTrack = () => {
   }
 
   let formChange = (data: any) => {
-    debugger;
     const { name, value } = data.target;
     UpdateTrackerForm((prev) => {
       return { ...prev, [name]: value };
@@ -219,13 +242,10 @@ const TimeTrack = () => {
       setTaskList(task ? task : []);
     }
   };
-  let updateTime = (data: any, field: string) => {
-    UpdateTrackerForm((prev) => {
-      let updatedData = { ...prev, [field]: data };
-      return updatedData;
-    });
-  };
+
   let formBlur = async (data: any) => {
+    debugger
+    const {name, value} = data
     let result: any;
     try {
       result = await ValidateRecord.validate(trackerForm, {
@@ -363,7 +383,7 @@ const TimeTrack = () => {
     if (time) {
       UpdateTrackerForm((resp) => {
         return { ...resp, startTime: time };
-      });
+      });      
       setpickerStartValue(time);
       SetstTime24Hrs(moment(time).format("hh:mm A"));
       setAnchorEl(null);
@@ -380,10 +400,40 @@ const TimeTrack = () => {
       setpickerEndValue(time);
       SetedTime24Hrs(moment(time).format("hh:mm A"));
       setAnchorE2(null);
+      checkDifferentInUpdatedTime(trackerForm.startTime, time)
+      updateErrorOnendTime()
     } else {
       setAnchorE2(null);
     }
   };
+    async function updateErrorOnendTime(){          
+          try {
+      await ValidateRecord.validate(trackerForm, {
+        abortEarly: false,
+      });
+      UpdateErrors(errorDefaultVlaue);
+    } catch (err: any) {
+      UpdateErrors(errorDefaultVlaue);
+        err.inner.forEach((res: any) => {          
+          UpdateErrors((prev) => {
+            return res.path == 'endTime' ?  { ...prev, [res.path]: [res.errors[0]] } : prev;  
+          });
+        });
+      }
+    }
+  function checkDifferentInUpdatedTime(startTime:any, endTime:any){
+    if(startTime && endTime){
+      debugger
+        const diffInMinutes = endTime.diff(startTime, "minutes");
+        const duration = moment.duration(diffInMinutes, 'minutes');
+        // const formattedTime = moment.utc(duration.asMilliseconds()).format('HH:mm'); 
+        const abs = moment.utc(Math.abs(duration.asMilliseconds())).format("HH:mm");
+     
+        UpdateTrackerForm((resp)=>{
+          return {...resp, hours : (diffInMinutes < 0 ? `-${abs}` : abs)}
+        })
+      }
+  }
 
   // End
   useEffect(() => {
@@ -486,6 +536,22 @@ const TimeTrack = () => {
     setPrjList(projectList.data.projectList);
     setTotalTaskList(projectList.data.taskList);
   }, [projectList]);
+
+  useEffect(()=>{
+    if(submitclick){
+    let formData = formErrors
+    for(let err in formData){
+      if(formData[err]){
+        toast.error(`${err}: ${formData[err][0]}`, { duration: 3000 });
+      }
+    }
+    formSubmitClicked(false)
+  }
+  },[formErrors])
+
+
+    
+
 
 
 
@@ -626,31 +692,7 @@ const TimeTrack = () => {
               </Popover>
             </FormControl>
 
-            {/* <div>
-              <LocalizationProvider dateAdapter={AdapterMoment}>
-                <FormControl
-                  fullWidth
-                  error={formErrors.endTime ? true : false}
-                >
-                  
-                  <TimePicker
-                    label="End Time"
-                    onChange={(value) => updateTime(value, "endTime")}
-                    value={
-                      trackerForm.endTime ? moment(trackerForm.endTime) : null
-                    }
-                    slotProps={{
-                      textField: {
-                        variant: "outlined",
-                        fullWidth: true,
-                        placeholder: "hh:mm",
-                        error: !!formErrors.endTime,
-                      },
-                    }}
-                  />
-                </FormControl>
-              </LocalizationProvider>
-            </div> */}
+           
             <div>
               <FormControl fullWidth error={formErrors.endTime ? true : false}>
                 <TextField
@@ -689,6 +731,9 @@ const TimeTrack = () => {
                   />
                 </Popover>
               </FormControl>
+            </div>
+            <div>
+              {trackerForm.hours}
             </div>
             <div>
               <FormControl fullWidth error={formErrors.status ? true : false}>
