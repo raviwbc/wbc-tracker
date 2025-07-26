@@ -143,13 +143,13 @@ const TimeTrack = () => {
       ).test(
         "endAfterStart",
         "End time must be after start time",
-        function(endtime){
+        function(){
           console.log('raviuu')
-          const {startTime} = this.parent;
-           let end = moment(endtime)
-           console.log(startTime)
+          const {startTime, endTime} = this.parent;
+           let end = moment(endTime)
+           if (!startTime || !endTime) return true
            console.log('raviuu', end.diff(startTime, "minutes"))
-            return end.diff(startTime, "minutes") < 0;
+            return end.diff(startTime, "minutes") > 0;
         }
 
       )
@@ -253,8 +253,8 @@ const TimeTrack = () => {
       });
       UpdateErrors(errorDefaultVlaue);
     } catch (err: any) {
-      UpdateErrors(errorDefaultVlaue);
       if (formUpdated == true) {
+        UpdateErrors(errorDefaultVlaue);
         err.inner.forEach((res: any) => {
           UpdateErrors((prev) => {
             return { ...prev, [res.path]: [res.errors[0]] };
