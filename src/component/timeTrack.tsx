@@ -286,12 +286,16 @@ const TimeTrack = () => {
     }
   }
   const callcompletedList = (date) => {
-    updateSelectedDate(date);
     UpdateTrackerForm(errorDefaultVlaue)
     SetstTime24Hrs('')
     SetedTime24Hrs('')
+    if(moment().format('MM-DD-YYYY') == date){
+      callCurrentDate()
+    }else{
+    updateSelectedDate(date);
     UpdateMode(false);
     navigate(`/index?date=${date}`);
+  }
   }
   const callCurrentDate = () => {
     updateSelectedDate('');
@@ -497,7 +501,7 @@ const TimeTrack = () => {
               <div className="text-sm text-gray-600">{item.dateString.split(" ")[1]}</div>
             </div>) : (
 
-            <button onClick={() => callCurrentDate()} className="wave-btn currentDateBtnTxt relative overflow-hidden px-6 py-4 rounded-md">
+            <button className="wave-btn currentDateBtnTxt relative overflow-hidden px-6 py-4 rounded-md">
               <span className="wave-btn__label flex items-center gap-2 relative z-10">
                 <CalendarMonthIcon />
                 {moment(item.paramsday).format("MMMM Do ddd")}
