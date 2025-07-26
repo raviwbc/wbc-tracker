@@ -588,7 +588,7 @@ const TimeTrack = () => {
 
       {/* taskbar Section */}
       <div className="mt-4">
-        <div className="d-inline">Trackers</div>
+        {/* <div className="d-inline">Trackers</div> */}
         {!selectedDate && (
           <div className="d-inline">
             <ToggleButtonGroup
@@ -778,7 +778,7 @@ const TimeTrack = () => {
             </div>
             
             <button type="submit" className="manualUpdate">
-              {trackerForm.hours} Update
+              Update {trackerForm.hours && trackerForm.hours + 'hrs.' }
             </button>
           </form>
         </div>

@@ -61,7 +61,7 @@
 
 .formArea {
     display: grid;
-    grid-template-columns: 250px 250px 150px 150px auto 150px 250px 100px;
+    grid-template-columns: 250px 250px 150px 150px auto 150px 200px;
     gap: 20px;
     padding: 20px 0;
     .time{
