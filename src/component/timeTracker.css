@@ -57,7 +57,9 @@
     width: 200px;
 }
 
-
+.modeToggle .Mui-selected {
+    color: #1b004e !important;
+}
 
 .formArea {
     display: grid;

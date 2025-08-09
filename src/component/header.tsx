@@ -13,16 +13,15 @@ export const HeaderComp = () => {
   const [profileSrc, setProfileSrc] = useState<any>("/user-profile.png");
   const [username, setUsername] = useState<any>("WBC Employee");
 
-  useEffect(() => {
-    if (
-      localStorage.getItem("username") &&
-      localStorage.getItem("profileImage")
-    ) {
-      setUsername(localStorage.getItem("username"));
-      setProfileSrc(localStorage.getItem("profileImage"));
-    }
-  }, []);
+useEffect(() => {
+  const username = localStorage.getItem("username");
+  const profileImage = localStorage.getItem("profileImage");
 
+  if (username && profileImage) {
+    setUsername(username);
+    setProfileSrc(profileImage);
+  }
+}, []);
 
   const handleLogoff = () => {
     dispatch(logoutRequest());
