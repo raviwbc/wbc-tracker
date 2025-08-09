@@ -48,16 +48,9 @@ export const logoutValidation = createSlice({
             state.message = action.payload;
         },
         
-        clearLoginCredential: (state) => {
-            state.data = null;
-            state.loading = false;
-            state.message = null
-
-
-        }
     }
 });
 
 // Export reducer and actions
 export const logoutReducer = logoutValidation.reducer;
-export const { logoutRequest, logoutsuccess, logoutFailed ,clearLoginCredential} = logoutValidation.actions;
+export const { logoutRequest, logoutsuccess, logoutFailed } = logoutValidation.actions;

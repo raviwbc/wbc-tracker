@@ -2,9 +2,9 @@ import { useContext, useEffect, useState } from "react";
 import { MyContext } from "../myContext.tsx";
 import React from "react";
 import "./header.css";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { logoutRequest } from "../store/reducers/logout.ts";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
 export const HeaderComp = () => {
   const { theme } = useContext(MyContext);
@@ -12,8 +12,7 @@ export const HeaderComp = () => {
   const location = useLocation();
   const [profileSrc, setProfileSrc] = useState<any>("/user-profile.png");
   const [username, setUsername] = useState<any>("WBC Employee");
-  const navigate = useNavigate();
-  const logoutResp = useSelector((state: any) => state.logoutReducer);
+
   useEffect(() => {
     if (
       localStorage.getItem("username") &&
@@ -24,17 +23,9 @@ export const HeaderComp = () => {
     }
   }, []);
 
-  // useEffect(() => {
-  //   console.log("message", logoutResp?.data?.message);
-  //   if (logoutResp?.data?.message === "Logout successful") {
-  //     debugger
-  //     dispatch(clearLoginCredential())
-  //     navigate("/");
-  //   }
-  // }, [logoutResp]);
 
   const handleLogoff = () => {
-    // dispatch(logoutRequest());
+    dispatch(logoutRequest());
   };
   return (
     <div className="pageHeader">
@@ -71,7 +62,5 @@ export const HeaderComp = () => {
     </div>
   );
 };
-function clearLoginCredential(): any {
-  throw new Error("Function not implemented.");
-}
+
 

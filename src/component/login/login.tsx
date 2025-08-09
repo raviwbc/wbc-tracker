@@ -19,24 +19,20 @@ interface LoginFormData {
 }
 
 export const Login = () => {
+    debugger
     const dispatch = useDispatch();
     const auth = useSelector((state: any) => state.loginValidationReducer)
-    
-    
     const navigate = useNavigate();
+    
     useEffect(() => {
         debugger
-        if(auth.data?.model?.token){
-            console.log("State auth", auth);
+        const token = localStorage.getItem('accessToken');
+        if(token){
             navigate('/index')
-            toast.success(auth.message, {
-                duration: 3000,
-              });
+            toast.success('Welcome back!', {duration: 3000});
 
         }else if(!auth.data && auth.message){
-            toast.error(auth.message || "Something went wrong!", {
-                duration: 3000, 
-              });
+            toast.error(auth.message || "Something went wrong!", {duration: 3000});
             
         }
     }, [auth]);
@@ -120,8 +116,8 @@ export const Login = () => {
 
 <div className="mobileRoundCrnr2"></div>
 <div className="mobileRoundCrnrSub2"></div>
-                {/* Optional Foreground Content */}
-                <div className="loginPage">
+               <div className="flexContainer">
+<div className="loginPage">
                     <div className="loginTxt">Login</div>
                     <div className="welcomeTxt">
                         <div>Welcome to <span style={{ color: "#1b004e" }}>WBC Tracker</span></div>
@@ -186,6 +182,8 @@ export const Login = () => {
                         Copyright © 2015, <span style={{ color: "#1b004e" }}>WBC Software Lab</span>. All Rights Reserved.
                     </div>
                 </div>
+               </div>
+                
             </div>
 
         </div>

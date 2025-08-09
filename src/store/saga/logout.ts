@@ -2,7 +2,6 @@ import { call, put, takeLatest } from "redux-saga/effects";
 import { logoutRequest, logoutsuccess, logoutFailed } from "../reducers/logout.ts";
 import { logout } from "../api-call/jsonapi.ts";
 import { startLoading, stopLoading } from "../reducers/loader.ts";
-import { clearLoginCredential } from "../reducers/logout.ts";
 
 
 
@@ -12,7 +11,7 @@ function* logoutAPICall() {
         const response = yield call(logout);
         if (response?.data) {
             yield put(logoutsuccess(response.data));  
-            // yield put(clearLoginCredential());
+             window.location.href = '/';  
         } else {
             yield put(logoutFailed("Invalid response from server"));
         }
@@ -22,7 +21,6 @@ function* logoutAPICall() {
     }finally{
         yield put(stopLoading());  
     }
-    
 }
 
 export function* watchLogout() {

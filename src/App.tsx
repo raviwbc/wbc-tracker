@@ -30,7 +30,7 @@ function App() {
     user,
     toggleTheme,
   };
-  
+  const token = localStorage.getItem('accessToken');
   
   return (
     <div>

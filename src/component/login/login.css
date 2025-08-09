@@ -21,6 +21,9 @@ body{
 .mobileRoundCrnrSub2,.mobileRoundCrnr2,.mobileRoundCrnrSub1,.mobileRoundCrnrSub1,.mobileRoundCrnr1{
     display: none;
 }
+.flexContainer{
+    display: flex;
+}
 .loginPage {
     margin-left: 150px;
     padding: 55px;
