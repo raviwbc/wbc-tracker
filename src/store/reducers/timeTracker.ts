@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 
 const projectListSegraction =  (tasks :any[]):any=>{
+    console.log("newapi", tasks)
     debugger
     
     let projectList : any[] =[]
@@ -31,8 +32,9 @@ const trackerAPICalls = createSlice({
         },
         projectListSuccess:(state, action:any)=>{
             state.Loading = false
-            const projectList = projectListSegraction(action.payload.model);
-            state.data = { taskList: action.payload.model, projectList: projectList}
+            // const projectList = projectListSegraction(action.payload.model);
+            const projectList = action.payload.model;
+            state.data = {projectList: projectList}
         },
         projectListFailed:(state, action:any)=>{
             state.Loading = false

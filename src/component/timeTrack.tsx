@@ -78,6 +78,7 @@ const TimeTrack = () => {
   //Get Project List
   const dispatch = useDispatch();
   const projectList = useSelector((state: any) => {
+    console.log("hari", state.trackerReducer)
     return state.trackerReducer;
   });
   const manualEntryStatus = useSelector((state: ReducersList) => {
@@ -208,11 +209,14 @@ const TimeTrack = () => {
   }
 
   let formChange = (data: any) => {
+    console.log(data)
+    debugger
     const { name, value } = data.target;
     UpdateTrackerForm((prev) => {
       return { ...prev, [name]: value };
     });
     if (value && name == "project") {
+      
       let task = totaltaskList?.filter((resp) => resp.projectID == value);
       setTaskList(task ? task : []);
     }
