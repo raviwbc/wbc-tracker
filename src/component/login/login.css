@@ -16,7 +16,7 @@
 body{
     margin: 0;
     padding: 0;
-    overflow: hidden; 
+    /* overflow: hidden;  */
 }
 .mobileRoundCrnrSub2,.mobileRoundCrnr2,.mobileRoundCrnrSub1,.mobileRoundCrnrSub1,.mobileRoundCrnr1{
     display: none;
