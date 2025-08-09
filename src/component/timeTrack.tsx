@@ -218,9 +218,9 @@ const TimeTrack = () => {
     UpdateTrackerForm((prev) => {
       return { ...prev, [name]: value };
     });
-    if (value && name == "project") {
-      let task = totaltaskList?.filter((resp) => resp.projectID == value);
-      setTaskList(task ? task : []);
+    if (value && name === "project") {
+      let task:any = prjList?.filter((resp) => resp.projectID === value);
+      setTaskList(task[0]?.tasks ? task[0]?.tasks : []);
     }
   };
 

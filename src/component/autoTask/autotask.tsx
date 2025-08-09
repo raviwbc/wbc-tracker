@@ -200,7 +200,8 @@ console.log("taskStared from auto", taskStared)
       return { ...prev, [name]: value };
     });
     if (value && name === "project") {
-      let task = prjList?.filter((resp) => resp.projectId === value);
+        debugger
+      let task = prjList?.filter((resp) => resp.projectID === value);
       let gg = task?.length ? task[0]?.tasks : [];
 
       setTaskList(gg ? gg :[]);
@@ -273,7 +274,7 @@ console.log("taskStared from auto", taskStared)
                   >
                     {prjList &&
                       prjList?.map((data) => (
-                        <MenuItem key={data.projectId} value={data.projectId}>
+                        <MenuItem key={data.projectID} value={data.projectID}>
                           {data.projectName}
                         </MenuItem>
                       ))}
