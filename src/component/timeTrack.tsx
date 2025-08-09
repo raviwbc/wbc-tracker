@@ -92,6 +92,7 @@ const TimeTrack = () => {
   const getStartup: getStartRes = useSelector((state: ReducersList) => {
     let getstartRed = state.getStartReducer;
     if (getstartRed.data.projectID) {
+      console.log("Strated", getstartRed)
       return getstartRed.data;
     } else {
       return {};
@@ -492,6 +493,7 @@ const TimeTrack = () => {
 
   useEffect(() => {
     if (getStartup?.projectID) {
+      console.log("getStartup", getStartup)
       setTaskStarted(true);
     }
   }, [getStartup]);
