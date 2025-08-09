@@ -3,14 +3,32 @@
 }
 .taskListTable>div.parent_div{
     display: grid;
-    grid-template-columns: 50px calc(100% - 560px) 50px 100px 200px 100px 50px
- ;
-    
+    grid-template-columns: 50px calc(100% - 560px) 50px 100px 200px 100px 50px;
 }
+.taskListTable>div.parent_div.mobile_div {
+grid-template-columns:unset
+}
+.mobile_div>div>div{
+    display: inline-block;
+}
+.taskListTable>div.parent_div.mobile_div> {
+   padding: 5px 5px; 
+}
+.mobile_div{
+    border: 1px solid #eee;
+    padding: 10px;
+    margin-bottom: 10px;}
+
+    
 .taskListTable .parent_div>div{
 padding: 10px 5px;
 }
-
+.iconsList{
+        display: flex;
+    align-items: center;
+    justify-content: start;
+    gap: 10px;
+}
 .taskListTable .parent_div span{
     background: #e6ffec;
     border: 1px solid #84bf7c;
@@ -46,4 +64,24 @@ span.status[data-status = 'Done']{
         text-align: center;
     color: #b0b0b0;
     font-weight: 600;
+}
+.ms-mobile{
+    display: none;
+}
+.ms-desk{
+    display: none;
+}
+
+
+@media screen and (max-width:776px){
+    .ms-mobile{
+        display: block;
+    }
+    
+}
+@media screen and (min-width:776px){
+    .ms-desk{
+        display: block;
+    }
+    
 }

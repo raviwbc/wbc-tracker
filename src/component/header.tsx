@@ -34,7 +34,7 @@ export const HeaderComp = () => {
           <div className="flex justify-between">
             <div className="flex gap-3 items-center">
               <div className="pl-3">
-                <b>TIME TRACKER</b>
+                <b>WBC TIME TRACKER</b>
               </div>
             </div>
             

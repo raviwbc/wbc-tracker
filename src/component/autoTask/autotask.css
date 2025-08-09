@@ -27,3 +27,10 @@ button.manualUpdate{
 .proj_details{
     padding: 10px 0;
 }
+
+@media screen and (max-width:776px){
+.autoForm{
+    grid-template-columns: unset;
+}
+    
+}

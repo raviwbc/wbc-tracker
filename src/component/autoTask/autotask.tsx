@@ -92,21 +92,39 @@ export const Autotask: React.FC<AutoTaskProps> = ({
 
   useEffect(() => {
     if (runningTaskDetails.projectID) {
-      debugger;
-      let projname = prjList?.find(
-        (resp) => resp.projectID == runningTaskDetails.projectID
-      )?.projectName;
+      let projname = prjList?.find((resp) => resp.projectID === runningTaskDetails.projectID)?.projectName;
       setProject(projname);
     }
-  }, [prjList]);
+  }, [prjList, runningTaskDetails]);
+
+useEffect(() => {
+  if (runningTaskDetails.projectID) {
+    let taskname = totaltaskList?.find(
+      (resp) => resp.taskID === runningTaskDetails.taskID
+    )?.title;
+    setTask(taskname);
+  }
+}, [totaltaskList, runningTaskDetails]);
+
+//   useEffect(() => {
+//     if (Object.keys(runningTaskDetails).length > 0) {
+//       if (!selectedProject) {
+//         if (runningTaskDetails.projectID) {
+//             let projname = prjList?.find((resp) => resp.projectID === runningTaskDetails.projectID)?.projectName;
+//             setProject(projname);
+//             let taskname = totaltaskList?.find((resp) => resp.taskID === runningTaskDetails.taskID)?.title;
+//             setTask(taskname);
+//         }
+//       }
+//     }
+//   }, [runningTaskDetails]);
+
+
   useEffect(() => {
-    if (runningTaskDetails.projectID) {
-      let taskname = totaltaskList?.find(
-        (resp) => resp.taskID == runningTaskDetails.taskID
-      )?.title;
-      setTask(taskname);
-    }
-  }, [totaltaskList]);
+console.log("taskStared from auto", taskStared)
+  },[taskStared])
+  
+
 
   function formReset() {
     setformUpdated(false);
@@ -115,7 +133,6 @@ export const Autotask: React.FC<AutoTaskProps> = ({
 
   async function submitcall(event: any) {
     event.preventDefault();
-    debugger;
     setformUpdated(true);
     let result;
     try {
@@ -176,13 +193,12 @@ export const Autotask: React.FC<AutoTaskProps> = ({
     }
   }
   let formChange = (data: any) => {
-    debugger;
     const { name, value } = data.target;
     UpdateTrackerForm((prev) => {
       return { ...prev, [name]: value };
     });
-    if (value && name == "project") {
-      let task = totaltaskList?.filter((resp) => resp.projectID == value);
+    if (value && name === "project") {
+      let task = totaltaskList?.filter((resp) => resp.projectID === value);
       setTaskList(task ? task : []);
     }
   };
@@ -245,7 +261,7 @@ export const Autotask: React.FC<AutoTaskProps> = ({
                   <InputLabel id="Project">Project</InputLabel>
                   <Select
                     labelId="Project"
-                    value={trackerForm.project}
+                    value={trackerForm.project ?? ''}
                     label="Project"
                     name="project"
                     onChange={formChange}
@@ -266,7 +282,7 @@ export const Autotask: React.FC<AutoTaskProps> = ({
                   <InputLabel id="task">Task</InputLabel>
                   <Select
                     labelId="task"
-                    value={trackerForm.task}
+                    value={trackerForm.task ?? ''}
                     label="task"
                     name="task"
                     onChange={formChange}
@@ -330,6 +346,7 @@ export const Autotask: React.FC<AutoTaskProps> = ({
                     <TextField
                       label="Notes"
                       value={trackerForm.comments}
+                      error={stopForm.comments ? true : false}
                       variant="outlined"
                       name="comments"
                       onChange={formChange}

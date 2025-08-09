@@ -167,3 +167,13 @@
         transform: translate(-50%, -75%) rotate(360deg);
     }
 }
+
+@media screen and (max-width:776px) {
+.formArea{
+    grid-template-columns: unset;
+}
+}
+.divSize{
+    overflow: auto;
+    max-height: calc(100vh - 390px);
+}

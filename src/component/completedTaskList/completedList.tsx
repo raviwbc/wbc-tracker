@@ -46,9 +46,13 @@ export const CompletedList = ({ entrylist, date }) => {
     }
   }, [deleteOperation]);
 
+  useEffect(()=>{
+    console.log("in completed list page", entrylist)
+  },[entrylist])
+
   return (
     <div>
-      <div className="taskListTable ">
+      <div className="taskListTable ms-desk">
         {entrylist ? (
           entrylist.map((resp: tasklist, index) => (
             <div
@@ -104,6 +108,69 @@ export const CompletedList = ({ entrylist, date }) => {
           <div className="nrf">No Record Found</div>
         )}
       </div>
+
+
+
+      <div className="taskListTable ms-mobile">
+        {entrylist ? (
+          entrylist.map((resp: tasklist, index) => (
+            <div
+              key={resp.taskID + resp.minutes + Math.random() * 10}
+              className="mobile_div parent_div">  
+              
+              <div>
+                <div>Project : </div>
+                <div> {resp.projectName}</div>
+              </div>
+                <div>
+                  <div>Task : </div>
+                  <div> {resp.taskName}</div>
+                </div>  
+            
+              <div>
+                <div>Timing : </div>
+                <div>{resp.startTime} - {resp.endTime}</div>                
+              </div>
+              <div>
+                 <div>Total Hours : </div>
+              <div>{minutesConverter(resp.minutes)}</div>
+              </div>
+              <div className="iconsList">
+                  <div>
+                <span data-status={resp.taskStatus} className="status">
+                  {resp.taskStatus}
+                </span>
+              </div>
+                <div>
+                <button onClick={() => deletefun(resp.id)}><img src="/assets/delete.svg" width={35} alt="Delete" /></button>
+              </div>
+              <div>
+<div className="cursor-pointer relative p-3"  onMouseEnter={() => setisCommentShowID(index)}
+                  onMouseLeave={() => setisCommentShowID(null)}>
+                <img
+                  src="/icon/notes.svg"
+                  width={30}
+                  height={30}
+                  alt=""
+                 
+                />
+                {isCommentShowID === index && (
+                  <div>
+                    <CommentsHover commentsTxt = {resp.comment || ''} />
+                  </div>
+                )}
+              </div>
+              </div>
+              </div>
+             
+              
+            </div>
+          ))
+        ) : (
+          <div className="nrf">No Record Found</div>
+        )}
+      </div>
+    
     </div>
   );
 };
