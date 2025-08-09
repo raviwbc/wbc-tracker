@@ -36,6 +36,7 @@ minutes: number
 projectID: number
 taskID: number
 userID: number
+tasks : any[]
 taskName: string | null
 isAuto: boolean 
 isRestart: boolean 

@@ -23,7 +23,7 @@ const trackerAPICalls = createSlice({
     name : 'timetracker',
     initialState : {
         Loading : false,
-        data : {},
+        data : [],
         message : ''
     },
     reducers : {
@@ -34,7 +34,7 @@ const trackerAPICalls = createSlice({
             state.Loading = false
             // const projectList = projectListSegraction(action.payload.model);
             const projectList = action.payload.model;
-            state.data = {projectList: projectList}
+            state.data =  projectList
         },
         projectListFailed:(state, action:any)=>{
             state.Loading = false

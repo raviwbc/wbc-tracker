@@ -75,19 +75,20 @@ export const Autotask: React.FC<AutoTaskProps> = ({
   const [stopForm, stopFormUpdateErrors] =
     useState<stopErrortrackerForm>(StopdefaultValue);
   const [trackerForm, UpdateTrackerForm] = useState<trackerForm>(defaultValue);
-  const [taskList, setTaskList] = useState<projectListmodel[]>([]);
-  const [prjList, setPrjList] = useState<tasklist[]>();
-  const [totaltaskList, setTotalTaskList] = useState<projectListmodel[]>([]);
+  const [taskList, setTaskList] = useState<any[]>([]);
+  const [prjList, setPrjList] = useState<any[]>();
+  const [totaltaskList, setTotalTaskList] = useState<any[]>([]);
   const [formUpdated, setformUpdated] = useState<boolean>(false);
-  const [selectedProject, setProject] = useState<any>("");
+  const [selectedProject, setProject] = useState<any[]>([]);
   const [selectedTask, setTask] = useState<any>("");
   const statusList = ["Done", "WIP", "OnHold"];
   // const [taskStared, setTaskStared] = useState<boolean>(false)
 
   useEffect(() => {
     console.log(projectList);
-    setPrjList(projectList.data.projectList);
-    setTotalTaskList(projectList.data.taskList);
+    console.log("auto", projectList.data);
+    setPrjList(projectList.data);
+    // setTotalTaskList(projectList.data.taskList);
   }, [projectList]);
 
   useEffect(() => {
@@ -193,13 +194,16 @@ console.log("taskStared from auto", taskStared)
     }
   }
   let formChange = (data: any) => {
+    debugger
     const { name, value } = data.target;
     UpdateTrackerForm((prev) => {
       return { ...prev, [name]: value };
     });
     if (value && name === "project") {
-      let task = totaltaskList?.filter((resp) => resp.projectID === value);
-      setTaskList(task ? task : []);
+      let task = prjList?.filter((resp) => resp.projectId === value);
+      let gg = task?.length ? task[0]?.tasks : [];
+
+      setTaskList(gg ? gg :[]);
     }
   };
   let formBlur = async (data: any) => {
@@ -268,8 +272,8 @@ console.log("taskStared from auto", taskStared)
                     onBlur={formBlur}
                   >
                     {prjList &&
-                      prjList.map((data) => (
-                        <MenuItem key={data.projectID} value={data.projectID}>
+                      prjList?.map((data) => (
+                        <MenuItem key={data.projectId} value={data.projectId}>
                           {data.projectName}
                         </MenuItem>
                       ))}

@@ -79,8 +79,8 @@ const TimeTrack = () => {
   //Get Project List
   const dispatch = useDispatch();
   const projectList = useSelector((state: any) => {
-    console.log("hari", state.trackerReducer)
-    return state.trackerReducer;
+    console.log("hari", state.trackerReducer.data)
+    return state.trackerReducer
   });
   const manualEntryStatus = useSelector((state: ReducersList) => {
     return state.manualEntryReducer;
@@ -216,10 +216,10 @@ const TimeTrack = () => {
     UpdateTrackerForm((prev) => {
       return { ...prev, [name]: value };
     });
-    if (value && name == "project") {
+    if (value && name === "project") {
       
-      let task = totaltaskList?.filter((resp) => resp.projectID == value);
-      setTaskList(task ? task : []);
+      let task:any = prjList?.filter((resp) => resp.projectID === value);
+      setTaskList(task[0].tasks ? task[0].tasks : []);
     }
   };
 
@@ -445,13 +445,15 @@ const TimeTrack = () => {
 
   useEffect(() => {
     if (prjList?.length) {
+      console.log("proj", prjList)
       const newlist:tasklist[] = entryListReducer.data?.filter(resp=> resp.endDate && resp.taskStatus);
       if (newlist?.length !== entryList?.length) {
+        
         const tasklistsp = newlist?.map((resp) => {
           let project = prjList?.filter(
             (data) => data.projectID === resp.projectID
           );
-          let task = totaltaskList?.filter(
+          let task = project[0].tasks?.filter(
             (data) => data.taskID === resp.taskID
           );
           return {
@@ -536,8 +538,10 @@ const TimeTrack = () => {
   }, []);
 
   useEffect(() => {
-    setPrjList(projectList.data.projectList);
-    setTotalTaskList(projectList.data.taskList);
+    debugger
+    console.log(projectList)
+    setPrjList(projectList.data);
+    // setTotalTaskList(projectList.data);
   }, [projectList]);
 
   useEffect(() => {
@@ -629,7 +633,7 @@ const TimeTrack = () => {
                   onBlur={formBlur}
                 >
                   <MenuItem>Select Project</MenuItem>
-                  {prjList &&
+                  {prjList?.length &&
                     prjList.map((data) => (
                       <MenuItem key={data.projectID} value={data.projectID}>
                         {data.projectName}
