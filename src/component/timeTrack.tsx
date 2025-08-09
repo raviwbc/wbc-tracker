@@ -39,6 +39,7 @@ import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import { toast } from "react-hot-toast";
 import TimePk from "./time-picker/time-picker.tsx";
+import { DynamicButton } from "../button/dynamicButton.tsx";
 
 type Dates = { dateString: string; paramsday: string };
 
@@ -136,11 +137,11 @@ const TimeTrack = () => {
         "Invalid time format",
         (value) => value && moment(value, "HH:mm", true).isValid()
       )
-      .test("endAfterStart", "End time must be after start time", function () {        
+      .test("endAfterStart", "End time must be after start time", function () {
         const { startTime, endTime } = this.parent;
         let end = moment(endTime);
         if (!startTime || !endTime) return true;
-        console.log('raviuu', end.diff(startTime, "minutes"))
+        console.log("raviuu", end.diff(startTime, "minutes"));
         return end.diff(startTime, "minutes") > 0;
       }),
   });
@@ -214,14 +215,13 @@ const TimeTrack = () => {
     UpdateTrackerForm((prev) => {
       return { ...prev, [name]: value };
     });
-    if (value && name == "project") {
-      let task = totaltaskList?.filter((resp) => resp.projectID == value);
+    if (value && name === "project") {
+      let task = totaltaskList?.filter((resp) => resp.projectID === value);
       setTaskList(task ? task : []);
     }
   };
 
   let formBlur = async (data: any) => {
-    let result: any;
     try {
       await ValidateRecord.validate(trackerForm, {
         abortEarly: false,
@@ -278,8 +278,8 @@ const TimeTrack = () => {
 
   function taskUpdated() {
     if (
-      stopAutoEntry.data?.didError == false &&
-      stopAutoEntry.Loading == false
+      stopAutoEntry.data?.didError === false &&
+      stopAutoEntry.Loading === false
     ) {
       toast.success("Task updated", { duration: 3000 });
       dispatch(
@@ -287,8 +287,8 @@ const TimeTrack = () => {
       );
       setTaskStarted(false);
     } else if (
-      stopAutoEntry.data?.didError == true &&
-      stopAutoEntry.Loading == false
+      stopAutoEntry.data?.didError === true &&
+      stopAutoEntry.Loading === false
     ) {
       toast.error(stopAutoEntry.data.message || "Something went wrong!", {
         duration: 3000,
@@ -394,17 +394,17 @@ const TimeTrack = () => {
       setAnchorE2(null);
     }
   };
-  function updateErrorOnendTime(endTime:any) {
-    const {startTime} = trackerForm;
+  function updateErrorOnendTime(endTime: any) {
+    const { startTime } = trackerForm;
     let end = moment(endTime);
-    console.log(end.diff(startTime, "minutes") )
-    if(end.diff(startTime, "minutes") < 0){
-      console.log(formErrors)
-      UpdateErrors(resp=>{
-        return {...resp, endTime : 'End time must be after start time'}
-      })
+    console.log(end.diff(startTime, "minutes"));
+    if (end.diff(startTime, "minutes") < 0) {
+      console.log(formErrors);
+      UpdateErrors((resp) => {
+        return { ...resp, endTime: "End time must be after start time" };
+      });
     }
-// sa
+    // sa
     // try {
     //   await ValidateRecord.validate(trackerForm, {
     //     abortEarly: false,
@@ -631,7 +631,7 @@ const TimeTrack = () => {
                   onBlur={formBlur}
                 >
                   <MenuItem>Select Project</MenuItem>
-                  { prjList &&
+                  {prjList &&
                     prjList.map((data) => (
                       <MenuItem key={data.projectID} value={data.projectID}>
                         {data.projectName}
@@ -776,15 +776,15 @@ const TimeTrack = () => {
                 {/* {formErrors.status && <FormHelperText>{formErrors.status[0]}</FormHelperText>} */}
               </FormControl>
             </div>
-            
-            <button type="submit" className="manualUpdate">
+
+            {/* <button type="submit" className="manualUpdate">
               Update {trackerForm.hours && trackerForm.hours + 'hrs.' }
-            </button>
+            </button> */}
+                <DynamicButton buttonname="UPDATE" time={ trackerForm.hours + 'hrs' }  onClick={submitcall}/>
           </form>
         </div>
       )}
 
-      <div></div>
       <div className="mt-4 rounded-lg bg-gray-100 shadow-lg">
         <h2>
           <button
@@ -822,6 +822,8 @@ const TimeTrack = () => {
           </div>
         )}
       </div>
+
+      
     </div>
   );
 };

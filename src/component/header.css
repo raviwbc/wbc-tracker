@@ -42,6 +42,7 @@
         font-weight: 600;
     }
 }
+
 .userDetails {
     display: flex;
     flex-direction: column;

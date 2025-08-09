@@ -37,6 +37,7 @@ export const HeaderComp = () => {
                 <b>TIME TRACKER</b>
               </div>
             </div>
+            
             <div className="flex gap-2 items-center container-2 ">
               <div className="profileImg ">
                 <img src={profileSrc} alt="WBC" className="p-1" />
