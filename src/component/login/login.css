@@ -23,6 +23,8 @@ body{
 }
 .flexContainer{
     display: flex;
+    align-items: center;
+    height: 100vh;
 }
 .loginPage {
     margin-left: 150px;

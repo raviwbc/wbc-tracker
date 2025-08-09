@@ -79,8 +79,8 @@ const TimeTrack = () => {
   //Get Project List
   const dispatch = useDispatch();
   const projectList = useSelector((state: any) => {
-    console.log("hari", state.trackerReducer.data)
-    return state.trackerReducer
+    console.log("hari", state.trackerReducer);
+    return state.trackerReducer;
   });
   const manualEntryStatus = useSelector((state: ReducersList) => {
     return state.manualEntryReducer;
@@ -94,13 +94,15 @@ const TimeTrack = () => {
   const getStartup: getStartRes = useSelector((state: ReducersList) => {
     let getstartRed = state.getStartReducer;
     if (getstartRed.data.projectID) {
-      console.log("Strated", getstartRed)
+      console.log("Strated", getstartRed);
       return getstartRed.data;
     } else {
       return {};
     }
   });
-  const entryListReducer = useSelector((store: ReducersList) => store.entryListReducer);
+  const entryListReducer = useSelector(
+    (store: ReducersList) => store.entryListReducer
+  );
 
   function resetManualForm() {
     UpdateTrackerForm(defaultValue);
@@ -210,16 +212,15 @@ const TimeTrack = () => {
   }
 
   let formChange = (data: any) => {
-    console.log(data)
-    debugger
+    console.log(data);
+    debugger;
     const { name, value } = data.target;
     UpdateTrackerForm((prev) => {
       return { ...prev, [name]: value };
     });
-    if (value && name === "project") {
-      
-      let task:any = prjList?.filter((resp) => resp.projectID === value);
-      setTaskList(task[0].tasks ? task[0].tasks : []);
+    if (value && name == "project") {
+      let task = totaltaskList?.filter((resp) => resp.projectID == value);
+      setTaskList(task ? task : []);
     }
   };
 
@@ -445,8 +446,9 @@ const TimeTrack = () => {
 
   useEffect(() => {
     if (prjList?.length) {
-      console.log("proj", prjList)
-      const newlist:tasklist[] = entryListReducer.data?.filter(resp=> resp.endDate && resp.taskStatus);
+      const newlist: tasklist[] = entryListReducer.data?.filter(
+        (resp) => resp.endDate && resp.taskStatus
+      );
       if (newlist?.length !== entryList?.length) {
         
         const tasklistsp = newlist?.map((resp) => {
@@ -492,7 +494,7 @@ const TimeTrack = () => {
 
   useEffect(() => {
     if (getStartup?.projectID) {
-      console.log("getStartup", getStartup)
+      console.log("getStartup", getStartup);
       setTaskStarted(true);
     }
   }, [getStartup]);
@@ -549,7 +551,26 @@ const TimeTrack = () => {
       let formData = formErrors;
       for (let err in formData) {
         if (formData[err]) {
-          toast.error(`${err}: ${formData[err][0]}`, { duration: 3000 });
+          toast.error(`${err}: ${formData[err][0]}`, {
+            duration: 3000,
+            position: "bottom-right",
+            style: {
+              background: "rgb(239 153 153 / 20%)",
+              borderRadius: "12px",
+              padding: "16px 20px",
+              color: "#1b004e",
+              border: "1px solid rgb(255 0 0 / 62%)",
+              backdropFilter: "blur(10px) saturate(180%)",
+              boxShadow: "0 4px 20px rgba(0, 0, 0, 0.3)",
+              fontWeight: "500",
+              letterSpacing: "0.5px",
+               zIndex: 99,
+            },
+            iconTheme: {
+              primary: "#ff4b5c", // Icon color
+              secondary: "#ffffff",
+            },
+          });
         }
       }
       formSubmitClicked(false);
@@ -560,39 +581,41 @@ const TimeTrack = () => {
     <div className="margin-20">
       {/* Calendar */}
       <div className="mt-4 flex gap-4  dateDayContainer">
-        {dates && dates?.map((item, index) =>
-          selectedDate !== item.paramsday && (dates.length !== index + 1 || selectedDate) ? (
-            <div
-              onClick={() => callcompletedList(item.paramsday)}
-              key={index}
-              className="flex flex-col items-center bg-gray-100 dateDayBox "
-            >
-              <div className="text-lg font-bold">
-                {item.dateString.split(" ")[0]}
+        {dates &&
+          dates?.map((item, index) =>
+            selectedDate !== item.paramsday &&
+            (dates.length !== index + 1 || selectedDate) ? (
+              <div
+                onClick={() => callcompletedList(item.paramsday)}
+                key={index}
+                className="flex flex-col items-center bg-gray-100 dateDayBox "
+              >
+                <div className="text-lg font-bold">
+                  {item.dateString.split(" ")[0]}
+                </div>
+                <div className="text-sm text-gray-600">
+                  {item.dateString.split(" ")[1]}
+                </div>
               </div>
-              <div className="text-sm text-gray-600">
-                {item.dateString.split(" ")[1]}
-              </div>
-            </div>
-          ) : (
-            <button className="wave-btn currentDateBtnTxt relative overflow-hidden px-6 py-4 rounded-md">
-              <span className="wave-btn__label flex items-center gap-2 relative z-10">
-                <CalendarMonthIcon />
-                {moment(item.paramsday).format("MMMM Do ddd")}
-              </span>
-              <div className="dummyDiv">
-                <span className="wave absolute pointer-events-none"></span>
-              </div>
-            </button>
-          )
-        )}
+            ) : (
+              <button className="wave-btn currentDateBtnTxt relative overflow-hidden px-6 py-4 rounded-md">
+                <span className="wave-btn__label flex items-center gap-2 relative z-10">
+                  <CalendarMonthIcon />
+                  {moment(item.paramsday).format("MMMM Do ddd")}
+                </span>
+                <div className="dummyDiv">
+                  <span className="wave absolute pointer-events-none"></span>
+                </div>
+              </button>
+            )
+          )}
       </div>
 
       {/* taskbar Section */}
       <div className="mt-4">
         {/* <div className="d-inline">Trackers</div> */}
         {!selectedDate && (
-          <div className="d-inline">
+          <div className="d-inline modeToggle">
             <ToggleButtonGroup
               color="primary"
               value={mode}
@@ -782,7 +805,11 @@ const TimeTrack = () => {
             {/* <button type="submit" className="manualUpdate">
               Update {trackerForm.hours && trackerForm.hours + 'hrs.' }
             </button> */}
-                <DynamicButton buttonname="UPDATE" time={ trackerForm.hours + 'hrs' }  onClick={submitcall}/>
+            <DynamicButton
+              buttonname="UPDATE"
+              time={trackerForm.hours + "hrs"}
+              onClick={submitcall}
+            />
           </form>
         </div>
       )}
@@ -825,8 +852,6 @@ const TimeTrack = () => {
           </div>
         )}
       </div>
-
-      
     </div>
   );
 };
