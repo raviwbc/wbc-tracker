@@ -98,10 +98,7 @@ const TimeTrack = () => {
       return {};
     }
   });
-  const entryListReducer = useSelector(
-    (store: ReducersList) => store.entryListReducer,
-    shallowEqual
-  );
+  const entryListReducer = useSelector((store: ReducersList) => store.entryListReducer);
 
   function resetManualForm() {
     UpdateTrackerForm(defaultValue);
@@ -443,11 +440,10 @@ const TimeTrack = () => {
   }, []);
 
   useEffect(() => {
-    debugger;
     if (prjList?.length) {
-      const datap: tasklist[] = entryListReducer.data;
-      if (datap?.length !== entryList?.length) {
-        const tasklistsp = datap?.map((resp) => {
+      const newlist:tasklist[] = entryListReducer.data?.filter(resp=> resp.endDate && resp.taskStatus);
+      if (newlist?.length !== entryList?.length) {
+        const tasklistsp = newlist?.map((resp) => {
           let project = prjList?.filter(
             (data) => data.projectID === resp.projectID
           );
@@ -460,10 +456,7 @@ const TimeTrack = () => {
             taskName: task?.length ? task[0].title : "",
           };
         });
-        const finalCmpTask = tasklistsp?.filter(
-          (res) => res.endDate && res.taskStatus
-        );
-        setEntryList(finalCmpTask);
+        setEntryList(tasklistsp);
       }
     }
   }, [entryListReducer, prjList]);
@@ -559,9 +552,8 @@ const TimeTrack = () => {
     <div className="margin-20">
       {/* Calendar */}
       <div className="mt-4 flex gap-4  dateDayContainer">
-        {dates?.map((item, index) =>
-          selectedDate != item.paramsday &&
-          (dates.length != index + 1 || selectedDate) ? (
+        {dates && dates?.map((item, index) =>
+          selectedDate !== item.paramsday && (dates.length !== index + 1 || selectedDate) ? (
             <div
               onClick={() => callcompletedList(item.paramsday)}
               key={index}
@@ -787,7 +779,7 @@ const TimeTrack = () => {
       )}
 
       <div></div>
-      <div className="mt-4 rounded-lg bg-gray-100 shadow-lg">
+      <div className="mt-4 rounded-lg bg-gray-100 shadow-lg divSize">
         <h2>
           <button
             type="button"
@@ -817,7 +809,7 @@ const TimeTrack = () => {
 
         {/* Accordion Content */}
         {isAccOpen && (
-          <div className="p-5 bg-white border border-gray-200 rounded-b-xl">
+          <div className=" bg-white border border-gray-200 rounded-b-xl">
             <div className="">
               <CompletedList entrylist={entryList} date={selectedDate} />
             </div>
