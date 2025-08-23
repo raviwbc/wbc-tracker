@@ -450,6 +450,8 @@ const TimeTrack = () => {
       );
       if(entryListReducer?.data?.additionalValue && entryListReducer?.data?.additionalValue.length === 1){
         setTotalHours( entryListReducer.data.additionalValue[0].value);
+      }else{
+        setTotalHours("")        
       }
       
       if (newlist?.length !== entryList?.length) {
