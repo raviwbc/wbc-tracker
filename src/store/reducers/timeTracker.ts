@@ -2,8 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 
 const projectListSegraction =  (tasks :any[]):any=>{
-    console.log("newapi", tasks)
-    debugger
+    
     
     let projectList : any[] =[]
     let set = new Set()

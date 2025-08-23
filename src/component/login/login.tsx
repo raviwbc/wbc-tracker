@@ -63,13 +63,7 @@ export const Login = () => {
         try {
             await validationSchema.validate(formData, { abortEarly: false });
             setErrors({});
-            console.log("Form Submitted!", formData);
             dispatch(loginRequest(formData));
-            console.log('state',auth);
-            
-            // navigate("/Index");  
-            
-
         } catch (validationError: any) {
             const newErrors: Partial<LoginFormData> = {};
             validationError.inner.forEach((err: any) => {

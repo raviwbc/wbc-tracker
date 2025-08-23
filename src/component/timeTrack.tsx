@@ -209,7 +209,7 @@ const TimeTrack = () => {
   }
 
   let formChange = (data: any) => {
-    console.log(data);
+    
     debugger;
     const { name, value } = data.target;
     UpdateTrackerForm((prev) => {
@@ -397,9 +397,7 @@ const TimeTrack = () => {
   function updateErrorOnendTime(endTime: any) {
     const { startTime } = trackerForm;
     let end = moment(endTime);
-    console.log(end.diff(startTime, "minutes"));
     if (end.diff(startTime, "minutes") < 0) {
-      console.log(formErrors);
       UpdateErrors((resp) => {
         return { ...resp, endTime: "End time must be after start time" };
       });
@@ -414,7 +412,6 @@ const TimeTrack = () => {
     //   UpdateErrors(errorDefaultVlaue);
     //   err.inner.forEach((res: any) => {
     //     UpdateErrors((prev) => {
-    //       console.log(res.errors[0])
     //       return res.path === "endTime"
     //         ? { ...prev, [res.path]: [res.errors[0]] }
     //         : prev;
@@ -491,7 +488,6 @@ const TimeTrack = () => {
 
   useEffect(() => {
     if (getStartup?.projectID) {
-      console.log("getStartup", getStartup);
       setTaskStarted(true);
     }
   }, [getStartup]);
@@ -538,7 +534,6 @@ const TimeTrack = () => {
 
   useEffect(() => {
     debugger
-    console.log(projectList)
     setPrjList(projectList.data);
     // setTotalTaskList(projectList.data);
   }, [projectList]);

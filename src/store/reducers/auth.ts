@@ -42,7 +42,7 @@ export const loginValidation = createSlice({
             state.loading = false;
             state.data = action.payload;
             state.message = "Login successful!";
-            console.log("Login Success:", action.payload);
+            
             localStorage.setItem("accessToken", action.payload.model.token);
             localStorage.setItem("userId", JSON.stringify(action.payload.model.userid))
             localStorage.setItem("currentUser", JSON.stringify(action.payload.model))
@@ -53,7 +53,7 @@ export const loginValidation = createSlice({
             state.loading = false;
             state.data = null;
             state.message = action.payload;
-            console.log("Login Failed:", action.payload);
+            
         },
     }
 });

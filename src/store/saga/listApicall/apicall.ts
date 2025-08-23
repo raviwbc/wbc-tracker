@@ -20,7 +20,7 @@ function* fetchProjectList(){
     try{
          yield put(startLoading());  
         const resp = yield call(getProjectList)
-        console.log(resp, 'project')
+        
         yield put(projectListSuccess(resp.data))
     }catch(e){
         yield put(projectListFailed(e.message))
@@ -30,7 +30,6 @@ function* fetchProjectList(){
 }
 
 export function* watchFetchlist(){
-    console.log('1'+'ravi')
     // yield takeLatest(fetchPostsRequest.type, fetchList),
     yield takeLatest(ProjectListRequest.type, fetchProjectList)
 }

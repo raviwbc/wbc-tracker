@@ -85,8 +85,6 @@ export const Autotask: React.FC<AutoTaskProps> = ({
   // const [taskStared, setTaskStared] = useState<boolean>(false)
 
   useEffect(() => {
-    console.log(projectList);
-    console.log("auto", projectList.data);
     setPrjList(projectList.data);
     // setTotalTaskList(projectList.data.taskList);
   }, [projectList]);
@@ -121,9 +119,6 @@ useEffect(() => {
 //   }, [runningTaskDetails]);
 
 
-  useEffect(() => {
-console.log("taskStared from auto", taskStared)
-  },[taskStared])
   
 
 

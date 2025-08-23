@@ -25,7 +25,7 @@ export const CompletedList = ({ entrylist, date }) => {
   });
 
   function deletefun(id: number | null) {
-    console.log(id);
+    
     dispatch(deleteRequest(id));
   }
 
@@ -47,7 +47,7 @@ export const CompletedList = ({ entrylist, date }) => {
   }, [deleteOperation]);
 
   useEffect(()=>{
-    console.log("in completed list page", entrylist)
+    
   },[entrylist])
 
   return (

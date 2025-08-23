@@ -111,7 +111,7 @@ const getStart = createSlice({
             state.Loading = true
         },
         getStartSuccess: (state, action)=>{
-            console.log(action)
+            
             state.data = action.payload.data.model
             state.Loading = false
             state.message = 'success'

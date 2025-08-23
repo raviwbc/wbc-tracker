@@ -29,7 +29,6 @@ function* deleteTaskDel(action){
          yield put(startLoading());  
         const resp = yield call(deleteTask, action.payload)        
         if(resp.data){
-            console.log(resp)
             yield put(deleteSuccess(resp.data))
         }else{
             yield put(deleteFailer('Something went wrong try again'))    
