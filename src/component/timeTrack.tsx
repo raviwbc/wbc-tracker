@@ -79,7 +79,6 @@ const TimeTrack = () => {
   //Get Project List
   const dispatch = useDispatch();
   const projectList = useSelector((state: any) => {
-    console.log("hari", state.trackerReducer);
     return state.trackerReducer;
   });
   const manualEntryStatus = useSelector((state: ReducersList) => {
@@ -94,7 +93,6 @@ const TimeTrack = () => {
   const getStartup: getStartRes = useSelector((state: ReducersList) => {
     let getstartRed = state.getStartReducer;
     if (getstartRed.data.projectID) {
-      console.log("Strated", getstartRed);
       return getstartRed.data;
     } else {
       return {};
@@ -142,7 +140,6 @@ const TimeTrack = () => {
         const { startTime, endTime } = this.parent;
         let end = moment(endTime);
         if (!startTime || !endTime) return true;
-        console.log("raviuu", end.diff(startTime, "minutes"));
         return end.diff(startTime, "minutes") > 0;
       }),
   });
