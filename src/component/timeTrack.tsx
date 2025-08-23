@@ -11,6 +11,7 @@ import {
   MenuItem,
   Popover,
   Select,
+  TextareaAutosize,
   TextField,
   ToggleButton,
   ToggleButtonGroup,
@@ -40,22 +41,23 @@ import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import { toast } from "react-hot-toast";
 import TimePk from "./time-picker/time-picker.tsx";
 import { DynamicButton } from "../button/dynamicButton.tsx";
+import { HeaderComp } from "./header.tsx";
 
 type Dates = { dateString: string; paramsday: string };
 
 let defaultValue = {
-  project: null,
+  project: undefined,
   notes: "",
-  task: null,
+  task: undefined,
   status: "",
   startTime: "",
   endTime: "",
   hours: "",
 };
 let errorDefaultVlaue = {
-  project: null,
+  project: undefined,
   notes: "",
-  task: null,
+  task: undefined,
   status: "",
   startTime: "",
   endTime: "",
@@ -68,6 +70,7 @@ const TimeTrack = () => {
   const [isAccOpen, setIsAccOpen] = useState<boolean>(true);
   const [prjList, setPrjList] = useState<tasklist[]>();
   const [entryList, setEntryList] = useState<tasklist[]>();
+  const [totalHours, setTotalHours] = useState<string | null>();
   const [totaltaskList, setTotalTaskList] = useState<projectList[]>([]);
   const [taskList, setTaskList] = useState<projectList[]>([]);
   const statusList = ["Done", "WIP", "OnHold"];
@@ -163,11 +166,9 @@ const TimeTrack = () => {
       UpdateErrors(errorDefaultVlaue);
       SetstTime24Hrs("");
       SetedTime24Hrs("");
-      debugger;
       let startTime: any = trackerForm.startTime;
       let endTime: any = trackerForm.endTime;
       if (selectedDate) {
-        debugger;
         startTime = dateFormatFunction(startTime);
         endTime = dateFormatFunction(endTime);
       }
@@ -209,14 +210,15 @@ const TimeTrack = () => {
   }
 
   let formChange = (data: any) => {
-    
-    debugger;
-    const { name, value } = data.target;
+    let { name, value } = data.target;
+    if (name === "project" || name === "task") {
+      value = Number(value);
+    }
     UpdateTrackerForm((prev) => {
       return { ...prev, [name]: value };
     });
     if (value && name === "project") {
-      let task:any = prjList?.filter((resp) => resp.projectID === value);
+      let task: any = prjList?.filter((resp) => resp.projectID === value);
       setTaskList(task[0]?.tasks ? task[0]?.tasks : []);
     }
   };
@@ -253,7 +255,7 @@ const TimeTrack = () => {
   }
 
   function EntryListCall() {
-    debugger;
+    debugger
     const searchParams = new URLSearchParams(location.search);
     const selectedDateLocal = searchParams.get("date");
     if (isValidDate(selectedDateLocal)) {
@@ -267,6 +269,10 @@ const TimeTrack = () => {
         )
       );
     }
+  }
+
+  function callAllEntry(){
+      dispatch(completedEntryRequest(""));
   }
 
   function postAutoEntry(postData: any) {
@@ -308,6 +314,7 @@ const TimeTrack = () => {
     }
   };
   const callCurrentDate = () => {
+    debugger
     updateSelectedDate("");
     UpdateMode(true);
     navigate(`/index`);
@@ -367,7 +374,6 @@ const TimeTrack = () => {
   };
 
   const getStartPickerData = (time) => {
-    debugger;
     if (time) {
       UpdateTrackerForm((resp) => {
         return { ...resp, startTime: time };
@@ -380,7 +386,6 @@ const TimeTrack = () => {
     }
   };
   const getEndPickerData = (time) => {
-    debugger;
     if (time) {
       UpdateTrackerForm((resp) => {
         return { ...resp, endTime: time };
@@ -421,7 +426,6 @@ const TimeTrack = () => {
   }
   function checkDifferentInUpdatedTime(startTime: any, endTime: any) {
     if (startTime && endTime) {
-      debugger;
       const diffInMinutes = endTime.diff(startTime, "minutes");
       const duration = moment.duration(diffInMinutes, "minutes");
       const abs = moment
@@ -440,11 +444,15 @@ const TimeTrack = () => {
 
   useEffect(() => {
     if (prjList?.length) {
-      const newlist: tasklist[] = entryListReducer.data?.filter(
+      debugger
+      const newlist: tasklist[] = entryListReducer.data.model?.filter(
         (resp) => resp.endDate && resp.taskStatus
       );
+      if(entryListReducer?.data?.additionalValue && entryListReducer?.data?.additionalValue.length === 1){
+        setTotalHours( entryListReducer.data.additionalValue[0].value);
+      }
+      
       if (newlist?.length !== entryList?.length) {
-        
         const tasklistsp = newlist?.map((resp) => {
           let project = prjList?.filter(
             (data) => data.projectID === resp.projectID
@@ -474,10 +482,11 @@ const TimeTrack = () => {
   }, [location.search]);
 
   useEffect(() => {
-    debugger;
     if (manualEntryStatus.Loading === false) {
       if (manualEntryStatus.data?.didError === false) {
         resetManualForm();
+        debugger
+        callAllEntry();
       } else if (manualEntryStatus.data?.didError === true) {
         toast.error(manualEntryStatus.message || "Something went wrong!", {
           duration: 3000,
@@ -533,7 +542,6 @@ const TimeTrack = () => {
   }, []);
 
   useEffect(() => {
-    debugger
     setPrjList(projectList.data);
     // setTotalTaskList(projectList.data);
   }, [projectList]);
@@ -556,7 +564,7 @@ const TimeTrack = () => {
               boxShadow: "0 4px 20px rgba(0, 0, 0, 0.3)",
               fontWeight: "500",
               letterSpacing: "0.5px",
-               zIndex: 99,
+              zIndex: 99,
             },
             iconTheme: {
               primary: "#ff4b5c", // Icon color
@@ -570,7 +578,10 @@ const TimeTrack = () => {
   }, [formErrors]);
 
   return (
+    <>
+    <HeaderComp></HeaderComp>
     <div className="margin-20">
+      
       {/* Calendar */}
       <div className="mt-4 flex gap-4  dateDayContainer">
         {dates &&
@@ -579,7 +590,7 @@ const TimeTrack = () => {
             (dates.length !== index + 1 || selectedDate) ? (
               <div
                 onClick={() => callcompletedList(item.paramsday)}
-                key={index}
+                key={item.paramsday}
                 className="flex flex-col items-center bg-gray-100 dateDayBox "
               >
                 <div className="text-lg font-bold">
@@ -590,7 +601,10 @@ const TimeTrack = () => {
                 </div>
               </div>
             ) : (
-              <button className="wave-btn currentDateBtnTxt relative overflow-hidden px-6 py-4 rounded-md">
+              <button
+                key={item.paramsday}
+                className="wave-btn currentDateBtnTxt relative overflow-hidden px-6 py-4 rounded-md"
+              >
                 <span className="wave-btn__label flex items-center gap-2 relative z-10">
                   <CalendarMonthIcon />
                   {moment(item.paramsday).format("MMMM Do ddd")}
@@ -641,16 +655,22 @@ const TimeTrack = () => {
                 <InputLabel id="Project">Project</InputLabel>
                 <Select
                   labelId="Project"
-                  value={trackerForm.project}
+                  value={
+                    trackerForm.project !== undefined
+                      ? String(trackerForm.project)
+                      : ""
+                  }
                   label="Project"
                   name="project"
                   onChange={formChange}
                   onBlur={formBlur}
                 >
-                  <MenuItem>Select Project</MenuItem>
                   {prjList?.length &&
                     prjList.map((data) => (
-                      <MenuItem key={data.projectID} value={data.projectID}>
+                      <MenuItem
+                        key={data.projectID}
+                        value={String(data.projectID)}
+                      >
                         {data.projectName}
                       </MenuItem>
                     ))}
@@ -662,15 +682,19 @@ const TimeTrack = () => {
                 <InputLabel id="task">Task</InputLabel>
                 <Select
                   labelId="task"
-                  value={trackerForm.task}
+                  value={
+                    trackerForm.task !== undefined
+                      ? String(trackerForm.task)
+                      : ""
+                  }
                   label="task"
                   name="task"
                   onChange={formChange}
                   onBlur={formBlur}
                 >
-                  {taskList &&
+                  {taskList?.length &&
                     taskList.map((data: projectList) => (
-                      <MenuItem key={data.taskID} value={data.taskID}>
+                      <MenuItem key={data.taskID} value={String(data.taskID)}>
                         {data.title}
                       </MenuItem>
                     ))}
@@ -755,23 +779,7 @@ const TimeTrack = () => {
                 </Popover>
               </FormControl>
             </div>
-            <div>
-              {/* error={formErrors.notes ? true : false} */}
-              <FormControl fullWidth>
-                <TextField
-                  error={formErrors.notes ? true : false}
-                  multiline
-                  variant="outlined"
-                  rows={1}
-                  value={trackerForm.notes}
-                  name="notes"
-                  label="Notes"
-                  id="notes"
-                  onChange={formChange}
-                  onBlur={formBlur}
-                />
-              </FormControl>
-            </div>
+           
             <div>
               <FormControl fullWidth error={formErrors.status ? true : false}>
                 <InputLabel id="status">Status</InputLabel>
@@ -793,10 +801,31 @@ const TimeTrack = () => {
                 {/* {formErrors.status && <FormHelperText>{formErrors.status[0]}</FormHelperText>} */}
               </FormControl>
             </div>
+             <div>
+              <FormControl fullWidth>
+                <TextareaAutosize                  
+                  style={{
+                    width: "100%",
+                    padding: "8px",
+                    fontSize: "1rem",
+                    borderColor: formErrors.notes ? "red" : "rgb(196 196 196)",
+                    borderRadius: "4px",
+                    border: "1px solid rgb(196 196 196)",
+                  }}
+                  minRows={1.5}
+                  maxRows={8}
+                        placeholder="Type your notes here..."   //
 
-            {/* <button type="submit" className="manualUpdate">
-              Update {trackerForm.hours && trackerForm.hours + 'hrs.' }
-            </button> */}
+                  value={trackerForm.notes}
+                  name="notes"
+                  id="notes"
+                  onChange={formChange}
+                  onBlur={formBlur}
+                />
+              </FormControl>
+            </div>
+
+          
             <DynamicButton
               buttonname="UPDATE"
               time={trackerForm.hours + "hrs"}
@@ -815,8 +844,9 @@ const TimeTrack = () => {
             onClick={() => setIsAccOpen(!isAccOpen)}
           >
             <span>Today Completed Task List</span>
-            <svg
-              enableBackground="new 0 0 100 100"
+            <span className="disp_div">
+              {totalHours ? <span>Total hours: {totalHours}</span> : ""}
+              <svg enableBackground="new 0 0 100 100"
               className={`w-3 h-3 transform ${
                 isAccOpen ? "rotate-180" : "rotate-0"
               }`}
@@ -831,7 +861,7 @@ const TimeTrack = () => {
                 strokeWidth="2"
                 d="M9 5 5 1 1 5"
               />
-            </svg>
+            </svg></span>
           </button>
         </h2>
 
@@ -845,6 +875,7 @@ const TimeTrack = () => {
         )}
       </div>
     </div>
+    </>
   );
 };
 

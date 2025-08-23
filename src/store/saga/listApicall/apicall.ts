@@ -30,6 +30,5 @@ function* fetchProjectList(){
 }
 
 export function* watchFetchlist(){
-    // yield takeLatest(fetchPostsRequest.type, fetchList),
     yield takeLatest(ProjectListRequest.type, fetchProjectList)
 }

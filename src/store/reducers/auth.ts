@@ -41,8 +41,7 @@ export const loginValidation = createSlice({
         loginSuccess: (state, action: PayloadAction<AuthData>) => {
             state.loading = false;
             state.data = action.payload;
-            state.message = "Login successful!";
-            
+            state.message = "Login successful!";            
             localStorage.setItem("accessToken", action.payload.model.token);
             localStorage.setItem("userId", JSON.stringify(action.payload.model.userid))
             localStorage.setItem("currentUser", JSON.stringify(action.payload.model))

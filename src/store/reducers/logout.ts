@@ -39,6 +39,7 @@ export const logoutValidation = createSlice({
         logoutsuccess: (state, action: PayloadAction<AuthData>) => {
             state.loading = false;
             state.data = action.payload;
+            state.message = "Logoff"
             localStorage.clear()
             
         },
@@ -47,10 +48,10 @@ export const logoutValidation = createSlice({
             state.data = null;
             state.message = action.payload;
         },
-        
+        resetLogout : ()=>    initialState
     }
 });
 
 // Export reducer and actions
 export const logoutReducer = logoutValidation.reducer;
-export const { logoutRequest, logoutsuccess, logoutFailed } = logoutValidation.actions;
+export const { logoutRequest, logoutsuccess, logoutFailed, resetLogout } = logoutValidation.actions;

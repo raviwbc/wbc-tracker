@@ -15,7 +15,7 @@ const manual = createSlice({
             let resp = action.payload
             state.data = resp
             state.Loading = false
-            state.message = resp.status
+            state.message = "manualEntryUpdated"
         },
         Entryfailure : (state, action)=>{
             state.Loading = false

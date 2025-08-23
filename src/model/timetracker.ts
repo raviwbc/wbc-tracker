@@ -118,11 +118,11 @@ export  class manualEntryData {
 }
 
 export  interface trackerForm {
-  project: number | null;
+  project: number | undefined;
   notes: string;
   status: string;
   startTime: string | null;
   endTime: string | null;
-  task: number | null;
+  task: number | undefined;
   hours: string | null;
 }

@@ -63,12 +63,18 @@
 
 .formArea {
     display: grid;
-    grid-template-columns: 250px 250px 150px 150px auto 150px 200px;
+    grid-template-columns: minmax(200px, 350px) minmax(200px, 350px) 150px 150px 120px minmax(200px, 400px) 200px;
     gap: 20px;
     padding: 20px 0;
     .time{
             border-radius: 27px;
     }
+}
+
+.disp_div{
+    display: flex;
+    gap: 10px;
+    align-items: center;
 }
 
 .mode_header {

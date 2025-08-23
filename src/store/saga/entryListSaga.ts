@@ -12,7 +12,7 @@ import { startLoading, stopLoading } from "../reducers/loader.ts";
          yield put(startLoading());  
         const resp = yield call(completedEntryList, action.payload)        
         if(resp.data){
-            yield put(completedEntrySuccess(resp.data.model))
+            yield put(completedEntrySuccess(resp.data))
         }else{
             yield put(completedEntryFailure('Something went wrong try again'))    
         }

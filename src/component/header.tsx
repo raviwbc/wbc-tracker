@@ -1,22 +1,24 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useReducer, useState } from "react";
 import { MyContext } from "../myContext.tsx";
 import React from "react";
 import "./header.css";
-import { useDispatch } from "react-redux";
-import { logoutRequest } from "../store/reducers/logout.ts";
-import { useLocation } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { logoutRequest, resetLogout } from "../store/reducers/logout.ts";
+import { useLocation, useNavigate } from "react-router-dom";
 
 export const HeaderComp = () => {
   const { theme } = useContext(MyContext);
   const dispatch = useDispatch();
   const location = useLocation();
+    const logout = useSelector((state: any) => {
+      return state.logoutReducer;
+    });
   const [profileSrc, setProfileSrc] = useState<any>("/user-profile.png");
   const [username, setUsername] = useState<any>("WBC Employee");
-
+const navigate = useNavigate();
 useEffect(() => {
   const username = localStorage.getItem("username");
   const profileImage = localStorage.getItem("profileImage");
-
   if (username && profileImage) {
     setUsername(username);
     setProfileSrc(profileImage);
@@ -24,8 +26,23 @@ useEffect(() => {
 }, []);
 
   const handleLogoff = () => {
+    
     dispatch(logoutRequest());
+
   };
+
+  useEffect(()=>{
+    
+    console.log(logout)
+    if(logout.message === 'Logoff'){
+      dispatch(resetLogout())
+navigate("/", { replace: true }); 
+    }
+  }, [logout])
+
+
+
+
   return (
     <div className="pageHeader">
       {location.pathname !== "/" && (
@@ -52,7 +69,7 @@ useEffect(() => {
                   {}
                 </div>
                 <div className="subTxt" onClick={handleLogoff}>
-                  <img src="/icon/logout.svg" width={25} height={25} alt="" />
+                  <img src="./icon/logout.svg" width={25} height={25} alt="" />
                 </div>
               </div>
             </div>

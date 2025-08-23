@@ -11,11 +11,12 @@ import TimeTrack from './component/timeTrack.tsx';
 import { Provider } from 'react-redux';
 import { store } from './store/store.ts';
 import { Login } from './component/login/login.tsx';
-import { BrowserRouter, Route,  Routes } from 'react-router-dom';
+import { BrowserRouter, Navigate, Route,  Routes } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import ClockLoader from './component/completedTaskList/loader/loader.tsx';
 import { TimePicker } from '@mui/x-date-pickers';
 import TimePk from './component/time-picker/time-picker.tsx';
+import ProtectedRoute from './component/ProtectedRouteProps.tsx';
 function App() {
   const [theme, setTheme] = useState('dark');
   const [user, setUser] = useState('Guest');
@@ -34,7 +35,7 @@ function App() {
   
   return (
     <div>
-          <BrowserRouter>
+          <BrowserRouter basename="/blueprint">
           {/* <nav>
         <ul>
           <li><Link to="/">Home</Link></li>
@@ -45,7 +46,6 @@ function App() {
       <Provider store={store}>
       <MyContext.Provider value={contextValue}>
       <div className={theme}>
-      <HeaderComp></HeaderComp>
       {/* <Router> */}
     
       <ClockLoader />
@@ -60,7 +60,7 @@ function App() {
     },
     // Customize specific types
     success: {
-      icon: <img src="/toater-succes.png" alt="success" width={24} height={24} />,
+      icon: <img src="./toater-succes.png" alt="success" width={24} height={24} />,
       style: {
         background: 'linear-gradient(90deg, rgb(255, 255, 255) 0%, rgb(176 255 129) 50%, rgb(255 255 255) 100%)',
         color: 'black',
@@ -69,7 +69,7 @@ function App() {
       },
     },
     error: {
-      icon: <img src="/toaster-error.png" alt="success" width={24} height={24} />,
+      icon: <img src="./toaster-error.png" alt="success" width={24} height={24} />,
       style: {
         background: 'linear-gradient(90deg, rgba(255, 255, 255, 1) 0%, rgb(255 157 157) 50%, rgb(255 215 211) 100%)',
         color: '#fffff',
@@ -80,17 +80,21 @@ function App() {
   }} />
   
       <Routes>
-        <Route path="/" element={<Login />}/>
-        <Route path="/Index" element={<TimeTrack />}/>
-        <Route path="*" element={<TimeTrack />} />
-
+        <Route path="/" element={<Navigate to="/login" replace />} />
+        <Route path="/login" element={<Login />} />
+        {/* <Route path="/index" element={<TimeTrack />} /> */}
+           {/* Protected route */}
+        <Route
+          path="/index"
+          element={
+            <ProtectedRoute>
+              <TimeTrack />
+            </ProtectedRoute>
+          }/>
+          {/* <Route
+          path="/*"
+           element={<Navigate to="/index" replace />}/>       */}
       </Routes>
-      {/* </Router> */}
-        
-        
-        
-        
-        
         
         </div>
         </MyContext.Provider>

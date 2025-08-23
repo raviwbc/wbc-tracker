@@ -19,21 +19,19 @@ interface LoginFormData {
 }
 
 export const Login = () => {
-    debugger
+    
     const dispatch = useDispatch();
     const auth = useSelector((state: any) => state.loginValidationReducer)
     const navigate = useNavigate();
     
-    useEffect(() => {
-        debugger
+    useEffect(() => {    
+        debugger    
         const token = localStorage.getItem('accessToken');
         if(token){
             navigate('/index')
             toast.success('Welcome back!', {duration: 3000});
-
         }else if(!auth.data && auth.message){
-            toast.error(auth.message || "Something went wrong!", {duration: 3000});
-            
+            toast.error(auth.message || "Something went wrong!", {duration: 3000});            
         }
     }, [auth]);
       
@@ -101,7 +99,7 @@ export const Login = () => {
                         transform: "rotate(180deg)",
                     }}
                 >
-                    <source src="/videos/bg-video.mp4" type="video/mp4" />
+                    <source src="./assets/bg-video.mp4" type="video/mp4" />
                     Your browser does not support the video tag.
                 </video>
 

@@ -98,28 +98,18 @@ export const Autotask: React.FC<AutoTaskProps> = ({
 
 useEffect(() => {
   if (runningTaskDetails.projectID) {
-    let taskname = totaltaskList?.find(
-      (resp) => resp.taskID === runningTaskDetails.taskID
-    )?.title;
-    setTask(taskname);
+    debugger
+    console.log(prjList)
+    let selectedproject = prjList?.find(resp=> resp.projectID === runningTaskDetails.projectID)
+    if(selectedproject?.tasks.length){
+      selectedproject?.tasks.forEach(element => {
+       if(element.taskID === runningTaskDetails.taskID) {
+        setTask(element.title);
+       }
+      });  
+    }
   }
-}, [totaltaskList, runningTaskDetails]);
-
-//   useEffect(() => {
-//     if (Object.keys(runningTaskDetails).length > 0) {
-//       if (!selectedProject) {
-//         if (runningTaskDetails.projectID) {
-//             let projname = prjList?.find((resp) => resp.projectID === runningTaskDetails.projectID)?.projectName;
-//             setProject(projname);
-//             let taskname = totaltaskList?.find((resp) => resp.taskID === runningTaskDetails.taskID)?.title;
-//             setTask(taskname);
-//         }
-//       }
-//     }
-//   }, [runningTaskDetails]);
-
-
-  
+}, [prjList, runningTaskDetails]);
 
 
   function formReset() {
@@ -189,13 +179,13 @@ useEffect(() => {
     }
   }
   let formChange = (data: any) => {
-    debugger
+    
     const { name, value } = data.target;
     UpdateTrackerForm((prev) => {
       return { ...prev, [name]: value };
     });
     if (value && name === "project") {
-        debugger
+        
       let task = prjList?.filter((resp) => resp.projectID === value);
       let gg = task?.length ? task[0]?.tasks : [];
 
@@ -306,13 +296,23 @@ useEffect(() => {
           )}
           {taskStared && (
             <>
-              {selectedProject && (
+              {/* {selectedProject && (
+                <div className="pos-relative">
                 <div className="proj_details">
                   <div className="proj">Project : {selectedProject}</div>
                   <div className="proj">Task : {selectedTask}</div>
                 </div>
-              )}
-              <div className="autoForm">
+                </div>
+              )} */}
+              <div className="autoForm">            
+                <div>
+                  {selectedProject && (
+                    <div className="proj_details">
+                      <div className="">Project : {selectedProject}</div>
+                      <div className="">Task : {selectedTask}</div>
+                      </div>
+                    )}
+                </div>
                 <div>
                   <RunningTimer startTime={runningTaskDetails.startTime} />
                 </div>

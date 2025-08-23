@@ -46,9 +46,7 @@ export const CompletedList = ({ entrylist, date }) => {
     }
   }, [deleteOperation]);
 
-  useEffect(()=>{
-    
-  },[entrylist])
+
 
   return (
     <div>
@@ -61,7 +59,7 @@ export const CompletedList = ({ entrylist, date }) => {
             >
               <div>
                 <button onClick={() => deletefun(resp.id)}>
-                  <img src="/assets/delete.svg" width={35} alt="Delete" />
+                  <img src="./assets/delete.svg" width={35} alt="Delete" />
                 </button>
               </div>
               <div>
@@ -71,7 +69,7 @@ export const CompletedList = ({ entrylist, date }) => {
               <div>
                 <img
                   title={resp.isAuto ? "Auto Entry" : "Manual Entry"}
-                  src={resp.isAuto ? "/assets/happy.svg" : "/assets/angry.svg"}
+                  src={resp.isAuto ? "./assets/happy.svg" : "./assets/angry.svg"}
                   width={30}
                   alt="Delete"
                 />
@@ -90,7 +88,7 @@ export const CompletedList = ({ entrylist, date }) => {
               <div className="cursor-pointer relative p-3"  onMouseEnter={() => setisCommentShowID(index)}
                   onMouseLeave={() => setisCommentShowID(null)}>
                 <img
-                  src="/icon/notes.svg"
+                  src="./icon/notes.svg"
                   width={30}
                   height={30}
                   alt=""
@@ -142,13 +140,13 @@ export const CompletedList = ({ entrylist, date }) => {
                 </span>
               </div>
                 <div>
-                <button onClick={() => deletefun(resp.id)}><img src="/assets/delete.svg" width={35} alt="Delete" /></button>
+                <button onClick={() => deletefun(resp.id)}><img src="./delete.svg" width={35} alt="Delete" /></button>
               </div>
               <div>
 <div className="cursor-pointer relative p-3"  onMouseEnter={() => setisCommentShowID(index)}
                   onMouseLeave={() => setisCommentShowID(null)}>
                 <img
-                  src="/icon/notes.svg"
+                  src="./icon/notes.svg"
                   width={30}
                   height={30}
                   alt=""

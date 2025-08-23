@@ -13,7 +13,8 @@ const entryList = createSlice({
                 ...state, Loading : true
             }             
         },
-        completedEntrySuccess: (state, action)=>{   
+        completedEntrySuccess: (state, action)=>{  
+            console.log(action.payload) 
             state.data = action.payload
             state.Loading = false
             state.message = ''
