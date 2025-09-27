@@ -255,7 +255,7 @@ const TimeTrack = () => {
   }
 
   function EntryListCall() {
-    debugger
+    
     const searchParams = new URLSearchParams(location.search);
     const selectedDateLocal = searchParams.get("date");
     if (isValidDate(selectedDateLocal)) {
@@ -301,7 +301,8 @@ const TimeTrack = () => {
       });
     }
   }
-  const callcompletedList = (date) => {
+  const callcompletedList = (date:any) => {
+    
     UpdateTrackerForm(errorDefaultVlaue);
     SetstTime24Hrs("");
     SetedTime24Hrs("");
@@ -314,7 +315,7 @@ const TimeTrack = () => {
     }
   };
   const callCurrentDate = () => {
-    debugger
+    
     updateSelectedDate("");
     UpdateMode(true);
     navigate(`/index`);
@@ -336,7 +337,7 @@ const TimeTrack = () => {
   const [stTime24Hrs, SetstTime24Hrs] = useState("");
   const [edTime24Hrs, SetedTime24Hrs] = useState("");
 
-  const handleIconClick = async (event, type: number) => {
+  const handleIconClick = async (event:any, type: number) => {
     try {
       if (type === 1) {
         setAnchorEl(event.currentTarget);
@@ -436,6 +437,12 @@ const TimeTrack = () => {
       });
     }
   }
+  function arraysEqual(a:any, b:any) {
+  if (a?.length !== b?.length) return false;
+  return a?.every((obj:any, i:number) => 
+    JSON.stringify(obj) === JSON.stringify(b[i])
+  );
+}
 
   // End
   useEffect(() => {
@@ -443,8 +450,10 @@ const TimeTrack = () => {
   }, []);
 
   useEffect(() => {
+    debugger
     if (prjList?.length) {
       debugger
+      
       const newlist: tasklist[] = entryListReducer.data.model?.filter(
         (resp) => resp.endDate && resp.taskStatus
       );
@@ -454,7 +463,8 @@ const TimeTrack = () => {
         setTotalHours("")        
       }
       
-      if (newlist?.length !== entryList?.length) {
+      if (!arraysEqual(newlist, entryList)) {
+      console.log(entryList);
         const tasklistsp = newlist?.map((resp) => {
           let project = prjList?.filter(
             (data) => data.projectID === resp.projectID
@@ -487,7 +497,7 @@ const TimeTrack = () => {
     if (manualEntryStatus.Loading === false) {
       if (manualEntryStatus.data?.didError === false) {
         resetManualForm();
-        debugger
+        
         callAllEntry();
       } else if (manualEntryStatus.data?.didError === true) {
         toast.error(manualEntryStatus.message || "Something went wrong!", {
@@ -609,7 +619,7 @@ const TimeTrack = () => {
               >
                 <span className="wave-btn__label flex items-center gap-2 relative z-10">
                   <CalendarMonthIcon />
-                  {moment(item.paramsday).format("MMMM Do ddd")}
+                  {moment(item.paramsday).format("MMM Do ddd")}
                 </span>
                 <div className="dummyDiv">
                   <span className="wave absolute pointer-events-none"></span>
