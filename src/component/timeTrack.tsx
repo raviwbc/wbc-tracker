@@ -272,7 +272,16 @@ const TimeTrack = () => {
   }
 
   function callAllEntry(){
-      dispatch(completedEntryRequest(""));
+        const searchParams = new URLSearchParams(location.search);
+            const selectedDateLocal = searchParams.get("date");
+            console.log(selectedDateLocal);
+            setformUpdated(false);
+
+      // dispatch(completedEntryRequest(""));
+      dispatch(
+        completedEntryRequest(
+          isValidDate(selectedDateLocal) ? selectedDateLocal : ""
+        ));
   }
 
   function postAutoEntry(postData: any) {
@@ -302,8 +311,9 @@ const TimeTrack = () => {
     }
   }
   const callcompletedList = (date:any) => {
-    
     UpdateTrackerForm(errorDefaultVlaue);
+    UpdateErrors(errorDefaultVlaue);
+    setformUpdated(false);
     SetstTime24Hrs("");
     SetedTime24Hrs("");
     if (moment().format("MM-DD-YYYY") == date) {
@@ -450,10 +460,7 @@ const TimeTrack = () => {
   }, []);
 
   useEffect(() => {
-    debugger
     if (prjList?.length) {
-      debugger
-      
       const newlist: tasklist[] = entryListReducer.data.model?.filter(
         (resp) => resp.endDate && resp.taskStatus
       );
@@ -494,10 +501,11 @@ const TimeTrack = () => {
   }, [location.search]);
 
   useEffect(() => {
+    debugger
+    console.log("Issue ON check", manualEntryStatus);
     if (manualEntryStatus.Loading === false) {
       if (manualEntryStatus.data?.didError === false) {
-        resetManualForm();
-        
+        resetManualForm();        
         callAllEntry();
       } else if (manualEntryStatus.data?.didError === true) {
         toast.error(manualEntryStatus.message || "Something went wrong!", {
@@ -820,9 +828,10 @@ const TimeTrack = () => {
                     width: "100%",
                     padding: "8px",
                     fontSize: "1rem",
-                    borderColor: formErrors.notes ? "red" : "rgb(196 196 196)",
-                    borderRadius: "4px",
-                    border: "1px solid rgb(196 196 196)",
+                    borderColor: formErrors?.notes ? "red" : "#c4c4c4",
+                    borderRadius: "4px",                    
+                     borderWidth: "1px",
+                     borderStyle: "solid",
                   }}
                   minRows={1.5}
                   maxRows={8}
