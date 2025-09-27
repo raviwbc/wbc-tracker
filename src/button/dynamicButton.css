@@ -2,6 +2,7 @@
 .outer-cont {
     display: flex;
     align-items: center;
+    height: 57px;
     gap: 8px;
     justify-content: center;
     padding: 12px 20px;
