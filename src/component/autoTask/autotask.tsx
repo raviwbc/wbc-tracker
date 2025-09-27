@@ -102,7 +102,7 @@ useEffect(() => {
     console.log(prjList)
     let selectedproject = prjList?.find(resp=> resp.projectID === runningTaskDetails.projectID)
     if(selectedproject?.tasks.length){
-      selectedproject?.tasks.forEach(element => {
+      selectedproject?.tasks.forEach((element:any) => {
        if(element.taskID === runningTaskDetails.taskID) {
         setTask(element.title);
        }

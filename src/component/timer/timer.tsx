@@ -2,7 +2,7 @@ import './timer.css';
 import moment from "moment";
 import { useEffect, useState } from "react";
 
-export const RunningTimer = ({ startTime }) => {
+export const RunningTimer = ({ startTime }:any) => {
   const [now, setNow] = useState(moment());
 
   useEffect(() => {
