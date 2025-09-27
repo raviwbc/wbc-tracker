@@ -140,7 +140,10 @@ export const CompletedList = ({ entrylist, date }) => {
                 </span>
               </div>
                 <div>
-                <button onClick={() => deletefun(resp.id)}><img src="./delete.svg" width={35} alt="Delete" /></button>
+                
+                        <button onClick={() => deletefun(resp.id)}>
+                  <img src="./assets/delete.svg" width={35} alt="Delete" />
+                </button>
               </div>
               <div>
 <div className="cursor-pointer relative p-3"  onMouseEnter={() => setisCommentShowID(index)}

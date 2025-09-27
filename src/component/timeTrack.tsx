@@ -642,18 +642,19 @@ const TimeTrack = () => {
         {/* <div className="d-inline">Trackers</div> */}
         {!selectedDate && (
           <div className="d-inline modeToggle">
-            <ToggleButtonGroup
+
+             <ToggleButtonGroup
               color="primary"
               value={mode}
               sx={{
                 transform: "scale(0.8)", // Reduce overall size
               }}
               exclusive
-              onChange={() => UpdateMode((resp) => (resp ? false : true))}
+              // onChange={() => UpdateMode((resp) => (resp ? false : true))}
               aria-label="Mode"
             >
-              <ToggleButton value={true}>Auto</ToggleButton>
-              <ToggleButton value={false}>Manual</ToggleButton>
+              <ToggleButton value={true}   className={mode === true ? "Mui-selected" : "inactive-btn"} onClick={() => UpdateMode(true)}>Auto</ToggleButton>
+              <ToggleButton value={false}    className={ mode === false ? "Mui-selected" : "inactive-btn"}  onClick={() => UpdateMode(false)}>Manual</ToggleButton>
             </ToggleButtonGroup>
           </div>
         )}
