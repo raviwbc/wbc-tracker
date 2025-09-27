@@ -308,8 +308,13 @@ useEffect(() => {
                 <div>
                   {selectedProject && (
                     <div className="proj_details">
-                      <div className="">Project : {selectedProject}</div>
-                      <div className="">Task : {selectedTask}</div>
+                      <div className="flex gap-2"> 
+                        <div className="Details_label">Project : </div>
+                        <div className="Details_value" >{selectedProject}</div>
+                        </div>
+                      <div className="flex gap-2">
+                        <div className="Details_label"> Task : </div><div className="Details_value"> {selectedTask}</div>
+                        </div>
                       </div>
                     )}
                 </div>

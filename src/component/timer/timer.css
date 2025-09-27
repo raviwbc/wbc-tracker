@@ -41,20 +41,19 @@
       filter: url('#glow');
     }
     .line-1 {
-      /* stroke: #f6de8d; */
       stroke-dashoffset: 0;
       animation: spark-1 13s linear infinite;
     }
-    .line-2 {
-      stroke: #1b004e;
-      stroke-dashoffset: 100;
-      animation: spark-2 10s linear infinite;
-    }
+    /* .line-2 {
+      stroke: #9d8abf;
+      stroke-dashoffset: 50;
+      animation: spark-2 30s linear infinite;
+    } */
   }
 
-  /* Make the dots visible and animated always */
+  
   .dots {
-    opacity: 1; /* Always visible */
+    opacity: 1;
     .dot {
       width: 1rem;
       height: 1rem;
@@ -66,31 +65,31 @@
     .dot-1 {
       top: 0;
       left: 20%;
-      animation: fly-up 3s linear infinite;
+      animation: fly-up 10s linear infinite;
     }
     .dot-2 {
       top: 0;
       left: 55%;
-      animation: fly-up 3s linear infinite;
-      animation-delay: 0.5s;
+      animation: fly-up 80s linear infinite;
+      animation-delay: 10.5s;
     }
     .dot-3 {
       top: 0;
       left: 80%;
-      animation: fly-up 3s linear infinite;
-      animation-delay: 1s;
+      animation: fly-up 80s linear infinite;
+      animation-delay: 10.5s;
     }
     .dot-4 {
       bottom: 0;
       left: 30%;
-      animation: fly-down 3s linear infinite;
-      animation-delay: 2.5s;
+      animation: fly-down 80s linear infinite;
+      animation-delay: 10.5s;
     }
     .dot-5 {
       bottom: 0;
       left: 65%;
-      animation: fly-down 3s linear infinite;
-      animation-delay: 1.5s;
+      animation: fly-down 80s linear infinite;
+      animation-delay: 10.5s;
     }
   }
 }
@@ -98,7 +97,7 @@
 /* Animations remain the same */
 @keyframes spark-1 {
   to {
-    stroke-dashoffset: -1000;
+    stroke-dashoffset: -250;
   }
 }
 @keyframes spark-2 {
@@ -107,9 +106,9 @@
   }
 }
 @keyframes fly-up {
-  0% { opacity: 0; transform: translateY(0) scale(0.2); }
-  5% { opacity: 1; transform: translateY(-1.5rem) scale(0.4); }
-  10%, 100% { opacity: 0; transform: translateY(-3rem) scale(0.2); }
+  0% { opacity: 0; transform: translateY(0) scale(0.1); }
+  5% { opacity: 1; transform: translateY(-1.5rem) scale(0.2); }
+  10%, 100% { opacity: 0; transform: translateY(-3rem) scale(0.1z); }
 }
 @keyframes fly-down {
   0% { opacity: 0; transform: translateY(0) scale(0.2); }
