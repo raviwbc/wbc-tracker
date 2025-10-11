@@ -1,8 +1,8 @@
-import './timer.css';
+import "./timer.css";
 import moment from "moment";
 import { useEffect, useState } from "react";
 
-export const RunningTimer = ({ startTime }:any) => {
+export const RunningTimer = ({ startTime }: any) => {
   const [now, setNow] = useState(moment());
 
   useEffect(() => {
@@ -14,7 +14,10 @@ export const RunningTimer = ({ startTime }:any) => {
   }, []);
 
   const duration = moment.duration(now.diff(startTime));
-  const formatted = moment.utc(duration.asMilliseconds()).format('HH:mm:ss');
+  const formatted = moment.utc(duration.asMilliseconds()).format("HH:mm:ss");
+  const hours = moment.utc(duration.asMilliseconds()).format("HH");
+  const minutes = moment.utc(duration.asMilliseconds()).format("mm");
+  const seconds = moment.utc(duration.asMilliseconds()).format("ss");
 
   return (
     <div>
@@ -22,7 +25,7 @@ export const RunningTimer = ({ startTime }:any) => {
       {/* <p className="time">{formatted}</p> */}
 
       {/* Voltage Button */}
-      <div className="voltage-button">
+      <div className="voltage-button ms-desk">
         <button>{formatted}</button>
 
         {/* SVG Party */}
@@ -33,7 +36,11 @@ export const RunningTimer = ({ startTime }:any) => {
           preserveAspectRatio="none"
         >
           <filter id="glow">
-            <feGaussianBlur className="blur" result="coloredBlur" stdDeviation="2" />
+            <feGaussianBlur
+              className="blur"
+              result="coloredBlur"
+              stdDeviation="2"
+            />
             <feTurbulence
               type="fractalNoise"
               baseFrequency="0.075"
@@ -80,6 +87,15 @@ export const RunningTimer = ({ startTime }:any) => {
           <div className="dot dot-5"></div>
         </div>
       </div>
+<div className="ms-mobile">
+      <div className="  timerDiv">
+        <div>{hours}</div>
+        <div>:</div>
+        <div>{minutes}</div>
+        <div>:</div>
+        <div>{seconds}</div>
+      </div>
+    </div>
     </div>
   );
 };

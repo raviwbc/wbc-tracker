@@ -22,6 +22,7 @@ import { useDispatch } from "react-redux";
 import { AutoEntryRequest } from "../../store/reducers/manualEntry.ts";
 import { RunningTimer } from "../timer/timer.tsx";
 import { DynamicButton } from "../../button/dynamicButton.tsx";
+import { useResponsiveSize } from "../../sizeDefiner.tsx";
 
 let errorDefaultVlaue = {
   project: null,
@@ -82,6 +83,7 @@ export const Autotask: React.FC<AutoTaskProps> = ({
   const [selectedProject, setProject] = useState<any[]>([]);
   const [selectedTask, setTask] = useState<any>("");
   const statusList = ["Done", "WIP", "OnHold"];
+    const size = useResponsiveSize();
   // const [taskStared, setTaskStared] = useState<boolean>(false)
 
   useEffect(() => {
@@ -247,6 +249,7 @@ useEffect(() => {
                 <FormControl
                   fullWidth
                   error={formErrors.project ? true : false}
+                  size={size}
                 >
                   <InputLabel id="Project">Project</InputLabel>
                   <Select
@@ -268,7 +271,7 @@ useEffect(() => {
                 </FormControl>
               </div>
               <div>
-                <FormControl fullWidth error={formErrors.task ? true : false}>
+                <FormControl fullWidth error={formErrors.task ? true : false} size={size}>
                   <InputLabel id="task">Task</InputLabel>
                   <Select
                     labelId="task"
@@ -304,8 +307,16 @@ useEffect(() => {
                 </div>
                 </div>
               )} */}
-              <div className="autoForm">            
-                <div>
+              <div className="autoForm">     
+                <div className="ms-mobile">        
+                  <div className="mob_div">
+                  {/* <div><i className="fa fa-tasks"></i> </div> */}
+                  <div className="icon_image"> <img src="./assets/task.svg" alt="Task" /></div>
+                  <div> { selectedTask}  &nbsp;
+                    <span className="project">{selectedProject}</span>
+                  </div>
+                </div> </div>       
+                <div className="ms-desk">
                   {selectedProject && (
                     <div className="proj_details">
                       <div className="flex gap-2"> 
@@ -322,7 +333,7 @@ useEffect(() => {
                   <RunningTimer startTime={runningTaskDetails.startTime} />
                 </div>
                 <div>
-                  <FormControl fullWidth error={stopForm.status ? true : false}>
+                  <FormControl fullWidth error={stopForm.status ? true : false} size={size}>
                     <InputLabel id="status">Status</InputLabel>
                     <Select
                       labelId="status"
@@ -346,7 +357,7 @@ useEffect(() => {
                   {/* {stopForm.comments} */}
                   <FormControl
                     fullWidth
-                    error={stopForm.comments ? true : false}
+                    error={stopForm.comments ? true : false} 
                   >
                     <TextField
                       label="Notes"
@@ -356,6 +367,7 @@ useEffect(() => {
                       name="comments"
                       onChange={formChange}
                       onBlur={formBlur}
+                      size={size}
                     />
                     {stopForm.comments && (
                       <FormHelperText>{stopForm.comments[0]}</FormHelperText>

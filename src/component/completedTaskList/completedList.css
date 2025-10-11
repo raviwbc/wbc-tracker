@@ -7,7 +7,8 @@
     align-items: center;
 }
 .taskListTable>div.parent_div.mobile_div {
-grid-template-columns:unset
+grid-template-columns:unset;
+font-size: 15px;
 }
 .mobile_div>div>div{
     display: inline-block;
@@ -15,14 +16,26 @@ grid-template-columns:unset
 .taskListTable>div.parent_div.mobile_div> {
    padding: 5px 5px; 
 }
-.mobile_div{
+.mobile_container{
     border: 1px solid #eee;
     padding: 10px;
-    margin-bottom: 10px;}
+    margin-bottom: 10px;
+        font-size: 15px;
+}
 
     
 .taskListTable .parent_div>div{
 padding: 10px 5px;
+}
+.taskListTable .mobile_div.parent_div>div{
+    padding: 10px 0px 0px;
+    display: grid;
+    align-items: center;
+    gap: 10px;
+    grid-template-columns: 28px auto;
+}
+.taskListTable .mobile_div.parent_div .icon_div{
+    flex-basis: 32px;
 }
 .iconsList{
         display: flex;
@@ -34,7 +47,7 @@ padding: 10px 5px;
     background: #e6ffec;
     border: 1px solid #84bf7c;
     border-radius: 31px;
-    padding: 2px 10px;
+    padding: 0px 8px;
     color: #005726;
     font-size: 13px;
     display: inline-block;
@@ -45,10 +58,14 @@ padding: 10px 5px;
     border: 1px solid #bf7c7c;
     color: #570000;
 }
+span.status{
+    display: inline-block;
+}
 span.status[data-status]{
     border-radius: 31px;
-    padding: 2px 10px;
+    padding: 0px 8px;
     font-size: 13px;
+    display: inline-block;
 }
 span.status[data-status = 'WIP']{
     background: #fff6e6;
@@ -72,12 +89,61 @@ span.status[data-status = 'Done']{
 .ms-desk{
     display: none;
 }
+.float-div{
+
+    position: absolute;
+    top: -30px;
+    right: -4px;
+}
+.mobile_div.parent_div{
+    position: relative;
+}
+.remove_task{
+    /* background-color: #570000;
+    width: 100%;
+    padding: 6px 10px;
+    border-radius: 6px;
+    color: white;
+    margin-top: 15px;
+    margin-bottom: 6px; */
+
+    background-color: #ffe8e8;
+    border: 1px solid #ffdddd;
+    width: 100%;
+    padding: 6px 10px;
+    border-radius: 6px;
+    color: #b33030;
+    margin-top: 15px;
+    margin-bottom: 6px;
+    font-weight: 500;
+}
+
+    .mobile_div.parent_div  span.project{
+        /* background: #1c014f;
+        color: white;
+        border: unset; */
+            background: #e9dcff;
+    color: #1e004c;
+    border: 1px solid #dbc1ff;
+        border-radius: 4px;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+
+    .mobile_div.parent_div .icon_image{
+    width: 24px;
+    }
+
+
 
 
 @media screen and (max-width:776px){
     .ms-mobile{
         display: block;
     }
+    .taskListTable {
+    padding: 20px 10px;
+}
     
 }
 @media screen and (min-width:776px){

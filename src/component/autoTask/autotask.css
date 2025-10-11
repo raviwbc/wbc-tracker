@@ -32,10 +32,36 @@ button.manualUpdate {
     padding: 6px 10px;
     border-radius: 6px;
 }
+     .mob_div .icon_image{
+    width: 32px;
+    }
 
 .pos-relative{
     position: relative;
 }
+
+.mob_div{
+    
+        display: grid;
+    grid-template-columns: 32px auto;
+    gap: 10px;
+    font-size: 20px;
+    font-weight: 600;
+    align-items: center;
+    justify-content: center;
+}
+    .mob_div  span.project{
+        /* background: #1c014f;
+        color: white;
+        border: unset; */
+            background: #e9dcff;
+    color: #1e004c;
+    border: 1px solid #dbc1ff;
+        border-radius: 4px;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        padding: 0px 10px 4px;
+    }
 
 .Details_label{
 color: #25004b;
@@ -54,5 +80,24 @@ color: #25004b;
     grid-template-columns: unset;
     
 }
+    
+}
+
+
+.ms-mobile, .ms-desk{
+  display: none;
+}
+
+@media screen and (max-width:776px){
+    .ms-mobile{
+        display: block;
+    }
+
+    
+}
+@media screen and (min-width:776px){
+    .ms-desk{
+        display: block;
+    }
     
 }

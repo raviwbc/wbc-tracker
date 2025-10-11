@@ -111,41 +111,49 @@ export const CompletedList = ({ entrylist, date }) => {
 
       <div className="taskListTable ms-mobile">
         {entrylist ? (
-          entrylist.map((resp: tasklist, index) => (
-            <div
+          entrylist.map((resp: tasklist, index:number) => (
+            <div className="mobile_container"
               key={resp.taskID + resp.minutes + Math.random() * 10}
-              className="mobile_div parent_div">  
-              
-              <div>
+              >  
+              <div className="mobile_div parent_div">
+              <div className="float-div">  
+                <div></div>
+                <span data-status={resp.taskStatus} className="status">
+                   {resp.taskStatus}  - {minutesConverter(resp.minutes)}
+                </span>
+              </div>            
+              {/* <div>
                 <div>Project : </div>
                 <div> {resp.projectName}</div>
-              </div>
-                <div>
-                  <div>Task : </div>
-                  <div> {resp.taskName}</div>
+              </div> */}
+                <div className="icon_div">
+                  {/* <div><i className="fa fa-tasks"></i> </div> */}
+                  <div className="icon_image"> <img src="./assets/task.svg" alt="Task" /></div>
+                  <div> {resp.taskName}  &nbsp;
+                    <span className="project">{resp.projectName}</span>
+                  </div>
                 </div>  
             
               <div>
-                <div>Timing : </div>
-                <div>{resp.startTime} - {resp.endTime}</div>                
+                <div className="icon_image"> <img src="./assets/time.svg" alt="Time" /></div>
+                <div>{resp.startTime} to {resp.endTime}</div>                
               </div>
-              <div>
-                 <div>Total Hours : </div>
+              {/* <div>
+                 <div>Tot</div>
               <div>{minutesConverter(resp.minutes)}</div>
+              </div> */}
+              <div>
+                <div className="icon_image"> <img src="./assets/notes.svg" alt="Notes" /></div>
+                <div>{resp.comment}</div>
               </div>
-              <div className="iconsList">
+              {/* <div className="iconsList">
                   <div>
                 <span data-status={resp.taskStatus} className="status">
                   {resp.taskStatus}
                 </span>
-              </div>
-                <div>
+              </div> */}
                 
-                        <button onClick={() => deletefun(resp.id)}>
-                  <img src="./assets/delete.svg" width={35} alt="Delete" />
-                </button>
-              </div>
-              <div>
+              {/* <div>
 <div className="cursor-pointer relative p-3"  onMouseEnter={() => setisCommentShowID(index)}
                   onMouseLeave={() => setisCommentShowID(null)}>
                 <img
@@ -161,10 +169,19 @@ export const CompletedList = ({ entrylist, date }) => {
                   </div>
                 )}
               </div>
-              </div>
-              </div>
+              </div> */}
+              {/* </div> */}
+      
              
-              
+              </div>
+                      <div>
+                <div>
+                  <button className="remove_task" onClick={() => deletefun(resp.id)}>
+                    {/* <img src="./assets/delete.svg" width={35} alt="Delete" /> */}
+                    Remove {resp.isAuto ? 'Auto' : 'Manual'} Task
+                    </button>
+                    </div>
+                    </div>
             </div>
           ))
         ) : (

@@ -115,3 +115,43 @@
   5% { opacity: 1; transform: translateY(1.5rem) scale(0.4); }
   10%, 100% { opacity: 0; transform: translateY(3rem) scale(0.2); }
 }
+
+.timerDiv{
+  display: grid;
+    justify-content: space-between;
+    gap: 5px;
+        grid-template-columns: calc(33% - 30px) 30px calc(33% - 30px) 30px calc(33% - 30px);
+    align-items: center;
+    justify-content: center;
+        padding: 10px 20px;
+}
+.timerDiv  div{
+padding: 20px;
+    font-size: 20px;
+    font-weight: 600;
+    box-shadow: 0 0 15px #dedede;
+    text-align: center;
+    border-radius: 10px;
+}
+.timerDiv div:nth-child(2), .timerDiv div:nth-child(4){
+  box-shadow: none;
+        padding: 20px 15px;
+}
+
+.ms-mobile, .ms-desk{
+  display: none;
+}
+
+@media screen and (max-width:776px){
+    .ms-mobile{
+        display: block;
+    }
+
+    
+}
+@media screen and (min-width:776px){
+    .ms-desk{
+        display: block;
+    }
+    
+}

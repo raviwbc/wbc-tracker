@@ -15,6 +15,8 @@ import {
   TextField,
   ToggleButton,
   ToggleButtonGroup,
+  useMediaQuery,
+  useTheme,
 } from "@mui/material";
 import { CompletedList } from "./completedTaskList/completedList.tsx";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
@@ -42,6 +44,7 @@ import { toast } from "react-hot-toast";
 import TimePk from "./time-picker/time-picker.tsx";
 import { DynamicButton } from "../button/dynamicButton.tsx";
 import { HeaderComp } from "./header.tsx";
+import { useResponsiveSize } from "../sizeDefiner.tsx";
 
 type Dates = { dateString: string; paramsday: string };
 
@@ -78,6 +81,10 @@ const TimeTrack = () => {
   const [selectedDate, updateSelectedDate] = useState<string | null>("");
   const location = useLocation();
   const navigate = useNavigate();
+    const theme = useTheme();
+  
+  const size = useResponsiveSize();
+
 
   //Get Project List
   const dispatch = useDispatch();
@@ -544,9 +551,14 @@ const TimeTrack = () => {
         EntryListCall();
 
         const listOfDate: Dates[] = [];
+        
         let k = (window.innerWidth - 40 - 190) / 75;
+        
+        if(window.innerWidth <= 600){
+          k = 1;
+        }
         k = Math.floor(k);
-
+        k=k-1;
         for (let i = k; i >= 0; i--) {
           const date = moment().subtract(i, "days").format("DD ddd");
           const fulldate = moment().subtract(i, "days").format("MM-DD-YYYY");
@@ -611,8 +623,7 @@ const TimeTrack = () => {
               <div
                 onClick={() => callcompletedList(item.paramsday)}
                 key={item.paramsday}
-                className="flex flex-col items-center bg-gray-100 dateDayBox "
-              >
+                className="flex flex-col items-center bg-gray-100 dateDayBox">
                 <div className="text-lg font-bold">
                   {item.dateString.split(" ")[0]}
                 </div>
@@ -621,9 +632,10 @@ const TimeTrack = () => {
                 </div>
               </div>
             ) : (
+              
               <button
                 key={item.paramsday}
-                className="wave-btn currentDateBtnTxt relative overflow-hidden px-6 py-4 rounded-md"
+                className="w-100 wave-btn currentDateBtnTxt relative overflow-hidden rounded-md"
               >
                 <span className="wave-btn__label flex items-center gap-2 relative z-10">
                   <CalendarMonthIcon />
@@ -633,6 +645,9 @@ const TimeTrack = () => {
                   <span className="wave absolute pointer-events-none"></span>
                 </div>
               </button>
+
+                                        
+
             )
           )}
       </div>
@@ -641,7 +656,7 @@ const TimeTrack = () => {
       <div className="mt-4">
         {/* <div className="d-inline">Trackers</div> */}
         {!selectedDate && (
-          <div className="d-inline modeToggle">
+          <div className="d-inline modeToggle w-100-mobile">
 
              <ToggleButtonGroup
               color="primary"
@@ -652,9 +667,10 @@ const TimeTrack = () => {
               exclusive
               // onChange={() => UpdateMode((resp) => (resp ? false : true))}
               aria-label="Mode"
+              className="w-100-mobile"
             >
-              <ToggleButton value={true}   className={mode === true ? "Mui-selected" : "inactive-btn"} onClick={() => UpdateMode(true)}>Auto</ToggleButton>
-              <ToggleButton value={false}    className={ mode === false ? "Mui-selected" : "inactive-btn"}  onClick={() => UpdateMode(false)}>Manual</ToggleButton>
+              <ToggleButton value={true}   className={mode === true ? "Mui-selected w-100-mobile" : "inactive-btn w-100"} onClick={() => UpdateMode(true)}>Auto</ToggleButton>
+              <ToggleButton value={false}    className={ mode === false ? "Mui-selected w-100-mobile" : "inactive-btn w-100-mobile"}  onClick={() => UpdateMode(false)}>Manual</ToggleButton>
             </ToggleButtonGroup>
           </div>
         )}
@@ -672,7 +688,7 @@ const TimeTrack = () => {
         <div>
           <form onSubmit={submitcall} className="formArea">
             <div>
-              <FormControl fullWidth error={formErrors.project ? true : false}>
+              <FormControl fullWidth error={formErrors.project ? true : false} size={size}>
                 <InputLabel id="Project">Project</InputLabel>
                 <Select
                   labelId="Project"
@@ -683,6 +699,7 @@ const TimeTrack = () => {
                   }
                   label="Project"
                   name="project"
+                  
                   onChange={formChange}
                   onBlur={formBlur}
                 >
@@ -699,7 +716,7 @@ const TimeTrack = () => {
               </FormControl>
             </div>
             <div>
-              <FormControl fullWidth error={formErrors.task ? true : false}>
+              <FormControl fullWidth error={formErrors.task ? true : false} size={size}>
                 <InputLabel id="task">Task</InputLabel>
                 <Select
                   labelId="task"
@@ -723,7 +740,7 @@ const TimeTrack = () => {
               </FormControl>
             </div>
 
-            <FormControl fullWidth error={formErrors.startTime ? true : false}>
+            <FormControl fullWidth error={formErrors.startTime ? true : false} >
               <TextField
                 label="Start Time"
                 value={stTime24Hrs}
@@ -731,6 +748,7 @@ const TimeTrack = () => {
                 fullWidth
                 variant="outlined"
                 placeholder="hh:mm"
+                size={size}
                 error={!!formErrors.startTime}
                 // error={!!error}
                 InputProps={{
@@ -762,7 +780,7 @@ const TimeTrack = () => {
             </FormControl>
 
             <div>
-              <FormControl fullWidth error={formErrors.endTime ? true : false}>
+              <FormControl fullWidth error={formErrors.endTime ? true : false} >
                 <TextField
                   label="End Time"
                   value={edTime24Hrs}
@@ -770,6 +788,7 @@ const TimeTrack = () => {
                   fullWidth
                   variant="outlined"
                   placeholder="hh:mm"
+                  size={size}
                   error={!!formErrors.endTime}
                   // error={!!error}
                   InputProps={{
@@ -802,7 +821,7 @@ const TimeTrack = () => {
             </div>
            
             <div>
-              <FormControl fullWidth error={formErrors.status ? true : false}>
+              <FormControl fullWidth error={formErrors.status ? true : false} size={size}>
                 <InputLabel id="status">Status</InputLabel>
                 <Select
                   labelId="status"
@@ -867,7 +886,7 @@ const TimeTrack = () => {
           >
             <span>Today Completed Task List</span>
             <span className="disp_div">
-              {totalHours ? <span>Total hours: {totalHours}</span> : ""}
+              <div className="ms-desk">{totalHours ? <span>Total hours: {totalHours}</span> : ""}</div>
               <svg enableBackground="new 0 0 100 100"
               className={`w-3 h-3 transform ${
                 isAccOpen ? "rotate-180" : "rotate-0"
@@ -895,7 +914,10 @@ const TimeTrack = () => {
             </div>
           </div>
         )}
+                     
+
       </div>
+       <div className="ms-mobile totalHours_mobile">{totalHours ? <span>Total Hours: {totalHours} </span> : ""}</div>
     </div>
     </>
   );

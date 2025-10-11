@@ -44,13 +44,16 @@ navigate("/", { replace: true });
 
 
   return (
-    <div className="pageHeader">
+    <div>
+    <div className="pageHeader ms-desk">
       {location.pathname !== "/" && (
         <div className={theme}>
           <div className="flex justify-between">
             <div className="flex gap-3 items-center">
-              <div className="pl-3">
-                <b>WBC TIME TRACKER</b>
+          
+                        <div className="pl-3 flex items-end gap-1" style={{fontWeight: "600"}}>
+                <img src="./icon/logo.svg" alt="" width={28} />
+                <div>WBC Timetracker</div>
               </div>
             </div>
             
@@ -77,6 +80,32 @@ navigate("/", { replace: true });
         </div>
       )}
     </div>
+    <div className="pageHeader ms-mobile">
+      {location.pathname !== "/" && (
+        <div className={theme}>
+          <div className="flex justify-between">
+            <div className="flex gap-3 items-center">
+              <div className="pl-3 flex items-end gap-1" style={{fontWeight: "600"}}>
+                <img src="./icon/logo.svg" alt="" width={28} />
+                <div>WBC Timetracker</div>
+              </div>
+            </div>
+            
+            <div className="flex gap-2 items-center ">
+              <div className="flex gap-1 items-center">
+                <div className="userWelcome" style={{fontSize: "15px"}} >Hi, <span title={username}> {username || "Guest"} </span>
+                </div>
+                <div className="subTxt" onClick={handleLogoff}>
+                  <img src="./icon/logout-white.svg" width={22} alt="" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+    </div>
+    
   );
 };
 
