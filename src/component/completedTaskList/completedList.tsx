@@ -52,7 +52,7 @@ export const CompletedList = ({ entrylist, date }) => {
     <div>
       <div className="taskListTable ms-desk">
         {entrylist ? (
-          entrylist.map((resp: tasklist, index) => (
+          entrylist.map((resp: tasklist, index:number) => (
             <div
               key={resp.taskID + resp.minutes + Math.random() * 10}
               className="parent_div"
